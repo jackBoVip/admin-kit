@@ -1,0 +1,56 @@
+/* NProgress 进度条样式 */
+
+/* 使点击事件穿透 */
+#nprogress {
+  @apply pointer-events-none;
+}
+
+/* 进度条主体 */
+#nprogress .bar {
+  @apply bg-primary fixed left-0 top-0 z-[1031] h-[2px] w-full;
+}
+
+/* 进度条尾部光晕效果 */
+#nprogress .peg {
+  @apply absolute right-0 block h-full w-[100px];
+
+  box-shadow:
+    0 0 10px hsl(var(--primary)),
+    0 0 5px hsl(var(--primary));
+  opacity: 1;
+  transform: rotate(3deg) translate(0, -4px);
+}
+
+/* 加载旋转图标容器 */
+#nprogress .spinner {
+  @apply fixed right-4 top-4 z-[1031] block;
+}
+
+/* 旋转图标样式 */
+#nprogress .spinner-icon {
+  @apply border-t-primary border-l-primary size-4 rounded-full border-[2px] border-solid border-transparent;
+
+  animation: nprogress-spinner 400ms linear infinite;
+}
+
+/* 自定义父容器 */
+.nprogress-custom-parent {
+  @apply relative overflow-hidden;
+}
+
+/* 自定义父容器内的进度条和旋转图标定位 */
+.nprogress-custom-parent #nprogress .spinner,
+.nprogress-custom-parent #nprogress .bar {
+  @apply absolute;
+}
+
+/* 旋转动画关键帧 */
+@keyframes nprogress-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

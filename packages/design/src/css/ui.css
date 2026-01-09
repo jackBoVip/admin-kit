@@ -1,0 +1,117 @@
+/* UI 组件样式 */
+
+/* ========== 侧边内容动画 ========== */
+.side-content {
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 从顶部滑入 */
+.side-content[data-side='top'] {
+  animation-name: slide-up;
+}
+
+/* 从底部滑入 */
+.side-content[data-side='bottom'] {
+  animation-name: slide-down;
+}
+
+/* 从左侧滑入 */
+.side-content[data-side='left'] {
+  animation-name: slide-left;
+}
+
+/* 从右侧滑入 */
+.side-content[data-side='right'] {
+  animation-name: slide-right;
+}
+
+/* ========== 面包屑过渡动画 ========== */
+.breadcrumb-transition-enter-active {
+  transition:
+    transform 0.4s cubic-bezier(0.76, 0, 0.24, 1),
+    opacity 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.breadcrumb-transition-leave-active {
+  display: none;
+}
+
+.breadcrumb-transition-enter-from {
+  opacity: 0;
+  transform: translateX(30px) skewX(-30deg);
+}
+
+/* ========== 滑动动画关键帧 ========== */
+
+/* 向下滑入 */
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 向左滑入 */
+@keyframes slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 向右滑入 */
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 向上滑入 */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== 弹窗层级 ========== */
+.z-popup {
+  z-index: var(--popup-z-index);
+}
+
+/* ========== 收缩动画 ========== */
+@keyframes shrink {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
