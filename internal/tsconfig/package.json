@@ -1,0 +1,17 @@
+{
+  "name": "@admin-kit/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "admin-kit monorepo 的共享 TypeScript 配置",
+  "files": [
+    "base.json",
+    "library.json",
+    "vue.json"
+  ],
+  "exports": {
+    "./base.json": "./base.json",
+    "./library.json": "./library.json",
+    "./vue.json": "./vue.json"
+  }
+}

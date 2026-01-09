@@ -14,7 +14,7 @@
     "@admin-kit/tsconfig": "workspace:*",
     "@changesets/cli": "catalog:",
     "prettier": "catalog:",
-    "sass": "1.97.1",
+    "sass": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:",
     "unbuild": "catalog:",

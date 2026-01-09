@@ -24,6 +24,8 @@
 **/.temp/
 **/.turbo/
 **/.vscode/
+**/.kiro/
+
 # 日志文件
 *.log
 npm-debug.log*
