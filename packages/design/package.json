@@ -1,10 +1,16 @@
 {
   "name": "@admin-kit/design",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": false,
   "type": "module",
   "description": "设计系统（样式、令牌）",
-  "keywords": ["admin-kit", "design", "tokens", "styles", "css"],
+  "keywords": [
+    "admin-kit",
+    "design",
+    "tokens",
+    "styles",
+    "css"
+  ],
   "author": "Admin Kit Team",
   "license": "MIT",
   "repository": {

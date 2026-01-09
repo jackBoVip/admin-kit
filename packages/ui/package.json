@@ -1,10 +1,16 @@
 {
   "name": "@admin-kit/ui",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": false,
   "type": "module",
   "description": "基础 UI 组件库",
-  "keywords": ["admin-kit", "ui", "vue", "components", "library"],
+  "keywords": [
+    "admin-kit",
+    "ui",
+    "vue",
+    "components",
+    "library"
+  ],
   "author": "Admin Kit Team",
   "license": "MIT",
   "repository": {
