@@ -1,27 +1,50 @@
 {
   "name": "@admin-kit/layouts",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "description": "布局和业务组件",
+  "keywords": ["admin-kit", "layouts", "vue", "components", "business"],
+  "author": "Admin Kit Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jackBoVip/admin-kit.git",
+    "directory": "packages/layouts"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./dist/style.css": "./dist/style.css"
   },
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "unpkg": "./dist/index.umd.js",
+  "jsdelivr": "./dist/index.umd.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "unbuild",
-    "dev": "unbuild --stub"
+    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly --outDir dist",
+    "dev": "vite build --watch"
   },
   "dependencies": {
     "@admin-kit/ui": "workspace:*",
     "@admin-kit/composables": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@admin-kit/tsconfig": "workspace:*",
+    "@vitejs/plugin-vue": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vue": "catalog:",
+    "vue-tsc": "^2.2.0"
   }
 }

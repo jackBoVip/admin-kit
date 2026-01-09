@@ -2,7 +2,8 @@
   "extends": "@admin-kit/tsconfig/library.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "composite": false
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }

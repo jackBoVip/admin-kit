@@ -6,10 +6,13 @@ catalog:
   turbo: ^2.7.3
   prettier: ^3.7.4
   typescript: ^5.9.3
+  vite: ^6.4.1
   vite-enhance: ^0.3.3
   unbuild: ^3.6.1
+  tsup: ^8.3.5
   sass: ^1.97.1
   vue: ^3.5.13
+  "@vitejs/plugin-vue": ^6.0.1
   "@changesets/cli": ^2.29.8
   "@iconify/json": ^2.2.406
   "@iconify/tailwind": ^1.2.0

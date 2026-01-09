@@ -1,17 +1,26 @@
 {
   "name": "@admin-kit/design",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "description": "设计系统（样式、令牌）",
+  "keywords": ["admin-kit", "design", "tokens", "styles", "css"],
+  "author": "Admin Kit Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jackBoVip/admin-kit.git",
+    "directory": "packages/design"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./styles": "./dist/styles/index.css"
   },
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -20,5 +29,11 @@
   "scripts": {
     "build": "unbuild",
     "dev": "unbuild --stub"
+  },
+  "devDependencies": {
+    "@admin-kit/tsconfig": "workspace:*",
+    "typescript": "catalog:",
+    "unbuild": "catalog:",
+    "sass": "catalog:"
   }
 }

@@ -1,23 +1,37 @@
 {
   "name": "@admin-kit/shared",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "description": "共享工具、常量和类型",
+  "keywords": ["admin-kit", "shared", "utils", "constants", "types"],
+  "author": "Admin Kit Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jackBoVip/admin-kit.git",
+    "directory": "packages/shared"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "unbuild",
-    "dev": "unbuild --stub"
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "devDependencies": {
+    "@admin-kit/tsconfig": "workspace:*",
+    "typescript": "catalog:",
+    "tsup": "catalog:"
   }
 }
