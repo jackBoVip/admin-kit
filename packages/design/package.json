@@ -33,11 +33,5 @@
   "scripts": {
     "build": "unbuild",
     "dev": "unbuild --stub"
-  },
-  "devDependencies": {
-    "@admin-kit/tsconfig": "workspace:*",
-    "typescript": "catalog:",
-    "unbuild": "catalog:",
-    "sass": "catalog:"
   }
 }

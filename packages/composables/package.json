@@ -38,11 +38,5 @@
   },
   "peerDependencies": {
     "vue": "^3.5.0"
-  },
-  "devDependencies": {
-    "@admin-kit/tsconfig": "workspace:*",
-    "typescript": "catalog:",
-    "tsup": "catalog:",
-    "vue": "catalog:"
   }
 }

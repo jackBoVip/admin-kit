@@ -13,19 +13,16 @@
   "devDependencies": {
     "@admin-kit/tsconfig": "workspace:*",
     "@changesets/cli": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
     "prettier": "catalog:",
     "sass": "catalog:",
+    "tsup": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:",
     "unbuild": "catalog:",
-    "vite-enhance": "catalog:"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "vite"
-      ]
-    }
+    "vite": "catalog:",
+    "vue": "catalog:",
+    "vue-tsc": "^2.2.0"
   },
   "packageManager": "pnpm@9.15.0",
   "engines": {
