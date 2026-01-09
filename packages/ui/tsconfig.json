@@ -1,8 +1,10 @@
 {
-  "extends": "@admin-kit/tsconfig/library.json",
+  "extends": "@admin-kit/tsconfig/vue.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "composite": false,
+    "noEmit": false
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }

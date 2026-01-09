@@ -7,7 +7,6 @@ catalog:
   prettier: ^3.7.4
   typescript: ^5.9.3
   vite: ^7.3.1
-  vite-enhance: ^0.3.3
   unbuild: ^3.6.1
   tsup: ^8.3.5
   sass: ^1.97.1
