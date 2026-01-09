@@ -1,0 +1,37 @@
+/**
+ * BEM 命名规范常量配置
+ * 
+ * BEM（Block Element Modifier）是一种 CSS 命名方法论，用于创建可重用的组件和代码共享。
+ * 
+ * 命名规则：
+ * - Block（块）：独立的组件，如 .admin-button
+ * - Element（元素）：块的组成部分，如 .admin-button__icon
+ * - Modifier（修饰符）：块或元素的不同状态或变体，如 .admin-button--primary
+ * - State（状态）：组件的状态类，如 .admin-button.is-disabled
+ * - When（条件）：组件的条件类，如 .admin-button.has-icon
+ * 
+ * 示例：
+ *   .admin-card                    // Block（块）
+ *   .admin-card__header            // Element（元素）
+ *   .admin-card__header--large     // Element + Modifier（元素 + 修饰符）
+ *   .admin-card.is-active          // Block + State（块 + 状态）
+ *   .admin-card.has-footer         // Block + When（块 + 条件）
+ */
+
+/* 命名空间前缀，用于所有组件类名 */
+$namespace: 'admin' !default;
+
+/* 通用分隔符，用于连接命名空间和块名 */
+$common-separator: '-' !default;
+
+/* 元素分隔符，用于连接块和元素 */
+$element-separator: '__' !default;
+
+/* 修饰符分隔符，用于连接块/元素和修饰符 */
+$modifier-separator: '--' !default;
+
+/* 状态类前缀，用于表示组件状态（is-active、is-disabled 等） */
+$state-prefix: 'is' !default;
+
+/* 条件类前缀列表，用于表示组件的条件状态 */
+$when-prefixes: ('has', 'with', 'without') !default;

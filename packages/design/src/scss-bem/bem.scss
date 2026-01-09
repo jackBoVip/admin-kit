@@ -1,0 +1,234 @@
+/**
+ * BEM 命名规范 Mixin 工具集
+ * 
+ * 提供一套基于 BEM 方法论的 SCSS Mixin，用于快速生成符合规范的 CSS 类名。
+ * 
+ * 用途：
+ * 1. 统一组件的 CSS 命名规范
+ * 2. 提高样式的可维护性和可读性
+ * 3. 避免样式冲突和命名污染
+ * 4. 简化 BEM 类名的编写过程
+ * 
+ * 使用示例：
+ *   @include b(button) {
+ *     // 生成 .admin-button
+ *     color: blue;
+ *     
+ *     @include e(icon) {
+ *       // 生成 .admin-button__icon
+ *       font-size: 16px;
+ *     }
+ *     
+ *     @include m(primary) {
+ *       // 生成 .admin-button--primary
+ *       background: blue;
+ *     }
+ *     
+ *     @include is(disabled) {
+ *       // 生成 .admin-button.is-disabled
+ *       opacity: 0.5;
+ *     }
+ *     
+ *     @include when(icon) {
+ *       // 生成 .admin-button.has-icon
+ *       padding-left: 32px;
+ *     }
+ *   }
+ * 
+ * 生成的 CSS：
+ *   .admin-button { color: blue; }
+ *   .admin-button__icon { font-size: 16px; }
+ *   .admin-button--primary { background: blue; }
+ *   .admin-button.is-disabled { opacity: 0.5; }
+ *   .admin-button.has-icon { padding-left: 32px; }
+ */
+
+@forward './constants';
+
+/**
+ * Block（块）Mixin
+ * 
+ * 用于定义一个独立的组件块，是 BEM 结构的最外层。
+ * 
+ * @param {String} $block - 块的名称
+ * 
+ * @example
+ *   @include b(card) {
+ *     padding: 16px;
+ *   }
+ *   // 生成：.admin-card { padding: 16px; }
+ */
+@mixin b($block) {
+  $B: $namespace + $common-separator + $block !global;
+
+  .#{$B} {
+    @content;
+  }
+}
+
+/**
+ * Element（元素）Mixin
+ * 
+ * 用于定义块的组成部分，必须在 @include b() 内部使用。
+ * 元素是块的子组件，不能独立存在。
+ * 
+ * @param {String} $name - 元素的名称
+ * 
+ * @example
+ *   @include b(card) {
+ *     @include e(header) {
+ *       font-weight: bold;
+ *     }
+ *   }
+ *   // 生成：.admin-card__header { font-weight: bold; }
+ */
+@mixin e($name) {
+  @at-root {
+    &#{$element-separator}#{$name} {
+      @content;
+    }
+  }
+}
+
+/**
+ * Modifier（修饰符）Mixin
+ * 
+ * 用于定义块或元素的不同状态、主题或变体。
+ * 可以在 @include b() 或 @include e() 内部使用。
+ * 
+ * @param {String|List} $name - 修饰符的名称，支持单个或多个修饰符
+ * 
+ * @example 单个修饰符
+ *   @include b(button) {
+ *     @include m(primary) {
+ *       background: blue;
+ *     }
+ *   }
+ *   // 生成：.admin-button--primary { background: blue; }
+ * 
+ * @example 多个修饰符（组合）
+ *   @include b(button) {
+ *     @include m((primary, large)) {
+ *       background: blue;
+ *       font-size: 18px;
+ *     }
+ *   }
+ *   // 生成：.admin-button--primary.admin-button--large { ... }
+ */
+@mixin m($name) {
+  @at-root {
+    @if type-of($name) == 'list' {
+      $selector: &;
+      @each $item in $name {
+        $selector: $selector + #{$modifier-separator}#{$item};
+      }
+      #{$selector} {
+        @content;
+      }
+    } @else {
+      &#{$modifier-separator}#{$name} {
+        @content;
+      }
+    }
+  }
+}
+
+/**
+ * State（状态）Mixin
+ * 
+ * 用于定义组件的状态类，如 disabled、active、loading 等。
+ * 状态类使用 .is- 前缀，与块或元素类名组合使用。
+ * 
+ * @param {String} $state - 状态的名称
+ * @param {String} $prefix - 状态前缀，默认为 'is'
+ * 
+ * @example
+ *   @include b(button) {
+ *     @include is(disabled) {
+ *       opacity: 0.5;
+ *       cursor: not-allowed;
+ *     }
+ *     @include is(loading) {
+ *       pointer-events: none;
+ *     }
+ *   }
+ *   // 生成：
+ *   // .admin-button.is-disabled { opacity: 0.5; cursor: not-allowed; }
+ *   // .admin-button.is-loading { pointer-events: none; }
+ */
+@mixin is($state, $prefix: $state-prefix) {
+  @at-root {
+    &.#{$prefix}-#{$state} {
+      @content;
+    }
+  }
+}
+
+/**
+ * When（条件）Mixin
+ * 
+ * 用于定义组件的条件类，如 has-icon、with-border、without-padding 等。
+ * 条件类使用 has-、with-、without- 等前缀，表示组件包含或不包含某些特性。
+ * 
+ * @param {String} $condition - 条件的名称
+ * @param {String} $prefix - 条件前缀，默认为 'has'
+ * 
+ * @example
+ *   @include b(button) {
+ *     @include when(icon) {
+ *       padding-left: 32px;
+ *     }
+ *     @include when(border, 'with') {
+ *       border: 1px solid #ccc;
+ *     }
+ *     @include when(margin, 'without') {
+ *       margin: 0;
+ *     }
+ *   }
+ *   // 生成：
+ *   // .admin-button.has-icon { padding-left: 32px; }
+ *   // .admin-button.with-border { border: 1px solid #ccc; }
+ *   // .admin-button.without-margin { margin: 0; }
+ */
+@mixin when($condition, $prefix: 'has') {
+  @at-root {
+    &.#{$prefix}-#{$condition} {
+      @content;
+    }
+  }
+}
+
+/**
+ * Pseudo（伪类/伪元素）Mixin
+ * 
+ * 用于快速添加伪类或伪元素样式。
+ * 
+ * @param {String} $pseudo - 伪类或伪元素名称（不需要冒号）
+ * 
+ * @example
+ *   @include b(button) {
+ *     @include pseudo(hover) {
+ *       background: darkblue;
+ *     }
+ *     @include pseudo(before) {
+ *       content: '';
+ *       display: block;
+ *     }
+ *   }
+ *   // 生成：
+ *   // .admin-button:hover { background: darkblue; }
+ *   // .admin-button::before { content: ''; display: block; }
+ */
+@mixin pseudo($pseudo) {
+  @at-root {
+    @if $pseudo == 'before' or $pseudo == 'after' or $pseudo == 'first-line' or $pseudo == 'first-letter' {
+      &::#{$pseudo} {
+        @content;
+      }
+    } @else {
+      &:#{$pseudo} {
+        @content;
+      }
+    }
+  }
+}

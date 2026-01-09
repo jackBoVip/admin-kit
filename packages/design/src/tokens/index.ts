@@ -1,10 +1,6 @@
 /**
  * 设计令牌
+ * 导入浅色主题和暗色主题的 CSS 变量
  */
-
-export const colors = {
-  primary: '#1890ff',
-  success: '#52c41a',
-  warning: '#faad14',
-  error: '#f5222d',
-};
+import './light.css';
+import './dark.css';

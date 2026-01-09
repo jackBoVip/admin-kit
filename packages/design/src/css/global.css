@@ -207,16 +207,16 @@
   }
 
   /* 链接样式 */
-  .vben-link {
+  .admin-link {
     color: var(--color-primary);
     cursor: pointer;
   }
 
-  .vben-link:hover {
+  .admin-link:hover {
     color: var(--color-primary-hover);
   }
 
-  .vben-link:active {
+  .admin-link:active {
     color: var(--color-primary-active);
   }
 

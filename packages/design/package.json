@@ -18,20 +18,26 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./styles": "./dist/styles/index.css"
+    "./css": "./dist/style.css",
+    "./umd": "./dist/index.umd.js",
+    "./scss-bem": "./src/scss-bem/bem.scss",
+    "./scss-bem/*": "./src/scss-bem/*"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
+  "unpkg": "./dist/index.umd.js",
+  "jsdelivr": "./dist/index.umd.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
+    "src/scss-bem",
     "README.md"
   ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "unbuild",
-    "dev": "unbuild --stub"
+    "build": "vite build",
+    "dev": "vite build --watch"
   }
 }
