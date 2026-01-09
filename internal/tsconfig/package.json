@@ -1,5 +1,5 @@
 {
-  "name": "@admin-kit/tsconfig",
+  "name": "@admin-core/tsconfig",
   "version": "0.0.0",
   "private": true,
   "type": "module",

@@ -1,4 +1,4 @@
-# @admin-kit/design
+# @admin-core/design
 
 设计系统（样式、令牌）
 
@@ -6,13 +6,13 @@
 
 ```bash
 # npm
-npm install @admin-kit/design
+npm install @admin-core/design
 
 # pnpm
-pnpm add @admin-kit/design
+pnpm add @admin-core/design
 
 # yarn
-yarn add @admin-kit/design
+yarn add @admin-core/design
 ```
 
 ## 使用方式
@@ -22,7 +22,7 @@ yarn add @admin-kit/design
 #### ESM (推荐)
 
 ```typescript
-import '@admin-kit/design/css'
+import '@admin-core/design/css'
 
 // 使用 CSS 变量
 // 在你的组件中直接使用设计令牌
@@ -31,7 +31,7 @@ import '@admin-kit/design/css'
 #### CommonJS
 
 ```javascript
-require('@admin-kit/design/css')
+require('@admin-core/design/css')
 ```
 
 ### 2. SCSS BEM 工具
@@ -40,7 +40,7 @@ require('@admin-kit/design/css')
 
 ```scss
 // 导入 BEM Mixin 工具
-@use '@admin-kit/design/scss-bem' as *;
+@use '@admin-core/design/scss-bem' as *;
 
 // 使用 BEM Mixin
 @include b(button) {
@@ -68,10 +68,10 @@ require('@admin-kit/design/css')
 
 ```html
 <!-- 样式 -->
-<link rel="stylesheet" href="https://unpkg.com/@admin-kit/design/dist/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@admin-core/design/dist/style.css">
 
 <!-- JavaScript -->
-<script src="https://unpkg.com/@admin-kit/design/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@admin-core/design/dist/index.umd.js"></script>
 <script>
   // 全局变量 AdminKitDesign
   console.log(AdminKitDesign)
@@ -82,10 +82,10 @@ require('@admin-kit/design/css')
 
 ```html
 <!-- 样式 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@admin-kit/design/dist/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@admin-core/design/dist/style.css">
 
 <!-- JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/@admin-kit/design/dist/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@admin-core/design/dist/index.umd.js"></script>
 <script>
   console.log(AdminKitDesign)
 </script>

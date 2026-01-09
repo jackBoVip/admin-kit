@@ -1,5 +1,5 @@
 {
-  "name": "@admin-kit/composables",
+  "name": "@admin-core/composables",
   "version": "0.0.0",
   "private": false,
   "type": "module",

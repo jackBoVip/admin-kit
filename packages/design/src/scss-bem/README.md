@@ -34,7 +34,7 @@ $element-separator: '-';
 $modifier-separator: '--';
 
 // 导入 BEM 工具
-@use '@admin-kit/design/scss-bem' as *;
+@use '@admin-core/design/scss-bem' as *;
 
 @include b(button) {
   // 生成 .my-app_button
@@ -52,7 +52,7 @@ $modifier-separator: '--';
 ### 基础用法
 
 ```scss
-@use '@admin-kit/design/scss-bem' as *;
+@use '@admin-core/design/scss-bem' as *;
 
 @include b(button) {
   // 生成 .admin-button
