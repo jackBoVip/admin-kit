@@ -1,0 +1,27 @@
+{
+  "name": "@admin-kit/composables",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Vue 组合式函数和状态管理",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub"
+  },
+  "dependencies": {
+    "@vueuse/core": "catalog:",
+    "vue": "catalog:"
+  }
+}

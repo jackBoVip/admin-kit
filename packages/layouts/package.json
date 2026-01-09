@@ -1,0 +1,27 @@
+{
+  "name": "@admin-kit/layouts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "布局和业务组件",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub"
+  },
+  "dependencies": {
+    "@admin-kit/ui": "workspace:*",
+    "@admin-kit/composables": "workspace:*"
+  }
+}

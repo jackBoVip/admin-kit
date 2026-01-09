@@ -1,0 +1,26 @@
+{
+  "name": "@admin-kit/icons",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "图标组件",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub"
+  },
+  "dependencies": {
+    "@iconify/vue": "catalog:"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@admin-kit/design",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "设计系统（样式、令牌）",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles": "./dist/styles/index.css"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub"
+  }
+}
