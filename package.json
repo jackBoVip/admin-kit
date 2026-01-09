@@ -16,6 +16,7 @@
     "@vitejs/plugin-vue": "catalog:",
     "prettier": "catalog:",
     "sass": "catalog:",
+    "tailwindcss": "catalog:",
     "tsup": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:",

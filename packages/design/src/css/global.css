@@ -1,7 +1,8 @@
-/* Tailwind CSS 指令 */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind CSS v4 导入 */
+@import "tailwindcss";
+
+/* 定义层级顺序 */
+@layer theme, base, components, utilities;
 
 /* 基础样式层 */
 @layer base {
@@ -9,17 +10,17 @@
   *,
   ::after,
   ::before {
-    @apply border-border;
-
     box-sizing: border-box;
     border-style: solid;
     border-width: 0;
+    border-color: var(--color-border);
   }
 
   /* HTML 根元素样式 */
   html {
-    @apply text-foreground bg-background font-sans;
-
+    color: var(--color-foreground);
+    background-color: var(--color-background);
+    font-family: var(--font-family-sans);
     font-size: var(--font-size-base, 16px);
     font-variation-settings: normal;
     line-height: 1.15;
@@ -38,7 +39,8 @@
   #app,
   body,
   html {
-    @apply size-full;
+    width: 100%;
+    height: 100%;
 
     /* 稳定滚动条槽（可选） */
     /* scrollbar-gutter: stable; */
@@ -65,73 +67,80 @@
   a:hover,
   a:link,
   a:visited {
-    @apply no-underline;
+    text-decoration: none;
   }
 
   /* 视图过渡动画配置 */
   ::view-transition-new(root),
   ::view-transition-old(root) {
-    @apply animate-none mix-blend-normal;
+    animation: none;
+    mix-blend-mode: normal;
   }
 
   /* 旧视图层级 */
   ::view-transition-old(root) {
-    @apply z-[1];
+    z-index: 1;
   }
 
   /* 新视图层级 */
   ::view-transition-new(root) {
-    @apply z-[2147483646];
+    z-index: 2147483646;
   }
 
   /* 暗色模式下的视图过渡层级反转 */
   html.dark::view-transition-old(root) {
-    @apply z-[2147483646];
+    z-index: 2147483646;
   }
 
   html.dark::view-transition-new(root) {
-    @apply z-[1];
+    z-index: 1;
   }
 
   /* 输入框占位符样式 */
   input::placeholder,
   textarea::placeholder {
-    @apply opacity-100;
+    opacity: 1;
   }
 
   /* 输入框自动填充样式（可选） */
   /* input:-webkit-autofill {
-    @apply border-none;
-
+    border: none;
     box-shadow: 0 0 0 1000px transparent inset;
   } */
 
   /* 移除数字输入框的增减按钮 */
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
-    @apply m-0 appearance-none;
+    margin: 0;
+    appearance: none;
   }
 
   /* 自定义滚动条样式（仅非 macOS 系统） */
   html:not([data-platform='macOs']) {
     /* 滚动条尺寸 */
     ::-webkit-scrollbar {
-      @apply h-[10px] w-[10px];
+      height: 10px;
+      width: 10px;
     }
 
     /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb {
-      @apply bg-border rounded-sm border-none;
+      background-color: var(--color-border);
+      border-radius: 0.125rem;
+      border: none;
     }
 
     /* 滚动条轨道 */
     ::-webkit-scrollbar-track {
-      @apply rounded-sm border-none bg-transparent shadow-none;
+      border-radius: 0.125rem;
+      border: none;
+      background-color: transparent;
+      box-shadow: none;
     }
 
     /* 隐藏滚动条按钮 */
     ::-webkit-scrollbar-button {
-      @apply hidden;
+      display: none;
     }
   }
 }
@@ -140,27 +149,46 @@
 @layer components {
   /* 水平居中布局 */
   .flex-center {
-    @apply flex items-center justify-center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* 垂直居中布局 */
   .flex-col-center {
-    @apply flex flex-col items-center justify-center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   /* 轮廓框样式 */
   .outline-box {
-    @apply outline-border relative cursor-pointer rounded-md p-1 outline outline-1;
+    position: relative;
+    cursor: pointer;
+    border-radius: 0.375rem;
+    padding: 0.25rem;
+    outline: 1px solid var(--color-border);
   }
 
   /* 轮廓框悬停效果 */
   .outline-box::after {
-    @apply absolute left-1/2 top-1/2 z-20 h-0 w-[1px] rounded-sm opacity-0 outline outline-2 outline-transparent transition-all duration-300 content-[""];
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 20;
+    height: 0;
+    width: 1px;
+    border-radius: 0.125rem;
+    opacity: 0;
+    outline: 2px solid transparent;
+    transition: all 0.3s;
   }
 
   /* 激活状态的轮廓框 */
   .outline-box.outline-box-active {
-    @apply outline-primary outline outline-2;
+    outline: 2px solid var(--color-primary);
   }
 
   .outline-box.outline-box-active::after {
@@ -169,26 +197,44 @@
 
   /* 非激活状态的悬停效果 */
   .outline-box:not(.outline-box-active):hover::after {
-    @apply outline-primary left-0 top-0 h-full w-full p-1 opacity-100;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding: 0.25rem;
+    opacity: 1;
+    outline-color: var(--color-primary);
   }
 
   /* 链接样式 */
   .vben-link {
-    @apply text-primary hover:text-primary-hover active:text-primary-active cursor-pointer;
+    color: var(--color-primary);
+    cursor: pointer;
+  }
+
+  .vben-link:hover {
+    color: var(--color-primary-hover);
+  }
+
+  .vben-link:active {
+    color: var(--color-primary-active);
   }
 
   /* 卡片容器样式 */
   .card-box {
-    @apply bg-card text-card-foreground border-border rounded-xl border;
+    background-color: var(--color-card);
+    color: var(--color-card-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
   }
 }
 
 /* 反色模式 */
 html.invert-mode {
-  @apply invert;
+  filter: invert(1);
 }
 
 /* 灰度模式 */
 html.grayscale-mode {
-  @apply grayscale;
+  filter: grayscale(1);
 }
