@@ -17,7 +17,7 @@ import {
   HTML_ATTRIBUTES,
   THEME_TRANSITION_DURATION,
   THEME_MAP,
-  THEME_METADATA,
+  getThemeMetadata,
 } from './constants'
 
 /**
@@ -288,13 +288,13 @@ export function watchSystemTheme(callback: (mode: ThemeMode) => void): () => voi
  * 获取所有可用主题
  */
 export function getAvailableThemes() {
-  return THEME_METADATA
+  return getThemeMetadata()
 }
 
 /**
  * 根据 ID 获取主题元数据
  */
-export function getThemeMetadata(variant: ThemeVariant) {
+export function getThemeMetadataById(variant: ThemeVariant) {
   return THEME_MAP.get(variant)
 }
 

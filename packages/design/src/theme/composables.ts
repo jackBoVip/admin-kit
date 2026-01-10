@@ -18,7 +18,7 @@ import {
   applyTheme,
   toggleDarkMode as utilToggleDarkMode,
   getAvailableThemes,
-  getThemeMetadata,
+  getThemeMetadataById,
   watchSystemTheme,
 } from './utils'
 
@@ -140,7 +140,7 @@ export function useTheme(): UseThemeReturn {
    * 获取当前主题元数据
    */
   const getCurrentThemeMetadata = (): ThemeMetadata | undefined => {
-    return getThemeMetadata(globalThemeState.value.variant)
+    return getThemeMetadataById(globalThemeState.value.variant)
   }
   
   return {

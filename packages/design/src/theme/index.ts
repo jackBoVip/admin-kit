@@ -71,7 +71,23 @@ export {
   THEME_METADATA,
   THEMES_BY_CATEGORY,
   THEME_MAP,
+  getThemeMetadata,
 } from './constants'
+
+// 导出国际化
+export {
+  setLocale,
+  getLocale,
+  getTranslations,
+  getThemeName,
+  getThemeDescription,
+  locales,
+  DEFAULT_LOCALE,
+  zhCN,
+  enUS,
+  type Locale,
+  type ThemeTranslations,
+} from './i18n'
 
 // 导出工具函数
 export {
@@ -93,7 +109,7 @@ export {
   detectSystemTheme,
   watchSystemTheme,
   getAvailableThemes,
-  getThemeMetadata,
+  getThemeMetadataById,
   parseHSL,
   toHSLString,
   getCSSVariable,
