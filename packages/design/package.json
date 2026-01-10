@@ -1,11 +1,12 @@
 {
   "name": "@admin-core/design",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": false,
   "type": "module",
   "description": "设计系统（样式、令牌）",
   "keywords": [
-    "admin-kit","admin-core",
+    "admin-kit",
+    "admin-core",
     "design",
     "tokens",
     "styles",

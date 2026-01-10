@@ -1,5 +1,11 @@
 # @admin-core/icons
 
+## 0.1.4
+
+### Patch Changes
+
+- Enhance package keywords for better npm search visibility
+
 ## 0.1.3
 
 ### Patch Changes

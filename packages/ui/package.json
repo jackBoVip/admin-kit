@@ -1,11 +1,12 @@
 {
   "name": "@admin-core/ui",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": false,
   "type": "module",
   "description": "基础 UI 组件库",
   "keywords": [
-    "admin-kit","admin-core",
+    "admin-kit",
+    "admin-core",
     "ui",
     "vue",
     "components",

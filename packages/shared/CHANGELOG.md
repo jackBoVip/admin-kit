@@ -1,5 +1,11 @@
 # @admin-core/shared
 
+## 0.1.8
+
+### Patch Changes
+
+- Enhance package keywords for better npm search visibility
+
 ## 0.1.7
 
 ### Patch Changes

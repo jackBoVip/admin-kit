@@ -1,5 +1,11 @@
 # @admin-core/design
 
+## 0.2.2
+
+### Patch Changes
+
+- Enhance package keywords for better npm search visibility
+
 ## 0.2.1
 
 ### Patch Changes

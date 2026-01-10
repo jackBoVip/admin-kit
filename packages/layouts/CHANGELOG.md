@@ -1,5 +1,11 @@
 # @admin-kit/layouts
 
+## 0.0.4
+
+### Patch Changes
+
+- Enhance package keywords for better npm search visibility
+
 ## 0.0.3
 
 ### Patch Changes

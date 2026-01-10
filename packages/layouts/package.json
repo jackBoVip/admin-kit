@@ -1,11 +1,12 @@
 {
   "name": "@admin-core/layouts",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": false,
   "type": "module",
   "description": "布局和业务组件",
   "keywords": [
-    "admin-kit","admin-core",
+    "admin-kit",
+    "admin-core",
     "layouts",
     "vue",
     "components",

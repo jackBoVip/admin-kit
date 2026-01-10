@@ -1,5 +1,11 @@
 # @admin-core/composables
 
+## 0.1.2
+
+### Patch Changes
+
+- Enhance package keywords for better npm search visibility
+
 ## 0.1.1
 
 ### Patch Changes
