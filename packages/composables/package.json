@@ -64,7 +64,9 @@
     "postpublish": "node ../../scripts/restore-catalog.js"
   },
   "dependencies": {
-    "@vueuse/core": "catalog:"
+    "@admin-core/shared": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "reka-ui": "catalog:"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

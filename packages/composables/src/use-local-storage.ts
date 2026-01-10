@@ -2,6 +2,34 @@ import { ref, watch } from 'vue'
 
 /**
  * LocalStorage 持久化组合式函数
+ * 
+ * @description
+ * 提供 LocalStorage 的响应式封装，自动同步数据到本地存储
+ * 
+ * @param key - LocalStorage 的键名
+ * @param defaultValue - 默认值
+ * 
+ * @returns 包含响应式数据和删除方法的对象
+ * 
+ * @example
+ * ```ts
+ * import { useLocalStorage } from '@admin-core/composables'
+ * 
+ * // 基本用法
+ * const { data, remove } = useLocalStorage('user', { name: 'Admin' })
+ * 
+ * // 修改数据会自动保存到 LocalStorage
+ * data.value = { name: 'John' }
+ * 
+ * // 删除数据
+ * remove()
+ * 
+ * // 支持复杂对象
+ * const { data: settings } = useLocalStorage('settings', {
+ *   theme: 'light',
+ *   language: 'zh-CN'
+ * })
+ * ```
  */
 export function useLocalStorage<T>(key: string, defaultValue: T) {
   const data = ref<T>(defaultValue)

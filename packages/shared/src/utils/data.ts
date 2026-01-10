@@ -905,6 +905,22 @@ export function kebabCase(str: string): string {
 }
 
 /**
+ * 将短横线命名法转换为驼峰命名法
+ * @description 专门用于将 kebab-case 转换为 camelCase
+ * @param str - 短横线命名的字符串
+ * @returns 驼峰命名的字符串
+ * @example
+ * ```typescript
+ * kebabToCamelCase('hello-world') // 'helloWorld'
+ * kebabToCamelCase('my-component-name') // 'myComponentName'
+ * ```
+ */
+export function kebabToCamelCase(str: string): string {
+  if (!str) return str
+  return str.replaceAll(/-([a-z])/g, (_, char) => char.toUpperCase())
+}
+
+/**
  * 将字符串转换为下划线命名法 (snake_case)
  * @param str - 要转换的字符串
  * @returns 下划线命名的字符串

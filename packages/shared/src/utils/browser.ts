@@ -125,6 +125,24 @@ export function getScrollbarWidth(): number {
   return scrollbarWidth
 }
 
+/**
+ * 检查页面是否需要滚动条
+ * @description 判断页面内容高度是否超过视口高度
+ * @returns 是否需要滚动条
+ * @example
+ * ```typescript
+ * if (needsScrollbar()) {
+ *   console.log('页面需要滚动条')
+ * }
+ * ```
+ */
+export function needsScrollbar(): boolean {
+  return (
+    globalThis.document.body.scrollHeight >
+    (globalThis.innerHeight || globalThis.document.documentElement.clientHeight)
+  )
+}
+
 // ============================================================================
 // 剪贴板工具函数
 // ============================================================================

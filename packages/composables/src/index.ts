@@ -9,6 +9,10 @@ export * from './use-counter'
 export * from './use-loading'
 export * from './use-clipboard'
 export * from './use-local-storage'
+export * from './use-scroll-lock'
+export * from './use-priority-value'
+export * from './use-namespace'
+export * from './use-layout-style'
 
 // 重新导出 @vueuse/core 的常用函数
 export {
@@ -31,3 +35,11 @@ export {
   useOnline,
   useClipboard as useVueUseClipboard,
 } from '@vueuse/core'
+
+
+export {
+  useEmitAsProps,
+  useForwardExpose,
+  useForwardProps,
+  useForwardPropsEmits,
+} from 'reka-ui';
