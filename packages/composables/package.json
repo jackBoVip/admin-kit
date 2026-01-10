@@ -1,6 +1,6 @@
 {
   "name": "@admin-core/composables",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "type": "module",
   "description": "Vue 组合式函数和状态管理",
@@ -26,7 +26,8 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "README.en.md"
   ],
   "publishConfig": {
     "access": "public"

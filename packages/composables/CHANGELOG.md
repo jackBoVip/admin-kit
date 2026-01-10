@@ -1,5 +1,18 @@
 # @admin-core/composables
 
+## 0.1.1
+
+### Patch Changes
+
+- 添加更多实用组合式函数
+  - 新增 useBoolean - 布尔值状态管理
+  - 新增 useCounter - 计数器状态管理
+  - 新增 useLoading - 加载状态管理
+  - 新增 useClipboard - 剪贴板操作
+  - 新增 useLocalStorage - LocalStorage 持久化
+  - 重新导出 VueUse 常用函数
+  - 创建完整的中英文文档
+
 ## 0.1.0
 
 ### Minor Changes
