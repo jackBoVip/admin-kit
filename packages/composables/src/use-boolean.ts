@@ -4,7 +4,7 @@ import { ref } from 'vue'
  * 布尔值状态管理组合式函数
  * 
  * @description
- * 提供布尔值状态的便捷管理方法
+ * 提供布尔值状态的便捷管理方法，使用 ES2025 最新特性
  * 
  * @param initialValue - 初始值，默认为 false
  * 

@@ -86,9 +86,9 @@ export function usePriorityValues<
 >(props: T, state: S | undefined) {
   const result: { [K in keyof T]: ComputedRef<T[K]> } = {} as never;
 
-  (Object.keys(props) as (keyof T)[]).forEach((key) => {
-    result[key] = usePriorityValue(key as keyof typeof props, props, state);
-  });
+  for (const key of Object.keys(props) as (keyof T)[]) {
+    result[key] = usePriorityValue(key as keyof typeof props, props, state)
+  }
 
   return result;
 }
@@ -118,19 +118,19 @@ export function useForwardPriorityValues<
 >(props: T, state: S | undefined) {
   const computedResult: { [K in keyof T]: ComputedRef<T[K]> } = {} as never;
 
-  (Object.keys(props) as (keyof T)[]).forEach((key) => {
+  for (const key of Object.keys(props) as (keyof T)[]) {
     computedResult[key] = usePriorityValue(
       key as keyof typeof props,
       props,
       state,
-    );
-  });
+    )
+  }
 
   return computed(() => {
-    const unwrapResult: Record<string, any> = {};
-    Object.keys(props).forEach((key) => {
-      unwrapResult[key] = unref(computedResult[key]);
-    });
-    return unwrapResult as { [K in keyof T]: T[K] };
-  });
+    const unwrapResult: Record<string, any> = {}
+    for (const key of Object.keys(props)) {
+      unwrapResult[key] = unref(computedResult[key])
+    }
+    return unwrapResult as { [K in keyof T]: T[K] }
+  })
 }

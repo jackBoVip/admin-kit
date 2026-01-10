@@ -4,7 +4,7 @@ import { ref } from 'vue'
  * 加载状态管理组合式函数
  * 
  * @description
- * 提供加载状态的便捷管理，支持异步函数自动管理加载状态
+ * 提供加载状态的便捷管理，支持异步函数自动管理加载状态，使用 ES2025 最新特性
  * 
  * @param initialValue - 初始加载状态，默认为 false
  * 

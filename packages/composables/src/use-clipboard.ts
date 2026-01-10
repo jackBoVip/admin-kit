@@ -5,7 +5,7 @@ import { useClipboard as useVueUseClipboard } from '@vueuse/core'
  * 剪贴板操作组合式函数
  * 
  * @description
- * 提供剪贴板复制功能，支持错误处理
+ * 提供剪贴板复制功能，支持错误处理，使用 ES2025 最新特性
  * 
  * @returns 包含复制方法和状态的对象
  * 

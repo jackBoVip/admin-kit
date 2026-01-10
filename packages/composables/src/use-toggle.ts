@@ -4,7 +4,7 @@ import { ref } from 'vue';
  * 切换状态的组合式函数
  * 
  * @description
- * 提供布尔值切换功能，常用于开关、显示/隐藏等场景
+ * 提供布尔值切换功能，常用于开关、显示/隐藏等场景，使用 ES2025 最新特性
  * 
  * @param initialValue - 初始状态，默认为 false
  * 

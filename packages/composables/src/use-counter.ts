@@ -16,7 +16,7 @@ export interface UseCounterOptions {
  * 计数器组合式函数
  * 
  * @description
- * 提供计数器功能，支持最小值、最大值和步长限制
+ * 提供计数器功能，支持最小值、最大值和步长限制，使用 ES2025 最新特性
  * 
  * @param initialValue - 初始值，默认为 0
  * @param options - 配置选项

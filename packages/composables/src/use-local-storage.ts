@@ -4,7 +4,7 @@ import { ref, watch } from 'vue'
  * LocalStorage 持久化组合式函数
  * 
  * @description
- * 提供 LocalStorage 的响应式封装，自动同步数据到本地存储
+ * 提供 LocalStorage 的响应式封装，自动同步数据到本地存储，使用 ES2025 最新特性
  * 
  * @param key - LocalStorage 的键名
  * @param defaultValue - 默认值
@@ -37,7 +37,7 @@ export function useLocalStorage<T>(key: string, defaultValue: T) {
   // 从 localStorage 读取初始值
   const read = () => {
     try {
-      const item = localStorage.getItem(key)
+      const item = globalThis.localStorage.getItem(key)
       if (item !== null) {
         data.value = JSON.parse(item)
       }
@@ -49,7 +49,7 @@ export function useLocalStorage<T>(key: string, defaultValue: T) {
   // 写入 localStorage
   const write = () => {
     try {
-      localStorage.setItem(key, JSON.stringify(data.value))
+      globalThis.localStorage.setItem(key, JSON.stringify(data.value))
     } catch (error) {
       console.error(`Error writing localStorage key "${key}":`, error)
     }
@@ -58,7 +58,7 @@ export function useLocalStorage<T>(key: string, defaultValue: T) {
   // 删除 localStorage
   const remove = () => {
     try {
-      localStorage.removeItem(key)
+      globalThis.localStorage.removeItem(key)
       data.value = defaultValue
     } catch (error) {
       console.error(`Error removing localStorage key "${key}":`, error)

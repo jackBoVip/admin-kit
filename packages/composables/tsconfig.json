@@ -4,7 +4,8 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "composite": false,
-    "lib": ["ES2020", "DOM"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
     "noPropertyAccessFromIndexSignature": false
   },
   "include": ["src/**/*"]

@@ -48,11 +48,11 @@ export function useScrollLock() {
     );
     const nodes = Array.from(layoutFixedNodes);
     if (nodes.length > 0) {
-      nodes.forEach((node) => {
-        node.dataset.transition = node.style['transition'];
-        node.style['transition'] = 'none';
-        node.style.paddingRight = `${scrollbarWidth}px`;
-      });
+      for (const node of nodes) {
+        node.dataset.transition = node.style['transition']
+        node.style['transition'] = 'none'
+        node.style.paddingRight = `${scrollbarWidth}px`
+      }
     }
     isLocked.value = true;
   });
@@ -67,12 +67,12 @@ export function useScrollLock() {
     );
     const nodes = Array.from(layoutFixedNodes);
     if (nodes.length > 0) {
-      nodes.forEach((node) => {
-        node.style.paddingRight = '';
+      for (const node of nodes) {
+        node.style.paddingRight = ''
         requestAnimationFrame(() => {
-          node.style['transition'] = node.dataset.transition || '';
-        });
-      });
+          node.style['transition'] = node.dataset.transition || ''
+        })
+      }
     }
     document.body.style.paddingRight = '';
   });
