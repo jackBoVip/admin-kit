@@ -94,6 +94,9 @@
       <!-- 自定义主题面板 -->
       <CustomThemePanel class="mb-8" />
 
+      <!-- 第三方集成测试 -->
+      <IntegrationTest class="mb-8" />
+
       <!-- 颜色令牌展示 -->
       <section class="mb-8">
         <h2 class="text-2xl font-bold mb-6">颜色令牌</h2>
@@ -302,6 +305,7 @@ import { ref } from 'vue'
 import { useTheme, setLocale, getLocale, getThemeMetadata, type Locale } from '@admin-core/design'
 import ColorCard from './components/ColorCard.vue'
 import CustomThemePanel from './components/CustomThemePanel.vue'
+import IntegrationTest from './components/IntegrationTest.vue'
 
 // 使用主题系统
 const {
