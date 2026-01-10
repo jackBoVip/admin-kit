@@ -4,7 +4,7 @@
   "private": false,
   "type": "module",
   "description": "图标组件库",
-  "keywords": ["admin-kit","admin-core", "icons", "vue", "components"],
+  "keywords": ["admin-kit","admin-core", "icons", "vue", "components", "svg-icons", "icon-library", "frontend", "ui", "interface", "graphics", "vector", "lucide", "iconify", "vue-icons"],
   "author": "Admin Kit Team",
   "license": "MIT",
   "repository": {

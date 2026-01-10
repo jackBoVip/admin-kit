@@ -6,11 +6,19 @@
   "description": "设计系统（样式、令牌）",
   "keywords": [
     "admin-kit","admin-core",
-    "admin-core",
     "design",
     "tokens",
     "styles",
-    "css"
+    "css",
+    "tailwind",
+    "themes",
+    "ui",
+    "frontend",
+    "styling",
+    "components",
+    "design-system",
+    "web-design",
+    "framework"
   ],
   "author": "Admin Kit Team",
   "license": "MIT",

@@ -4,7 +4,7 @@
   "private": false,
   "type": "module",
   "description": "共享工具、常量和类型",
-  "keywords": ["admin-kit","admin-core", "shared", "utils", "constants", "types"],
+  "keywords": ["admin-kit","admin-core", "shared", "utils", "constants", "types", "utilities", "helpers", "frontend", "vue", "typescript", "javascript", "configuration", "validation", "common-functions"],
   "author": "Admin Kit Team",
   "license": "MIT",
   "repository": {

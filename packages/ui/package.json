@@ -9,7 +9,16 @@
     "ui",
     "vue",
     "components",
-    "library"
+    "library",
+    "component-library",
+    "frontend",
+    "ui-framework",
+    "web-components",
+    "design-system",
+    "interactive",
+    "widgets",
+    "elements",
+    "frontend-development"
   ],
   "author": "Admin Kit Team",
   "license": "MIT",

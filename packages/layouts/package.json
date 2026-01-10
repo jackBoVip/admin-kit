@@ -9,7 +9,17 @@
     "layouts",
     "vue",
     "components",
-    "business"
+    "business",
+    "admin-panel",
+    "dashboard",
+    "layout-components",
+    "frontend",
+    "ui",
+    "page-layout",
+    "navigation",
+    "sidebar",
+    "header",
+    "responsive"
   ],
   "author": "Admin Kit Team",
   "license": "MIT",
