@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tailwind 测试</title>
+  <style>
+    /* 直接测试 CSS 变量 */
+    .test-primary {
+      background-color: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+      padding: 1rem;
+      margin: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tailwind CSS 测试</h1>
+  
+  <div class="test-primary">
+    使用 CSS 变量的测试（应该有蓝色背景）
+  </div>
+  
+  <div class="bg-primary text-primary-foreground p-4 m-4">
+    使用 Tailwind 类的测试（应该有蓝色背景）
+  </div>
+  
+  <div class="bg-red-500 text-white p-4 m-4">
+    使用 Tailwind 默认颜色的测试（应该有红色背景）
+  </div>
+  
+  <script>
+    // 检查 CSS 变量
+    const root = document.documentElement;
+    const primary = getComputedStyle(root).getPropertyValue('--primary');
+    console.log('--primary:', primary);
+    
+    // 检查 Tailwind 类
+    const element = document.querySelector('.bg-primary');
+    if (element) {
+      const bg = getComputedStyle(element).backgroundColor;
+      console.log('bg-primary background:', bg);
+    }
+  </script>
+</body>
+</html>

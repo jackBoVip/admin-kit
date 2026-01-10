@@ -43,8 +43,8 @@
     "dev": "vite build --watch"
   },
   "dependencies": {
-    "@admin-kit/ui": "workspace:*",
-    "@admin-kit/composables": "workspace:*"
+    "@admin-core/ui": "workspace:*",
+    "@admin-core/composables": "workspace:*"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

@@ -6,6 +6,7 @@
   "description": "设计系统（样式、令牌）",
   "keywords": [
     "admin-kit",
+    "admin-core",
     "design",
     "tokens",
     "styles",
@@ -24,10 +25,23 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./style.css": "./dist/style.css",
     "./css": "./dist/style.css",
+    "./css/index.css": "./src/css/index.css",
+    "./tokens/light.css": "./src/tokens/light.css",
+    "./tokens/dark.css": "./src/tokens/dark.css",
     "./umd": "./dist/index.umd.js",
+    "./theme": {
+      "types": "./src/theme/index.ts",
+      "import": "./src/theme/index.ts"
+    },
     "./scss-bem": "./src/scss-bem/bem.scss",
-    "./scss-bem/*": "./src/scss-bem/*"
+    "./scss-bem/*": "./src/scss-bem/*",
+    "./tailwind.config": {
+      "types": "./tailwind.config.ts",
+      "import": "./tailwind.config.ts",
+      "require": "./tailwind.config.ts"
+    }
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -45,5 +59,13 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "sass": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:"
   }
 }

@@ -43,8 +43,8 @@
     "dev": "vite build --watch"
   },
   "dependencies": {
-    "@admin-kit/design": "workspace:*",
-    "@admin-kit/icons": "workspace:*"
+    "@admin-core/design": "workspace:*",
+    "@admin-core/icons": "workspace:*"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

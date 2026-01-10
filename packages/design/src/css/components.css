@@ -1,0 +1,96 @@
+/**
+ * 组件样式
+ * 可复用的组件类
+ */
+@layer components {
+  /* 水平居中布局 */
+  .flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 垂直居中布局 */
+  .flex-col-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 卡片容器样式 */
+  .card-box {
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+  }
+
+  /* 轮廓框样式 */
+  .outline-box {
+    position: relative;
+    cursor: pointer;
+    border-radius: 0.375rem;
+    padding: 0.25rem;
+    outline: 1px solid hsl(var(--border));
+  }
+
+  /* 轮廓框悬停效果 */
+  .outline-box::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 20;
+    height: 0;
+    width: 1px;
+    border-radius: 0.125rem;
+    opacity: 0;
+    outline: 2px solid transparent;
+    transition: all 0.3s;
+  }
+
+  /* 激活状态的轮廓框 */
+  .outline-box.outline-box-active {
+    outline: 2px solid hsl(var(--primary));
+  }
+
+  .outline-box.outline-box-active::after {
+    display: none;
+  }
+
+  /* 非激活状态的悬停效果 */
+  .outline-box:not(.outline-box-active):hover::after {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding: 0.25rem;
+    opacity: 1;
+    outline-color: hsl(var(--primary));
+  }
+
+  /* 链接样式 */
+  .admin-link {
+    color: hsl(var(--primary));
+    cursor: pointer;
+  }
+
+  .admin-link:hover {
+    opacity: 0.8;
+  }
+
+  .admin-link:active {
+    opacity: 0.6;
+  }
+}
+
+/* 反色模式 */
+html.invert-mode {
+  filter: invert(1);
+}
+
+/* 灰度模式 */
+html.grayscale-mode {
+  filter: grayscale(1);
+}

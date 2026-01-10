@@ -1,0 +1,21 @@
+/**
+ * @admin-core/design 样式系统入口
+ * 
+ * 包含：
+ * 1. Tailwind CSS v4 基础
+ * 2. 设计令牌（浅色/暗色主题）
+ * 3. 基础样式、组件样式、工具类
+ */
+
+/* Tailwind CSS v4 导入 */
+@import "tailwindcss";
+
+/* 导入设计令牌 */
+@import "../tokens/light.css";
+@import "../tokens/dark.css";
+
+/* 导入样式模块 */
+@import "./utilities.css";
+@import "./base.css";
+@import "./components.css";
+

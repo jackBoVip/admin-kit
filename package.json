@@ -11,7 +11,7 @@
     "release": "changeset publish"
   },
   "devDependencies": {
-    "@admin-kit/tsconfig": "workspace:*",
+    "@admin-core/tsconfig": "workspace:*",
     "@changesets/cli": "catalog:",
     "@vitejs/plugin-vue": "catalog:",
     "prettier": "catalog:",
