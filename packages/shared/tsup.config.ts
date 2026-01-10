@@ -37,7 +37,7 @@ export default defineConfig([
     tsconfig: './tsconfig.json',
     external: externalDeps,
   },
-  // UMD build for CDN (main entry only)
+  // UMD build for CDN (main entry only) - with external deps
   {
     entry: ['src/index.ts'],
     format: ['iife'],
@@ -55,7 +55,7 @@ export default defineConfig([
       }
     },
   },
-  // UMD minified build for CDN (main entry only)
+  // UMD minified build for CDN (main entry only) - with external deps
   {
     entry: ['src/index.ts'],
     format: ['iife'],
@@ -70,6 +70,24 @@ export default defineConfig([
     esbuildOptions(options) {
       options.banner = {
         js: '/* @admin-core/shared - MIT License */',
+      }
+    },
+  },
+  // UMD standalone build for CDN (main entry only) - bundle all deps
+  {
+    entry: ['src/index.ts'],
+    format: ['iife'],
+    outExtension: () => ({ js: '.umd.standalone.min.js' }),
+    globalName: 'AdminCoreShared',
+    clean: false,
+    splitting: false,
+    sourcemap: true,
+    minify: true,
+    tsconfig: './tsconfig.json',
+    // 不设置 external，打包所有依赖
+    esbuildOptions(options) {
+      options.banner = {
+        js: '/* @admin-core/shared - Standalone Bundle - MIT License */',
       }
     },
   },
