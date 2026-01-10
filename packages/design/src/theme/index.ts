@@ -130,6 +130,18 @@ export {
 // 导出自定义主题类型
 export type { CustomThemeColors } from './utils'
 
+// 导出第三方集成工具
+export {
+  getHSLColor,
+  getRGBColor,
+  getHexColor,
+  hslToRgb,
+  hslToHex,
+  getThemeColors,
+  getThemeColorsRGB,
+  getThemeColorsHex,
+} from './integration'
+
 // 导出 Vue Composables
 export {
   useTheme,
