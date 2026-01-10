@@ -1,6 +1,6 @@
 {
   "name": "@admin-core/design",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "type": "module",
   "description": "设计系统（样式、令牌）",
@@ -58,8 +58,7 @@
     "src/tokens",
     "src/scss-bem",
     "README.md",
-    "THIRD_PARTY_INTEGRATION.md",
-    "I18N.md"
+    "README.en.md"
   ],
   "publishConfig": {
     "access": "public"

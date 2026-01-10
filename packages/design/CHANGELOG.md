@@ -1,5 +1,15 @@
 # @admin-core/design
 
+## 0.2.1
+
+### Patch Changes
+
+- 文档优化
+  - 整合所有文档到 README.md（中文）和 README.en.md（英文）
+  - 删除旧的分散文档文件
+  - 改进文档排版和组织结构
+  - 提供完整的功能说明、使用示例和 API 参考
+
 ## 0.2.0
 
 ### Minor Changes
