@@ -393,3 +393,33 @@ export function getQueryParam(key: string, url?: string): string | null {
   const searchParams = new URLSearchParams(url || globalThis.location.search)
   return searchParams.get(key)
 }
+
+// ============================================================================
+// CSS 变量更新工具函数
+// ============================================================================
+
+/**
+ * 更新 CSS 变量
+ * @description 批量更新文档根元素的 CSS 自定义属性，使用 ESNext 最新特性
+ * @param variables - CSS 变量对象，键为变量名，值为变量值
+ * @example
+ * ```typescript
+ * updateCSSVariables({
+ *   '--primary-color': 'hsl(212 100% 45%)',
+ *   '--border-radius': '0.5rem',
+ *   '--font-size': '16px'
+ * })
+ * ```
+ */
+export function updateCSSVariables(variables: Record<string, string>): void {
+  const root = globalThis.document?.documentElement
+  if (!root) {
+    return
+  }
+
+  for (const [key, value] of Object.entries(variables)) {
+    if (value !== undefined && value !== null) {
+      root.style.setProperty(key, value)
+    }
+  }
+}

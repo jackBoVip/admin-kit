@@ -1453,3 +1453,77 @@ export function findTreeNode<T extends Record<string, any>>(
 
   return undefined
 }
+
+
+// ============================================================================
+// 对象差异比较工具函数
+// ============================================================================
+
+/**
+ * 对象差异结果类型
+ * @description 递归的部分类型，表示对象的差异
+ */
+export type DiffResult<T> = Partial<{
+  [K in keyof T]: T[K] extends object ? DiffResult<T[K]> : T[K]
+}>
+
+/**
+ * 深度比较两个对象，返回差异部分
+ * @description 比较两个对象，返回第二个对象中与第一个对象不同的部分，使用 ESNext 最新特性
+ * @template T - 对象类型
+ * @param obj1 - 第一个对象（原始对象）
+ * @param obj2 - 第二个对象（新对象）
+ * @returns 差异对象，只包含不同的字段
+ * @example
+ * ```typescript
+ * const old = { a: 1, b: { c: 2, d: 3 }, e: [1, 2] }
+ * const new = { a: 1, b: { c: 4, d: 3 }, e: [1, 3] }
+ * diff(old, new)
+ * // { b: { c: 4 }, e: [1, 3] }
+ * ```
+ */
+export function diff<T extends Record<string, any>>(
+  obj1: T,
+  obj2: T
+): DiffResult<T> {
+  /**
+   * 递归查找差异
+   * @param o1 - 第一个值
+   * @param o2 - 第二个值
+   * @returns 差异值，如果相同则返回 undefined
+   */
+  function findDifferences(o1: any, o2: any): any {
+    // 处理数组
+    if (Array.isArray(o1) && Array.isArray(o2)) {
+      if (!arraysEqual(o1, o2)) {
+        return o2
+      }
+      return undefined
+    }
+
+    // 处理对象
+    if (
+      typeof o1 === 'object' &&
+      typeof o2 === 'object' &&
+      o1 !== null &&
+      o2 !== null
+    ) {
+      const diffResult: any = {}
+      const keys = new Set([...Object.keys(o1), ...Object.keys(o2)])
+
+      for (const key of keys) {
+        const valueDiff = findDifferences(o1[key], o2[key])
+        if (valueDiff !== undefined) {
+          diffResult[key] = valueDiff
+        }
+      }
+
+      return Object.keys(diffResult).length > 0 ? diffResult : undefined
+    }
+
+    // 处理基本类型
+    return o1 === o2 ? undefined : o2
+  }
+
+  return findDifferences(obj1, obj2)
+}

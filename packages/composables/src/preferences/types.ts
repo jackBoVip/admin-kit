@@ -14,7 +14,7 @@ import type {
   PreferencesButtonPositionType,
   TabsStyleType,
   ThemeModeType,
-} from '@admin-core/typings';
+} from '@admin-core/shared/types';
 
 type SupportedLanguagesType = 'en-US' | 'zh-CN';
 

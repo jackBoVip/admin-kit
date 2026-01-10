@@ -418,7 +418,7 @@ class PreferenceManager {
     this.cache = new StorageManager({ prefix: namespace })
 
     // 合并初始偏好设置
-    this.initialPreferences = merge({}, overrides, defaultPreferences)
+    this.initialPreferences = merge({}, overrides || {}, defaultPreferences) as Preferences
 
     // 加载缓存的偏好设置并与初始配置合并
     const cachedPreferences = this.loadFromCache() || {}
@@ -426,7 +426,7 @@ class PreferenceManager {
       {},
       cachedPreferences,
       this.initialPreferences,
-    )
+    ) as Preferences
 
     // 更新偏好设置
     this.updatePreferences(mergedPreference)
