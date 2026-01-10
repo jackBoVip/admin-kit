@@ -29,6 +29,8 @@
 
 ## 📦 安装
 
+### NPM 安装（推荐）
+
 ```bash
 # 使用 pnpm
 pnpm add @admin-core/icons
@@ -38,6 +40,58 @@ npm install @admin-core/icons
 
 # 使用 yarn
 yarn add @admin-core/icons
+```
+
+### CDN 引入
+
+通过 CDN 直接在浏览器中使用：
+
+```html
+<!-- 引入 Vue 3 -->
+<script src="https://unpkg.com/vue@3"></script>
+
+<!-- 引入 @admin-core/icons -->
+<script src="https://unpkg.com/@admin-core/icons"></script>
+
+<!-- 或使用 jsDelivr -->
+<script src="https://cdn.jsdelivr.net/npm/@admin-core/icons"></script>
+
+<!-- 使用压缩版本 -->
+<script src="https://unpkg.com/@admin-core/icons/dist/index.umd.min.js"></script>
+```
+
+CDN 使用示例：
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Core Icons CDN Demo</title>
+</head>
+<body>
+  <div id="app">
+    <iconify-icon icon="mdi:home" :width="24"></iconify-icon>
+  </div>
+
+  <!-- 引入 Vue 3 -->
+  <script src="https://unpkg.com/vue@3"></script>
+  
+  <!-- 引入 @admin-core/icons -->
+  <script src="https://unpkg.com/@admin-core/icons"></script>
+
+  <script>
+    const { createApp } = Vue
+    const { IconifyIcon } = AdminCoreIcons
+
+    createApp({
+      components: {
+        IconifyIcon
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>
 ```
 
 ---

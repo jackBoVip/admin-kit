@@ -29,6 +29,8 @@ English | [简体中文](./README.md)
 
 ## 📦 Installation
 
+### NPM Installation (Recommended)
+
 ```bash
 # Using pnpm
 pnpm add @admin-core/icons
@@ -38,6 +40,58 @@ npm install @admin-core/icons
 
 # Using yarn
 yarn add @admin-core/icons
+```
+
+### CDN Usage
+
+Use directly in browser via CDN:
+
+```html
+<!-- Include Vue 3 -->
+<script src="https://unpkg.com/vue@3"></script>
+
+<!-- Include @admin-core/icons -->
+<script src="https://unpkg.com/@admin-core/icons"></script>
+
+<!-- Or use jsDelivr -->
+<script src="https://cdn.jsdelivr.net/npm/@admin-core/icons"></script>
+
+<!-- Use minified version -->
+<script src="https://unpkg.com/@admin-core/icons/dist/index.umd.min.js"></script>
+```
+
+CDN Usage Example:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Core Icons CDN Demo</title>
+</head>
+<body>
+  <div id="app">
+    <iconify-icon icon="mdi:home" :width="24"></iconify-icon>
+  </div>
+
+  <!-- Include Vue 3 -->
+  <script src="https://unpkg.com/vue@3"></script>
+  
+  <!-- Include @admin-core/icons -->
+  <script src="https://unpkg.com/@admin-core/icons"></script>
+
+  <script>
+    const { createApp } = Vue
+    const { IconifyIcon } = AdminCoreIcons
+
+    createApp({
+      components: {
+        IconifyIcon
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>
 ```
 
 ---
