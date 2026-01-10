@@ -75,6 +75,7 @@ import { debounce, formatFileSize } from '@admin-core/shared/utils'
 
 **Available subpaths:**
 
+- `@admin-core/shared/cache` - Storage management (~7 KB)
 - `@admin-core/shared/color` - Color utilities (~2 KB)
 - `@admin-core/shared/constants` - Constant definitions (~9 KB)
 - `@admin-core/shared/types` - TypeScript types (~33 B)
@@ -235,6 +236,191 @@ A: Check the corresponding type definition files:
 - `dist/constants.d.ts` - Constants
 - `dist/types.d.ts` - Types
 - `dist/utils.d.ts` - Utility functions
+
+---
+
+---
+
+## 💾 Storage Management (Cache)
+
+Provides browser storage management with prefix, expiration, and type safety, optimized with ES2025 features.
+
+### Features
+
+- ✅ **Type Safe** - Complete TypeScript type support
+- ✅ **Prefix Isolation** - Namespace support to avoid key conflicts
+- ✅ **Expiration Management** - Automatic handling of expired data
+- ✅ **Batch Operations** - Support for batch read/write/delete
+- ✅ **ES2025 Features** - Using private fields, `globalThis`, modern array methods, etc.
+- ✅ **Error Handling** - Comprehensive error handling and automatic retry
+
+### Basic Usage
+
+```typescript
+import { StorageManager } from '@admin-core/shared/cache'
+
+// Create storage manager
+const storage = new StorageManager({ 
+  prefix: 'myapp', 
+  storageType: 'localStorage' 
+})
+
+// Set permanent storage
+storage.setItem('user', { name: 'John', age: 30 })
+
+// Set storage with expiration (5 minutes)
+storage.setItem('token', 'abc123', 5 * 60 * 1000)
+
+// Get storage item
+const user = storage.getItem<{ name: string; age: number }>('user')
+console.log(user) // { name: 'John', age: 30 }
+
+// Check if exists
+if (storage.has('token')) {
+  console.log('Token exists')
+}
+
+// Remove storage item
+storage.removeItem('token')
+```
+
+### Batch Operations
+
+```typescript
+// Batch set
+storage.setItems({
+  user: { name: 'John' },
+  token: 'abc123',
+  config: { theme: 'dark' }
+}, 60 * 60 * 1000) // All items expire in 1 hour
+
+// Batch get
+const items = storage.getItems<string>(['token', 'refreshToken'])
+console.log(items) // { token: 'abc123', refreshToken: 'xyz789' }
+
+// Batch remove
+storage.removeItems(['token', 'refreshToken', 'session'])
+```
+
+### Management Operations
+
+```typescript
+// Get all keys
+const keys = storage.keys()
+console.log(keys) // ['user', 'token', 'config']
+
+// Get storage item count
+const count = storage.size()
+console.log(`Total items: ${count}`)
+
+// Clear all expired items
+storage.clearExpiredItems()
+
+// Clear all items with prefix
+storage.clear()
+```
+
+### Periodic Cleanup
+
+```typescript
+// Clean up expired items every minute
+setInterval(() => {
+  storage.clearExpiredItems()
+}, 60000)
+```
+
+### ES2025 Modern Features
+
+This module uses the following ES2025 and modern JavaScript features:
+
+#### 1. Private Field Syntax (`#`)
+```typescript
+class StorageManager {
+  readonly #prefix: string  // True private field
+  readonly #storage: Storage
+}
+```
+**Advantage**: More secure than `private` keyword, private at runtime too
+
+#### 2. `globalThis` Instead of `window`
+```typescript
+globalThis.localStorage  // Instead of window.localStorage
+```
+**Advantage**: Cross-environment compatibility (browser, Node.js, Web Workers)
+
+#### 3. Modern Array Methods
+```typescript
+// Using Array.from and functional programming
+const keys = Array.from(
+  { length: this.#storage.length },
+  (_, i) => this.#storage.key(i)
+).filter((key): key is string => key?.startsWith(this.#prefix) ?? false)
+```
+**Advantage**: More concise, readable, and functional
+
+#### 4. `Object.fromEntries()` and `Object.entries()`
+```typescript
+// Batch get
+return Object.fromEntries(
+  keys.map(key => [key, this.getItem<T>(key)])
+)
+
+// Batch set
+for (const [key, value] of Object.entries(items)) {
+  this.setItem(key, value, ttl)
+}
+```
+**Advantage**: Elegant conversion between objects and arrays
+
+#### 5. `for...of` Loop
+```typescript
+for (const key of keysToRemove) {
+  this.#storage.removeItem(key)
+}
+```
+**Advantage**: Better performance than `forEach`, supports break/continue
+
+### API Documentation
+
+#### Constructor
+
+```typescript
+constructor(options?: StorageManagerOptions)
+```
+
+**Parameters**:
+- `options.prefix` - Storage key prefix, default is empty string
+- `options.storageType` - Storage type, `'localStorage'` or `'sessionStorage'`, default is `'localStorage'`
+
+#### Methods
+
+| Method | Description | Parameters | Return |
+|--------|-------------|------------|--------|
+| `setItem<T>` | Set storage item | `key, value, ttl?` | `void` |
+| `getItem<T>` | Get storage item | `key, defaultValue?` | `T \| null` |
+| `removeItem` | Remove storage item | `key` | `void` |
+| `has` | Check if exists | `key` | `boolean` |
+| `keys` | Get all key names | - | `string[]` |
+| `size` | Get item count | - | `number` |
+| `clear` | Clear all items | - | `void` |
+| `clearExpiredItems` | Clear expired items | - | `void` |
+| `setItems<T>` | Batch set | `items, ttl?` | `void` |
+| `getItems<T>` | Batch get | `keys` | `Record<string, T \| null>` |
+| `removeItems` | Batch remove | `keys` | `void` |
+
+### Browser Compatibility
+
+- Chrome 90+
+- Firefox 90+
+- Safari 15+
+- Edge 90+
+
+Requires support for:
+- Private class fields (`#`)
+- `globalThis`
+- `Object.fromEntries()`
+- Optional chaining (`?.`)
+- Nullish coalescing (`??`)
 
 ---
 

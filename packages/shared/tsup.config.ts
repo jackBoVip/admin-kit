@@ -5,6 +5,7 @@ export default defineConfig([
   {
     entry: {
       index: 'src/index.ts',
+      cache: 'src/cache/index.ts',
       color: 'src/color/index.ts',
       constants: 'src/constants/index.ts',
       types: 'src/types/common.ts',

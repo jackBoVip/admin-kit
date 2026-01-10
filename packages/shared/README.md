@@ -75,6 +75,7 @@ import { debounce, formatFileSize } from '@admin-core/shared/utils'
 
 **可用的子路径：**
 
+- `@admin-core/shared/cache` - 存储管理工具（~7 KB）
 - `@admin-core/shared/color` - 颜色处理工具（~2 KB）
 - `@admin-core/shared/constants` - 常量定义（~9 KB）
 - `@admin-core/shared/types` - TypeScript 类型（~33 B）
@@ -235,6 +236,191 @@ A: 查看对应的类型定义文件：
 - `dist/constants.d.ts` - 常量
 - `dist/types.d.ts` - 类型
 - `dist/utils.d.ts` - 工具函数
+
+---
+
+---
+
+## 💾 存储管理（Cache）
+
+提供带前缀、过期时间和类型安全的浏览器存储管理功能，使用 ES2025 最新特性优化。
+
+### 特性
+
+- ✅ **类型安全** - 完整的 TypeScript 类型支持
+- ✅ **前缀隔离** - 支持命名空间，避免键名冲突
+- ✅ **过期管理** - 自动处理过期数据
+- ✅ **批量操作** - 支持批量读写和删除
+- ✅ **ES2025 特性** - 使用私有字段、`globalThis`、现代数组方法等
+- ✅ **错误处理** - 完善的错误处理和自动重试机制
+
+### 基础用法
+
+```typescript
+import { StorageManager } from '@admin-core/shared/cache'
+
+// 创建存储管理器
+const storage = new StorageManager({ 
+  prefix: 'myapp', 
+  storageType: 'localStorage' 
+})
+
+// 设置永久存储
+storage.setItem('user', { name: 'John', age: 30 })
+
+// 设置带过期时间的存储（5分钟）
+storage.setItem('token', 'abc123', 5 * 60 * 1000)
+
+// 获取存储项
+const user = storage.getItem<{ name: string; age: number }>('user')
+console.log(user) // { name: 'John', age: 30 }
+
+// 检查是否存在
+if (storage.has('token')) {
+  console.log('Token exists')
+}
+
+// 移除存储项
+storage.removeItem('token')
+```
+
+### 批量操作
+
+```typescript
+// 批量设置
+storage.setItems({
+  user: { name: 'John' },
+  token: 'abc123',
+  config: { theme: 'dark' }
+}, 60 * 60 * 1000) // 所有项 1 小时后过期
+
+// 批量获取
+const items = storage.getItems<string>(['token', 'refreshToken'])
+console.log(items) // { token: 'abc123', refreshToken: 'xyz789' }
+
+// 批量删除
+storage.removeItems(['token', 'refreshToken', 'session'])
+```
+
+### 管理操作
+
+```typescript
+// 获取所有键
+const keys = storage.keys()
+console.log(keys) // ['user', 'token', 'config']
+
+// 获取存储项数量
+const count = storage.size()
+console.log(`Total items: ${count}`)
+
+// 清除所有过期项
+storage.clearExpiredItems()
+
+// 清除所有带前缀的项
+storage.clear()
+```
+
+### 定期清理
+
+```typescript
+// 每分钟清理一次过期项
+setInterval(() => {
+  storage.clearExpiredItems()
+}, 60000)
+```
+
+### ES2025 现代特性
+
+本模块使用了以下 ES2025 和现代 JavaScript 特性：
+
+#### 1. 私有字段语法 (`#`)
+```typescript
+class StorageManager {
+  readonly #prefix: string  // 真正的私有字段
+  readonly #storage: Storage
+}
+```
+**优势**: 比 `private` 关键字更安全，运行时也是私有的
+
+#### 2. `globalThis` 替代 `window`
+```typescript
+globalThis.localStorage  // 替代 window.localStorage
+```
+**优势**: 跨环境兼容（浏览器、Node.js、Web Workers）
+
+#### 3. 现代数组方法
+```typescript
+// 使用 Array.from 和函数式编程
+const keys = Array.from(
+  { length: this.#storage.length },
+  (_, i) => this.#storage.key(i)
+).filter((key): key is string => key?.startsWith(this.#prefix) ?? false)
+```
+**优势**: 更简洁、更易读、更函数式
+
+#### 4. `Object.fromEntries()` 和 `Object.entries()`
+```typescript
+// 批量获取
+return Object.fromEntries(
+  keys.map(key => [key, this.getItem<T>(key)])
+)
+
+// 批量设置
+for (const [key, value] of Object.entries(items)) {
+  this.setItem(key, value, ttl)
+}
+```
+**优势**: 对象和数组之间的优雅转换
+
+#### 5. `for...of` 循环
+```typescript
+for (const key of keysToRemove) {
+  this.#storage.removeItem(key)
+}
+```
+**优势**: 比 `forEach` 性能更好，支持 break/continue
+
+### API 文档
+
+#### 构造函数
+
+```typescript
+constructor(options?: StorageManagerOptions)
+```
+
+**参数**:
+- `options.prefix` - 存储键的前缀，默认为空字符串
+- `options.storageType` - 存储类型，`'localStorage'` 或 `'sessionStorage'`，默认为 `'localStorage'`
+
+#### 方法
+
+| 方法 | 说明 | 参数 | 返回值 |
+|------|------|------|--------|
+| `setItem<T>` | 设置存储项 | `key, value, ttl?` | `void` |
+| `getItem<T>` | 获取存储项 | `key, defaultValue?` | `T \| null` |
+| `removeItem` | 移除存储项 | `key` | `void` |
+| `has` | 检查是否存在 | `key` | `boolean` |
+| `keys` | 获取所有键名 | - | `string[]` |
+| `size` | 获取存储项数量 | - | `number` |
+| `clear` | 清除所有项 | - | `void` |
+| `clearExpiredItems` | 清除过期项 | - | `void` |
+| `setItems<T>` | 批量设置 | `items, ttl?` | `void` |
+| `getItems<T>` | 批量获取 | `keys` | `Record<string, T \| null>` |
+| `removeItems` | 批量移除 | `keys` | `void` |
+
+### 浏览器兼容性
+
+- Chrome 90+
+- Firefox 90+
+- Safari 15+
+- Edge 90+
+
+需要支持以下特性：
+- Private class fields (`#`)
+- `globalThis`
+- `Object.fromEntries()`
+- Optional chaining (`?.`)
+- Nullish coalescing (`??`)
 
 ---
 

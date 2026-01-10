@@ -55,6 +55,11 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./cache": {
+      "types": "./dist/cache.d.ts",
+      "import": "./dist/cache.js",
+      "require": "./dist/cache.cjs"
+    },
     "./color": {
       "types": "./dist/color.d.ts",
       "import": "./dist/color.js",
