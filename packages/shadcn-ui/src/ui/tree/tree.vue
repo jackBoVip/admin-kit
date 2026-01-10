@@ -277,7 +277,7 @@ defineExpose({
     :class="
       cn(
         'text-blackA11 container select-none list-none rounded-lg text-sm font-medium',
-        $attrs.class as unknown as ClassType,
+        $attrs['class'] as unknown as ClassType,
         bordered ? 'border' : '',
       )
     "
@@ -286,7 +286,7 @@ defineExpose({
       :class="
         cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-b' : '')
       "
-      v-if="$slots.header"
+      v-if="$slots['header']"
     >
       <slot name="header"> </slot>
     </div>
@@ -424,7 +424,7 @@ defineExpose({
       :class="
         cn('my-0.5 flex w-full items-center p-1', bordered ? 'border-t' : '')
       "
-      v-if="$slots.footer"
+      v-if="$slots['footer']"
     >
       <slot name="footer"> </slot>
     </div>

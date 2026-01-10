@@ -68,7 +68,7 @@ const logoSrc = computed(() => {
 <template>
   <div :class="theme" class="flex h-full items-center text-lg">
     <a
-      :class="$attrs.class"
+      :class="$attrs['class']"
       :href="href"
       class="flex h-full items-center gap-2 overflow-hidden px-3 text-lg leading-normal transition-all duration-500"
     >

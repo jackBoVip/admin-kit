@@ -29,7 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const showTooltip = computed(() => !!slots.tooltip || !!props.tooltip);
+const showTooltip = computed(() => !!slots['tooltip'] || !!props.tooltip);
 </script>
 
 <template>
@@ -60,7 +60,7 @@ const showTooltip = computed(() => !!slots.tooltip || !!props.tooltip);
         <slot></slot>
       </AdminButton>
     </template>
-    <slot v-if="slots.tooltip" name="tooltip"> </slot>
+    <slot v-if="slots['tooltip']" name="tooltip"> </slot>
     <template v-else>
       {{ tooltip }}
     </template>
