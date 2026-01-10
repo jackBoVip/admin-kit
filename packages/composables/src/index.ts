@@ -13,6 +13,12 @@ export * from './use-scroll-lock'
 export * from './use-priority-value'
 export * from './use-namespace'
 export * from './use-layout-style'
+export * from './use-sortable'
+export * from './use-is-mobile'
+
+// 国际化
+export * from './locale'
+export type { Locale } from './locale/messages'
 
 // 重新导出 @vueuse/core 的常用函数
 export {
