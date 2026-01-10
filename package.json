@@ -8,7 +8,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish"
+    "release": "pnpm run build && changeset publish",
+    "prepublishOnly": "node scripts/resolve-catalog.js"
   },
   "devDependencies": {
     "@admin-core/tsconfig": "workspace:*",
@@ -24,7 +25,8 @@
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:",
     "vue": "catalog:",
-    "vue-tsc": "^2.2.0"
+    "vue-tsc": "^2.2.0",
+    "yaml": "2.8.2"
   },
   "packageManager": "pnpm@9.15.0",
   "engines": {
