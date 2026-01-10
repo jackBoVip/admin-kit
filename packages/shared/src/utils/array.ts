@@ -114,7 +114,9 @@ export function shuffle<T>(arr: T[]): T[] {
   
   for (let i = result.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[result[i], result[j]] = [result[j], result[i]]
+    const temp = result[i]
+    result[i] = result[j]!
+    result[j] = temp!
   }
   
   return result
@@ -399,11 +401,17 @@ export function zip<T extends any[]>(...arrays: T[]): any[][] {
 export function unzip<T extends any[]>(arr: T[]): any[][] {
   if (arr.length === 0) return []
   
-  const result: any[][] = Array.from({ length: arr[0].length }, () => [])
+  const firstItem = arr[0]
+  if (!firstItem) return []
+  
+  const result: any[][] = Array.from({ length: firstItem.length }, () => [])
   
   for (const tuple of arr) {
     for (let i = 0; i < tuple.length; i++) {
-      result[i].push(tuple[i])
+      const targetArray = result[i]
+      if (targetArray) {
+        targetArray.push(tuple[i])
+      }
     }
   }
   

@@ -252,19 +252,19 @@ export function getOSInfo(): { name: string; version: string } {
   } else if (isMacOs()) {
     name = 'Mac OS'
     const match = ua.match(/Mac OS X (\d+[._]\d+[._]\d+)/)
-    if (match) {
+    if (match && match[1]) {
       version = match[1].replace(/_/g, '.')
     }
   } else if (isIOS()) {
     name = 'iOS'
     const match = ua.match(/OS (\d+[._]\d+)/)
-    if (match) {
+    if (match && match[1]) {
       version = match[1].replace(/_/g, '.')
     }
   } else if (isAndroid()) {
     name = 'Android'
     const match = ua.match(/Android (\d+\.\d+)/)
-    if (match) {
+    if (match && match[1]) {
       version = match[1]
     }
   }

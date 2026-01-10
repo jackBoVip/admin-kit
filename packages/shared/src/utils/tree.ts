@@ -181,7 +181,7 @@ export function sortTree<T extends Record<string, any>>(
 ): T[] {
   const { childProps = 'children' } = options ?? {};
   
-  return treeData.toSorted(sortFunction).map((item) => {
+  return [...treeData].sort(sortFunction).map((item: T) => {
     const children = item[childProps];
     
     if (children && Array.isArray(children) && children.length > 0) {
