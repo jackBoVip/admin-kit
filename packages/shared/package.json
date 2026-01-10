@@ -1,6 +1,6 @@
 {
   "name": "@admin-core/shared",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": false,
   "type": "module",
   "description": "共享工具、常量和类型",
@@ -24,7 +24,8 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "README.en.md"
   ],
   "publishConfig": {
     "access": "public"
