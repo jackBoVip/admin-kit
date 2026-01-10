@@ -7,7 +7,7 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": [],
+  "ignore": ["@admin-core/design-demo", "@admin-core/tsconfig"],
   "privatePackages": {
     "version": true,
     "tag": true
