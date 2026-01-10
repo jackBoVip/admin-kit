@@ -30,7 +30,7 @@ export default defineComponent({
       if (!isComponent) {
         if (props.renderBr && isString(props.content)) {
           const lines = props.content.split('\n');
-          const result = [];
+          const result: any[] = [];
           for (const [i, line] of lines.entries()) {
             result.push(h('p', { key: i }, line));
             // if (i < lines.length - 1) {

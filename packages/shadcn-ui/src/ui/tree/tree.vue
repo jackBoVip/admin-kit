@@ -219,9 +219,10 @@ function onSelect(item: FlattenedItem<Recordable<any>>, isSelected: boolean) {
           get(i.value, props.valueField) === get(item.value, props.valueField)
         );
       })
-      ?.parents?.filter((item) => !get(item, props.disabledField))
-      ?.toReversed()
-      .forEach((p) => {
+      ?.parents?.filter((item: any) => !get(item, props.disabledField))
+      ?.slice()
+      .reverse()
+      .forEach((p: any) => {
         const children = flattenData.value.filter((i) => {
           return (
             i.parents.length > 0 &&

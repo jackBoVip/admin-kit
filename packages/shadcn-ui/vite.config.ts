@@ -1,12 +1,19 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 
+/**
+ * Vite 配置
+ * 
+ * @description
+ * 使用 ESNext 和 Vue 3 最新特性构建 UI 组件库
+ */
 export default defineConfig({
   plugins: [vue()],
   build: {
+    target: 'esnext',
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: resolve(import.meta.dirname, 'src/index.ts'),
       name: 'AdminKitUI',
       formats: ['es', 'cjs', 'umd'],
       fileName: (format) => {
