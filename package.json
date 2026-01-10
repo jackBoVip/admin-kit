@@ -25,8 +25,8 @@
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:",
     "vue": "catalog:",
-    "vue-tsc": "^2.2.0",
-    "yaml": "2.8.2"
+    "vue-tsc": "catalog:",
+    "yaml": "catalog:"
   },
   "packageManager": "pnpm@9.15.0",
   "engines": {

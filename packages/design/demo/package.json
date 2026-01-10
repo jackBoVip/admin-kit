@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "element-plus": "2.13.1",
+    "element-plus": "catalog:",
     "tailwindcss": "catalog:",
     "vue": "catalog:"
   },

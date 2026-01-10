@@ -4,26 +4,57 @@ packages:
   - "internal/*"
 
 catalog:
+  # 构建工具
   turbo: ^2.7.3
-  prettier: ^3.7.4
-  typescript: ^5.9.3
-  vite: ^7.3.1
-  vite-plugin-dts: ^4.5.4
   unbuild: ^3.6.1
   tsup: ^8.5.0
-  sass: ^1.97.1
+  vite: ^7.3.1
+  vite-plugin-dts: ^4.5.4
+  
+  # TypeScript
+  typescript: ^5.9.3
+  vue-tsc: ^3.2.1
+  
+  # Vue 生态
   vue: ^3.5.26
-  vue-tsc: ^2.2.0
+  "@vitejs/plugin-vue": ^6.0.3
+  "@vueuse/core": ^14.1.0
+  "@vue/shared": ^3.5.26
+  
+  # 样式工具
+  sass: ^1.97.1
   tailwindcss: ^4.1.18
   "@tailwindcss/postcss": ^4.1.18
   "@tailwindcss/vite": ^4.1.18
   postcss: ^8.5.1
   autoprefixer: ^10.4.21
-  "@vitejs/plugin-vue": ^6.0.3
-  "@changesets/cli": ^2.29.8
+  tailwind-merge: ^2.6.0
+  clsx: ^2.1.1
+  
+  # 图标
   "@iconify/json": ^2.2.425
   "@iconify/tailwind": ^1.2.0
   "@iconify/vue": ^5.0.0
-  "@vueuse/core": ^14.1.0
-  "@types/node": ^22.15.5
   "lucide-vue-next": ^0.562.0
+  
+  # 工具库
+  "@changesets/cli": ^2.29.8
+  "@types/node": ^22.15.5
+  prettier: ^3.7.4
+  
+  # shared 包依赖
+  "@ctrl/tinycolor": ^4.1.0
+  dayjs: ^1.11.13
+  defu: ^6.1.4
+  es-toolkit: ^1.29.1
+  "lodash.clonedeep": ^4.5.0
+  nprogress: ^0.2.0
+  "theme-colors": ^0.1.0
+  "@types/lodash.clonedeep": ^4.5.9
+  "@types/nprogress": ^0.2.3
+  
+  # UI 库
+  "element-plus": ^2.9.2
+  
+  # 其他
+  yaml: ^2.8.2
