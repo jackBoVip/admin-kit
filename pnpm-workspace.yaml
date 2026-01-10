@@ -58,6 +58,7 @@ catalog:
   "element-plus": ^2.9.2
   "reka-ui": ^2.7.0
   "vee-validate": ^4.15.1
+  "sortablejs": ^1.15.6
   
   # 其他
   yaml: ^2.8.2
