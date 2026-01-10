@@ -59,6 +59,7 @@ catalog:
   "reka-ui": ^2.7.0
   "vee-validate": ^4.15.1
   "sortablejs": ^1.15.6
+  "@types/sortablejs": ^1.15.8
   
   # 其他
   yaml: ^2.8.2
