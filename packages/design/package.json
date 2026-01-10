@@ -1,6 +1,6 @@
 {
   "name": "@admin-core/design",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "type": "module",
   "description": "设计系统（样式、令牌）",
