@@ -1,5 +1,15 @@
 # @admin-core/icons
 
+## 0.1.2
+
+### Patch Changes
+
+- 依赖更新
+  - 使用 catalog 管理依赖版本
+  - 更新 lucide-vue-next 到最新版本 (^0.562.0)
+  - 更新 @iconify/vue 到最新版本 (^5.0.0)
+  - 发布时自动解析 catalog 依赖
+
 ## 0.1.1
 
 ### Patch Changes

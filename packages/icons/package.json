@@ -1,6 +1,6 @@
 {
   "name": "@admin-core/icons",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "type": "module",
   "description": "图标组件库",
@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@iconify/vue": "catalog:",
-    "lucide-vue-next": "^0.468.0"
+    "lucide-vue-next": "catalog:"
   },
   "peerDependencies": {
     "vue": "^3.5.0"
