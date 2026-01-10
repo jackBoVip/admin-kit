@@ -97,6 +97,9 @@
       <!-- 第三方集成测试 -->
       <IntegrationTest class="mb-8" />
 
+      <!-- Element Plus 集成演示 -->
+      <ElementPlusDemo class="mb-8" />
+
       <!-- 颜色令牌展示 -->
       <section class="mb-8">
         <h2 class="text-2xl font-bold mb-6">颜色令牌</h2>
@@ -306,6 +309,7 @@ import { useTheme, setLocale, getLocale, getThemeMetadata, type Locale } from '@
 import ColorCard from './components/ColorCard.vue'
 import CustomThemePanel from './components/CustomThemePanel.vue'
 import IntegrationTest from './components/IntegrationTest.vue'
+import ElementPlusDemo from './components/ElementPlusDemo.vue'
 
 // 使用主题系统
 const {

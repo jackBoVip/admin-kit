@@ -1,0 +1,154 @@
+/**
+ * Element Plus 主题集成
+ * 将 Admin Core 主题颜色映射到 Element Plus
+ */
+
+/* 主色 */
+:root {
+  --el-color-primary: hsl(var(--primary));
+  --el-color-primary-light-3: hsl(var(--primary) / 0.7);
+  --el-color-primary-light-5: hsl(var(--primary) / 0.5);
+  --el-color-primary-light-7: hsl(var(--primary) / 0.3);
+  --el-color-primary-light-8: hsl(var(--primary) / 0.2);
+  --el-color-primary-light-9: hsl(var(--primary) / 0.1);
+  --el-color-primary-dark-2: hsl(var(--primary));
+  
+  /* 成功色 */
+  --el-color-success: hsl(var(--success));
+  --el-color-success-light-3: hsl(var(--success) / 0.7);
+  --el-color-success-light-5: hsl(var(--success) / 0.5);
+  --el-color-success-light-7: hsl(var(--success) / 0.3);
+  --el-color-success-light-8: hsl(var(--success) / 0.2);
+  --el-color-success-light-9: hsl(var(--success) / 0.1);
+  --el-color-success-dark-2: hsl(var(--success));
+  
+  /* 警告色 */
+  --el-color-warning: hsl(var(--warning));
+  --el-color-warning-light-3: hsl(var(--warning) / 0.7);
+  --el-color-warning-light-5: hsl(var(--warning) / 0.5);
+  --el-color-warning-light-7: hsl(var(--warning) / 0.3);
+  --el-color-warning-light-8: hsl(var(--warning) / 0.2);
+  --el-color-warning-light-9: hsl(var(--warning) / 0.1);
+  --el-color-warning-dark-2: hsl(var(--warning));
+  
+  /* 危险色 */
+  --el-color-danger: hsl(var(--destructive));
+  --el-color-danger-light-3: hsl(var(--destructive) / 0.7);
+  --el-color-danger-light-5: hsl(var(--destructive) / 0.5);
+  --el-color-danger-light-7: hsl(var(--destructive) / 0.3);
+  --el-color-danger-light-8: hsl(var(--destructive) / 0.2);
+  --el-color-danger-light-9: hsl(var(--destructive) / 0.1);
+  --el-color-danger-dark-2: hsl(var(--destructive));
+  
+  /* 信息色 */
+  --el-color-info: hsl(var(--muted-foreground));
+  --el-color-info-light-3: hsl(var(--muted-foreground) / 0.7);
+  --el-color-info-light-5: hsl(var(--muted-foreground) / 0.5);
+  --el-color-info-light-7: hsl(var(--muted-foreground) / 0.3);
+  --el-color-info-light-8: hsl(var(--muted-foreground) / 0.2);
+  --el-color-info-light-9: hsl(var(--muted-foreground) / 0.1);
+  
+  /* 文本颜色 */
+  --el-text-color-primary: hsl(var(--foreground));
+  --el-text-color-regular: hsl(var(--foreground) / 0.9);
+  --el-text-color-secondary: hsl(var(--muted-foreground));
+  --el-text-color-placeholder: hsl(var(--muted-foreground) / 0.6);
+  --el-text-color-disabled: hsl(var(--muted-foreground) / 0.4);
+  
+  /* 边框颜色 */
+  --el-border-color: hsl(var(--border));
+  --el-border-color-light: hsl(var(--border) / 0.7);
+  --el-border-color-lighter: hsl(var(--border) / 0.5);
+  --el-border-color-extra-light: hsl(var(--border) / 0.3);
+  --el-border-color-dark: hsl(var(--border));
+  --el-border-color-darker: hsl(var(--border));
+  
+  /* 背景颜色 */
+  --el-bg-color: hsl(var(--background));
+  --el-bg-color-page: hsl(var(--background-deep));
+  --el-bg-color-overlay: hsl(var(--card));
+  
+  /* 填充颜色 */
+  --el-fill-color: hsl(var(--muted));
+  --el-fill-color-light: hsl(var(--muted) / 0.7);
+  --el-fill-color-lighter: hsl(var(--muted) / 0.5);
+  --el-fill-color-extra-light: hsl(var(--muted) / 0.3);
+  --el-fill-color-dark: hsl(var(--muted));
+  --el-fill-color-darker: hsl(var(--muted));
+  --el-fill-color-blank: hsl(var(--background));
+  
+  /* 遮罩颜色 */
+  --el-overlay-color: hsl(var(--foreground) / 0.5);
+  --el-overlay-color-light: hsl(var(--foreground) / 0.3);
+  --el-overlay-color-lighter: hsl(var(--foreground) / 0.2);
+  
+  /* 阴影 */
+  --el-box-shadow: 0 2px 8px hsl(var(--foreground) / 0.1);
+  --el-box-shadow-light: 0 1px 4px hsl(var(--foreground) / 0.08);
+  --el-box-shadow-lighter: 0 1px 2px hsl(var(--foreground) / 0.05);
+  --el-box-shadow-dark: 0 4px 16px hsl(var(--foreground) / 0.15);
+}
+
+/* 暗色模式 */
+.dark {
+  --el-bg-color: hsl(var(--background));
+  --el-bg-color-page: hsl(var(--background-deep));
+  --el-bg-color-overlay: hsl(var(--card));
+  --el-text-color-primary: hsl(var(--foreground));
+  --el-text-color-regular: hsl(var(--foreground) / 0.9);
+  --el-border-color: hsl(var(--border));
+  --el-fill-color: hsl(var(--muted));
+  --el-fill-color-blank: hsl(var(--background));
+}
+
+/* Element Plus 组件微调 */
+.el-button {
+  transition: all 0.3s ease;
+}
+
+.el-input__wrapper {
+  background-color: hsl(var(--background));
+  box-shadow: 0 0 0 1px hsl(var(--border)) inset;
+  transition: all 0.3s ease;
+}
+
+.el-input__wrapper:hover {
+  box-shadow: 0 0 0 1px hsl(var(--ring)) inset;
+}
+
+.el-input__wrapper.is-focus {
+  box-shadow: 0 0 0 2px hsl(var(--ring)) inset;
+}
+
+.el-select__wrapper {
+  background-color: hsl(var(--background));
+  box-shadow: 0 0 0 1px hsl(var(--border)) inset;
+  transition: all 0.3s ease;
+}
+
+.el-select__wrapper:hover {
+  box-shadow: 0 0 0 1px hsl(var(--ring)) inset;
+}
+
+.el-select__wrapper.is-focused {
+  box-shadow: 0 0 0 2px hsl(var(--ring)) inset;
+}
+
+.el-card {
+  background-color: hsl(var(--card));
+  border-color: hsl(var(--border));
+  color: hsl(var(--card-foreground));
+  transition: all 0.3s ease;
+}
+
+.el-alert {
+  transition: all 0.3s ease;
+}
+
+.el-tag {
+  transition: all 0.3s ease;
+}
+
+.el-progress__text {
+  color: hsl(var(--foreground));
+}

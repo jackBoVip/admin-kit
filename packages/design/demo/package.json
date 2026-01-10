@@ -10,8 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "catalog:",
-    "tailwindcss": "catalog:"
+    "element-plus": "2.13.1",
+    "tailwindcss": "catalog:",
+    "vue": "catalog:"
   },
   "devDependencies": {
     "@admin-core/design": "workspace:*",
