@@ -1,0 +1,43 @@
+﻿<script lang="ts" setup>
+import type { BacktopProps } from './backtop';
+
+import { computed } from 'vue';
+
+import { ArrowUpToLine } from '@admin-core/icons';
+
+import { AdminButton } from '../button';
+import { useBackTop } from './use-backtop';
+
+interface Props extends BacktopProps {}
+
+defineOptions({ name: 'BackTop' });
+
+const props = withDefaults(defineProps<Props>(), {
+  bottom: 20,
+  isGroup: false,
+  right: 24,
+  target: '',
+  visibilityHeight: 200,
+});
+
+const backTopStyle = computed(() => ({
+  bottom: `${props.bottom}px`,
+  right: `${props.right}px`,
+}));
+
+const { handleClick, visible } = useBackTop(props);
+</script>
+<template>
+  <transition name="fade-down">
+    <AdminButton
+      v-if="visible"
+      :style="backTopStyle"
+      class="data z-popup fixed bottom-10 size-10 rounded-full bg-background shadow-float duration-500 hover:bg-heavy dark:bg-accent dark:hover:bg-heavy"
+      size="icon"
+      variant="icon"
+      @click="handleClick"
+    >
+      <ArrowUpToLine class="size-4" />
+    </AdminButton>
+  </transition>
+</template>
