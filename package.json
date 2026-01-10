@@ -9,7 +9,8 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "pnpm run build && changeset publish",
-    "prepublishOnly": "node scripts/resolve-catalog.js"
+    "prepublishOnly": "node scripts/resolve-catalog.js",
+    "postpublish": "node scripts/restore-catalog.js"
   },
   "devDependencies": {
     "@admin-core/tsconfig": "workspace:*",

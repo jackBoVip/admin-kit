@@ -1,5 +1,41 @@
 # @admin-core/shared
 
+## 0.4.0
+
+### Minor Changes
+
+- 新增功能和优化
+  - **日期快捷函数**：新增 12 个日期快捷函数（获取上个月最后一天、本月第一天、本年第一天等）
+  - **状态管理优化**：使用 ES2025 私有字段优化 global-state 模块，新增 8 个实用方法
+  - **轻量级状态管理**：创建 store 模块，提供 createStore、createDerivedStore、combineStores、createPersistedStore 等功能
+  - **依赖管理**：统一使用 pnpm catalog 管理所有依赖，更新到最新版本
+  - **CDN 支持增强**：新增 standalone 构建版本，包含所有依赖，适用于 CDN 直接引入
+  - **文档完善**：新增依赖安装指南文档，说明依赖自动安装机制和 CDN 使用方式
+
+## 0.3.0
+
+### Minor Changes
+
+- 新增功能和优化
+  - **日期快捷函数**：新增 12 个日期快捷函数（获取上个月最后一天、本月第一天、本年第一天等）
+  - **状态管理优化**：使用 ES2025 私有字段优化 global-state 模块，新增 8 个实用方法
+  - **轻量级状态管理**：创建 store 模块，提供 createStore、createDerivedStore、combineStores、createPersistedStore 等功能
+  - **依赖管理**：统一使用 pnpm catalog 管理所有依赖，更新到最新版本
+  - **CDN 支持增强**：新增 standalone 构建版本，包含所有依赖，适用于 CDN 直接引入
+  - **文档完善**：新增依赖安装指南文档，说明依赖自动安装机制和 CDN 使用方式
+
+## 0.2.0
+
+### Minor Changes
+
+- 新增功能和优化
+  - **日期快捷函数**：新增 12 个日期快捷函数（获取上个月最后一天、本月第一天、本年第一天等）
+  - **状态管理优化**：使用 ES2025 私有字段优化 global-state 模块，新增 8 个实用方法
+  - **轻量级状态管理**：创建 store 模块，提供 createStore、createDerivedStore、combineStores、createPersistedStore 等功能
+  - **依赖管理**：统一使用 pnpm catalog 管理所有依赖，更新到最新版本
+  - **CDN 支持增强**：新增 standalone 构建版本，包含所有依赖，适用于 CDN 直接引入
+  - **文档完善**：新增依赖安装指南文档，说明依赖自动安装机制和 CDN 使用方式
+
 ## 0.1.8
 
 ### Patch Changes
