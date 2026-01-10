@@ -61,7 +61,9 @@
   },
   "scripts": {
     "build": "vite build && vue-tsc --declaration --emitDeclarationOnly --outDir dist",
-    "dev": "vite build --watch"
+    "dev": "vite build --watch",
+    "prepublishOnly": "node ../../scripts/resolve-catalog.js",
+    "postpublish": "node ../../scripts/restore-catalog.js"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

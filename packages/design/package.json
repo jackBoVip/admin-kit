@@ -94,7 +94,9 @@
   },
   "scripts": {
     "build": "vite build",
-    "dev": "vite build --watch"
+    "dev": "vite build --watch",
+    "prepublishOnly": "node ../../scripts/resolve-catalog.js",
+    "postpublish": "node ../../scripts/restore-catalog.js"
   },
   "devDependencies": {
     "@types/node": "catalog:",

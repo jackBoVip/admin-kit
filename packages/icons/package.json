@@ -59,7 +59,9 @@
   },
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "prepublishOnly": "node ../../scripts/resolve-catalog.js",
+    "postpublish": "node ../../scripts/restore-catalog.js"
   },
   "dependencies": {
     "@iconify/vue": "catalog:",
