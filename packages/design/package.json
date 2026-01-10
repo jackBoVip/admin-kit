@@ -5,7 +5,7 @@
   "type": "module",
   "description": "设计系统（样式、令牌）",
   "keywords": [
-    "admin-kit",
+    "admin-kit","admin-core",
     "admin-core",
     "design",
     "tokens",

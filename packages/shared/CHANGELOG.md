@@ -1,5 +1,74 @@
 # @admin-core/shared
 
+## 0.1.7
+
+### Patch Changes
+
+- 完善 types 模块的注解和分类
+  - **详细注解**：为所有类型添加完整的 JSDoc 注释和使用示例
+  - **移除外部依赖**：移除对 vue-router 的依赖，自定义必要的类型
+  - **类型优化**：优化 TabDefinition、MenuRecordRaw、RouteMeta 等类型定义
+  - **代码组织**：按功能分类组织类型（基础工具、API、数据结构、用户、菜单、路由等）
+  - **类型安全**：增强类型定义的完整性和准确性
+
+## 0.1.6
+
+### Patch Changes
+
+- 优化 color 模块符合 ES2025/ESNext 最新标准
+  - **函数式编程**：使用 `Object.fromEntries` 和 `flatMap` 重构 `generatorColorVariables` 函数
+  - **代码简化**：减少中间变量，提高代码可读性和性能
+  - **不可变性**：使用更现代的函数式方法处理数据
+  - **代码组织**：将常量定义移到文件顶部，符合最佳实践
+  - **性能优化**：减少循环嵌套，使用声明式编程风格
+
+## 0.1.5
+
+### Patch Changes
+
+- 完善 constants 模块并拆分 index.ts
+  - **模块化拆分**：将 constants 拆分为 8 个独立模块（datetime、pagination、app、storage、regex、file、http、animation）
+  - **类型安全**：所有常量使用 `as const` 确保类型安全和不可变性
+  - **TypeScript 类型**：导出类型定义（SupportedLocale、HttpStatus、HttpMethod、ContentType 等）
+  - **代码优化**：优化 globals.ts 和 admin.ts，使用对象组织相关常量
+  - **详细注释**：每个常量都有详细的中文说明
+  - **最佳实践**：符合 ES2021+ 和 TypeScript 5.x 最新规范
+  - **破坏性变更**：移除旧的常量导出方式，统一使用对象形式（如 `CSS_VARIABLES.LAYOUT_CONTENT_HEIGHT`、`ADMIN_URLS.GITHUB`）
+
+## 0.1.4
+
+### Patch Changes
+
+- 优化代码符合最新 ES 规范和最佳实践
+  - **TypeScript 现代化**：使用现代 JSDoc 语法（移除 `{type}` 标注）
+  - **接口优化**：使用 `readonly` 修饰符增强不可变性
+  - **常量提取**：提取魔法字符串为常量（`MAIN_COLOR_KEY`、`ANGLE_UNITS_REGEX`）
+  - **性能优化**：使用 `for...of` 和 `Object.entries()` 替代 `forEach`
+  - **代码简化**：简化 `isValidColor` 使用短路运算符
+  - **不可变性**：返回值使用 `Object.freeze()` 和 `Readonly` 类型
+  - **参数类型**：使用 `readonly` 数组参数类型提高类型安全
+  - **变量提取**：避免重复计算，提取中间变量
+
+## 0.1.3
+
+### Patch Changes
+
+- 移除 `import.meta` 使用以消除构建警告
+  - 修复 CJS 和 IIFE 格式构建时的 `import.meta` 警告
+  - 使用 `process.env` 替代 `import.meta.env` 以提高兼容性
+  - 确保所有输出格式（ESM、CJS、IIFE）都能正常工作
+
+## 0.1.2
+
+### Patch Changes
+
+- 完善颜色工具模块
+  - 添加 `@ctrl/tinycolor` 和 `theme-colors` 依赖
+  - 为所有颜色工具函数添加完整的 JSDoc 注释
+  - 更新 TypeScript 配置支持 ES2021（支持 `replaceAll` 方法）
+  - 导出 `ColorItem` 类型定义
+  - 改进函数类型定义和返回值类型
+
 ## 0.1.1
 
 ### Patch Changes

@@ -11,14 +11,12 @@ export function noop() {}
  * 判断是否为开发环境
  */
 export const isDev = 
-  (typeof import.meta !== 'undefined' && (import.meta as any).env?.DEV) || 
   (typeof process !== 'undefined' && process.env['NODE_ENV'] === 'development')
 
 /**
  * 判断是否为生产环境
  */
 export const isProd = 
-  (typeof import.meta !== 'undefined' && (import.meta as any).env?.PROD) || 
   (typeof process !== 'undefined' && process.env['NODE_ENV'] === 'production')
 
 /**

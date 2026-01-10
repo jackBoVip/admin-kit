@@ -1,10 +1,10 @@
 {
   "name": "@admin-core/shared",
-  "version": "0.1.1",
+  "version": "0.1.7",
   "private": false,
   "type": "module",
   "description": "共享工具、常量和类型",
-  "keywords": ["admin-kit", "shared", "utils", "constants", "types"],
+  "keywords": ["admin-kit","admin-core", "shared", "utils", "constants", "types"],
   "author": "Admin Kit Team",
   "license": "MIT",
   "repository": {
@@ -17,6 +17,26 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./color": {
+      "types": "./dist/color.d.ts",
+      "import": "./dist/color.js",
+      "require": "./dist/color.cjs"
+    },
+    "./constants": {
+      "types": "./dist/constants.d.ts",
+      "import": "./dist/constants.js",
+      "require": "./dist/constants.cjs"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js",
+      "require": "./dist/types.cjs"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "import": "./dist/utils.js",
+      "require": "./dist/utils.cjs"
     }
   },
   "main": "./dist/index.cjs",
@@ -35,5 +55,9 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@ctrl/tinycolor": "^4.1.0",
+    "theme-colors": "^0.1.0"
   }
 }

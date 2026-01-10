@@ -42,6 +42,8 @@ yarn add @admin-core/shared
 
 ## 🚀 快速开始
 
+### 完整导入
+
 ```typescript
 // 导入工具函数
 import { debounce, formatFileSize, deepClone } from '@admin-core/shared'
@@ -51,6 +53,245 @@ import { STORAGE_KEYS, HTTP_STATUS } from '@admin-core/shared'
 
 // 导入类型
 import type { ApiResponse, PaginationParams } from '@admin-core/shared'
+```
+
+### 按需导入（推荐）
+
+为了更好的 Tree-shaking 效果和更快的构建速度，推荐使用子路径导入：
+
+```typescript
+// 只导入颜色工具
+import { generateThemeColors, hexToRgb } from '@admin-core/shared/color'
+
+// 只导入常量
+import { STORAGE_KEYS, HTTP_STATUS } from '@admin-core/shared/constants'
+
+// 只导入类型
+import type { ApiResponse, UserInfo } from '@admin-core/shared/types'
+
+// 只导入工具函数
+import { debounce, formatFileSize } from '@admin-core/shared/utils'
+```
+
+**可用的子路径：**
+
+- `@admin-core/shared/color` - 颜色处理工具（~2 KB）
+- `@admin-core/shared/constants` - 常量定义（~9 KB）
+- `@admin-core/shared/types` - TypeScript 类型（~33 B）
+- `@admin-core/shared/utils` - 工具函数（~5 KB）
+
+---
+
+## 📖 子路径导入详细指南
+
+### 使用建议
+
+#### ✅ 推荐：按需导入
+
+```typescript
+// 只导入需要的模块
+import { STORAGE_KEYS } from '@admin-core/shared/constants'
+import { formatFileSize } from '@admin-core/shared/utils'
+import type { ApiResponse } from '@admin-core/shared/types'
+```
+
+**优点：**
+- 更好的 Tree-shaking 效果
+- 更快的构建速度
+- 更小的包体积
+- 更清晰的依赖关系
+
+#### ⚠️ 可选：完整导入
+
+```typescript
+// 导入所有内容
+import { STORAGE_KEYS, formatFileSize } from '@admin-core/shared'
+import type { ApiResponse } from '@admin-core/shared'
+```
+
+**适用场景：**
+- 需要使用多个模块的功能
+- 不关心包体积优化
+- 快速原型开发
+
+### 包体积对比
+
+| 导入方式 | 包体积 | 构建时间 |
+|---------|--------|---------|
+| 完整导入 | ~13 KB | 较慢 |
+| 子路径导入（单个模块） | ~2-9 KB | 较快 |
+| 子路径导入（多个模块） | 按需累加 | 中等 |
+
+### 实际应用示例
+
+#### Vue 3 项目
+
+```typescript
+// src/composables/useTheme.ts
+import { convertToHslCssVar } from '@admin-core/shared/color'
+import { STORAGE_KEYS } from '@admin-core/shared/constants'
+import type { ThemeConfig } from '@admin-core/shared/types'
+
+export function useTheme() {
+  const theme = ref<ThemeConfig>({
+    mode: 'light',
+    variant: 'default'
+  })
+  
+  const applyTheme = (color: string) => {
+    const hsl = convertToHslCssVar(color)
+    document.documentElement.style.setProperty('--primary', hsl)
+    localStorage.setItem(STORAGE_KEYS.THEME, JSON.stringify(theme.value))
+  }
+  
+  return { theme, applyTheme }
+}
+```
+
+#### React 项目
+
+```typescript
+// src/hooks/useApi.ts
+import { debounce } from '@admin-core/shared/utils'
+import { HTTP_STATUS } from '@admin-core/shared/constants'
+import type { ApiResponse, PaginationParams } from '@admin-core/shared/types'
+
+export function useApi<T>() {
+  const [data, setData] = useState<T | null>(null)
+  
+  const fetchData = debounce(async (params: PaginationParams) => {
+    const response: ApiResponse<T> = await fetch('/api/data', {
+      method: 'POST',
+      body: JSON.stringify(params)
+    }).then(res => res.json())
+    
+    if (response.code === HTTP_STATUS.OK) {
+      setData(response.data)
+    }
+  }, 300)
+  
+  return { data, fetchData }
+}
+```
+
+### 迁移指南
+
+如果你之前使用完整导入，可以逐步迁移到子路径导入：
+
+#### 步骤 1：识别导入
+
+```typescript
+// 之前
+import { STORAGE_KEYS, formatFileSize, ApiResponse } from '@admin-core/shared'
+```
+
+#### 步骤 2：按模块分组
+
+- `STORAGE_KEYS` → `constants`
+- `formatFileSize` → `utils`
+- `ApiResponse` → `types`
+
+#### 步骤 3：更新导入
+
+```typescript
+// 之后
+import { STORAGE_KEYS } from '@admin-core/shared/constants'
+import { formatFileSize } from '@admin-core/shared/utils'
+import type { ApiResponse } from '@admin-core/shared/types'
+```
+
+### TypeScript 配置
+
+确保你的 `tsconfig.json` 支持模块解析：
+
+```json
+{
+  "compilerOptions": {
+    "moduleResolution": "bundler",  // 或 "node16", "nodenext"
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  }
+}
+```
+
+### 常见问题
+
+**Q: 子路径导入会影响类型推导吗？**
+
+A: 不会。TypeScript 会正确推导所有类型，无论使用哪种导入方式。
+
+**Q: 可以混合使用完整导入和子路径导入吗？**
+
+A: 可以，但不推荐。建议在项目中统一使用一种导入方式。
+
+**Q: 子路径导入支持哪些构建工具？**
+
+A: 支持所有现代构建工具，包括 Vite、Webpack 5+、Rollup、esbuild、Turbopack。
+
+**Q: 如何查看某个模块导出了哪些内容？**
+
+A: 查看对应的类型定义文件：
+- `dist/color.d.ts` - 颜色工具
+- `dist/constants.d.ts` - 常量
+- `dist/types.d.ts` - 类型
+- `dist/utils.d.ts` - 工具函数
+
+---
+
+## 🎨 颜色工具
+
+### 颜色生成
+
+```typescript
+import { generatorColorVariables } from '@admin-core/shared/color'
+
+// 生成完整的色阶 CSS 变量（50-950）
+const colors = generatorColorVariables([
+  { name: 'blue', color: '#3b82f6', alias: 'primary' }
+])
+
+console.log(colors)
+// {
+//   '--blue-50': '214 100% 97%',
+//   '--blue-100': '214 95% 93%',
+//   ...
+//   '--blue-500': '217 91% 60%',
+//   ...
+//   '--primary': '217 91% 60%'
+// }
+```
+
+### 颜色转换
+
+```typescript
+import { convertToHsl, convertToRgb, convertToHslCssVar } from '@admin-core/shared/color'
+
+// 转换为 HSL
+convertToHsl('#1890ff')  // 'hsl(209 100% 55%)'
+
+// 转换为 RGB
+convertToRgb('hsl(210 100% 55%)')  // 'rgb(26, 140, 255)'
+
+// 转换为 CSS 变量兼容的 HSL 格式
+convertToHslCssVar('#1890ff')  // '209 100% 55%'
+```
+
+### 颜色判断
+
+```typescript
+import { isDarkColor, isLightColor, isValidColor } from '@admin-core/shared/color'
+
+// 判断是否为深色
+isDarkColor('#000000')  // true
+isDarkColor('#ffffff')  // false
+
+// 判断是否为浅色
+isLightColor('#ffffff')  // true
+isLightColor('#000000')  // false
+
+// 验证颜色是否有效
+isValidColor('#1890ff')  // true
+isValidColor('invalid')  // false
 ```
 
 ---

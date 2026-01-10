@@ -42,6 +42,8 @@ yarn add @admin-core/shared
 
 ## 🚀 Quick Start
 
+### Full Import
+
 ```typescript
 // Import utility functions
 import { debounce, formatFileSize, deepClone } from '@admin-core/shared'
@@ -51,6 +53,245 @@ import { STORAGE_KEYS, HTTP_STATUS } from '@admin-core/shared'
 
 // Import types
 import type { ApiResponse, PaginationParams } from '@admin-core/shared'
+```
+
+### Subpath Imports (Recommended)
+
+For better tree-shaking and faster build times, use subpath imports:
+
+```typescript
+// Import only color utilities
+import { generateThemeColors, hexToRgb } from '@admin-core/shared/color'
+
+// Import only constants
+import { STORAGE_KEYS, HTTP_STATUS } from '@admin-core/shared/constants'
+
+// Import only types
+import type { ApiResponse, UserInfo } from '@admin-core/shared/types'
+
+// Import only utility functions
+import { debounce, formatFileSize } from '@admin-core/shared/utils'
+```
+
+**Available subpaths:**
+
+- `@admin-core/shared/color` - Color utilities (~2 KB)
+- `@admin-core/shared/constants` - Constant definitions (~9 KB)
+- `@admin-core/shared/types` - TypeScript types (~33 B)
+- `@admin-core/shared/utils` - Utility functions (~5 KB)
+
+---
+
+## 📖 Subpath Imports Guide
+
+### Usage Recommendations
+
+#### ✅ Recommended: On-Demand Import
+
+```typescript
+// Import only what you need
+import { STORAGE_KEYS } from '@admin-core/shared/constants'
+import { formatFileSize } from '@admin-core/shared/utils'
+import type { ApiResponse } from '@admin-core/shared/types'
+```
+
+**Benefits:**
+- Better tree-shaking
+- Faster build times
+- Smaller bundle size
+- Clearer dependencies
+
+#### ⚠️ Optional: Full Import
+
+```typescript
+// Import everything
+import { STORAGE_KEYS, formatFileSize } from '@admin-core/shared'
+import type { ApiResponse } from '@admin-core/shared'
+```
+
+**Use Cases:**
+- Need multiple module features
+- Don't care about bundle size
+- Rapid prototyping
+
+### Bundle Size Comparison
+
+| Import Method | Bundle Size | Build Time |
+|--------------|-------------|------------|
+| Full Import | ~13 KB | Slower |
+| Subpath (Single Module) | ~2-9 KB | Faster |
+| Subpath (Multiple Modules) | Cumulative | Medium |
+
+### Real-World Examples
+
+#### Vue 3 Project
+
+```typescript
+// src/composables/useTheme.ts
+import { convertToHslCssVar } from '@admin-core/shared/color'
+import { STORAGE_KEYS } from '@admin-core/shared/constants'
+import type { ThemeConfig } from '@admin-core/shared/types'
+
+export function useTheme() {
+  const theme = ref<ThemeConfig>({
+    mode: 'light',
+    variant: 'default'
+  })
+  
+  const applyTheme = (color: string) => {
+    const hsl = convertToHslCssVar(color)
+    document.documentElement.style.setProperty('--primary', hsl)
+    localStorage.setItem(STORAGE_KEYS.THEME, JSON.stringify(theme.value))
+  }
+  
+  return { theme, applyTheme }
+}
+```
+
+#### React Project
+
+```typescript
+// src/hooks/useApi.ts
+import { debounce } from '@admin-core/shared/utils'
+import { HTTP_STATUS } from '@admin-core/shared/constants'
+import type { ApiResponse, PaginationParams } from '@admin-core/shared/types'
+
+export function useApi<T>() {
+  const [data, setData] = useState<T | null>(null)
+  
+  const fetchData = debounce(async (params: PaginationParams) => {
+    const response: ApiResponse<T> = await fetch('/api/data', {
+      method: 'POST',
+      body: JSON.stringify(params)
+    }).then(res => res.json())
+    
+    if (response.code === HTTP_STATUS.OK) {
+      setData(response.data)
+    }
+  }, 300)
+  
+  return { data, fetchData }
+}
+```
+
+### Migration Guide
+
+If you're currently using full imports, you can gradually migrate to subpath imports:
+
+#### Step 1: Identify Imports
+
+```typescript
+// Before
+import { STORAGE_KEYS, formatFileSize, ApiResponse } from '@admin-core/shared'
+```
+
+#### Step 2: Group by Module
+
+- `STORAGE_KEYS` → `constants`
+- `formatFileSize` → `utils`
+- `ApiResponse` → `types`
+
+#### Step 3: Update Imports
+
+```typescript
+// After
+import { STORAGE_KEYS } from '@admin-core/shared/constants'
+import { formatFileSize } from '@admin-core/shared/utils'
+import type { ApiResponse } from '@admin-core/shared/types'
+```
+
+### TypeScript Configuration
+
+Ensure your `tsconfig.json` supports module resolution:
+
+```json
+{
+  "compilerOptions": {
+    "moduleResolution": "bundler",  // or "node16", "nodenext"
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  }
+}
+```
+
+### FAQ
+
+**Q: Does subpath import affect type inference?**
+
+A: No. TypeScript will correctly infer all types regardless of import method.
+
+**Q: Can I mix full imports and subpath imports?**
+
+A: Yes, but not recommended. It's better to use one consistent approach.
+
+**Q: Which build tools support subpath imports?**
+
+A: All modern build tools including Vite, Webpack 5+, Rollup, esbuild, and Turbopack.
+
+**Q: How do I see what a module exports?**
+
+A: Check the corresponding type definition files:
+- `dist/color.d.ts` - Color utilities
+- `dist/constants.d.ts` - Constants
+- `dist/types.d.ts` - Types
+- `dist/utils.d.ts` - Utility functions
+
+---
+
+## 🎨 Color Utilities
+
+### Color Generation
+
+```typescript
+import { generatorColorVariables } from '@admin-core/shared/color'
+
+// Generate complete color scale CSS variables (50-950)
+const colors = generatorColorVariables([
+  { name: 'blue', color: '#3b82f6', alias: 'primary' }
+])
+
+console.log(colors)
+// {
+//   '--blue-50': '214 100% 97%',
+//   '--blue-100': '214 95% 93%',
+//   ...
+//   '--blue-500': '217 91% 60%',
+//   ...
+//   '--primary': '217 91% 60%'
+// }
+```
+
+### Color Conversion
+
+```typescript
+import { convertToHsl, convertToRgb, convertToHslCssVar } from '@admin-core/shared/color'
+
+// Convert to HSL
+convertToHsl('#1890ff')  // 'hsl(209 100% 55%)'
+
+// Convert to RGB
+convertToRgb('hsl(210 100% 55%)')  // 'rgb(26, 140, 255)'
+
+// Convert to CSS variable compatible HSL format
+convertToHslCssVar('#1890ff')  // '209 100% 55%'
+```
+
+### Color Detection
+
+```typescript
+import { isDarkColor, isLightColor, isValidColor } from '@admin-core/shared/color'
+
+// Check if dark
+isDarkColor('#000000')  // true
+isDarkColor('#ffffff')  // false
+
+// Check if light
+isLightColor('#ffffff')  // true
+isLightColor('#000000')  // false
+
+// Validate color
+isValidColor('#1890ff')  // true
+isValidColor('invalid')  // false
 ```
 
 ---

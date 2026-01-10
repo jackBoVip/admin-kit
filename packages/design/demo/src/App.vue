@@ -313,10 +313,8 @@ import ElementPlusDemo from './components/ElementPlusDemo.vue'
 
 // 使用主题系统
 const {
-  mode,
   variant,
   isDark,
-  setMode,
   setVariant,
   toggleDarkMode,
   getCurrentThemeMetadata,

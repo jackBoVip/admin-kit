@@ -4,7 +4,7 @@
   "private": false,
   "type": "module",
   "description": "Vue 组合式函数和状态管理",
-  "keywords": ["admin-kit", "composables", "vue", "hooks", "state"],
+  "keywords": ["admin-kit","admin-core", "composables", "vue", "hooks", "state"],
   "author": "Admin Kit Team",
   "license": "MIT",
   "repository": {

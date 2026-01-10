@@ -1,9 +1,15 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig([
-  // ESM and CJS builds
+  // ESM and CJS builds with multiple entry points
   {
-    entry: ['src/index.ts'],
+    entry: {
+      index: 'src/index.ts',
+      color: 'src/color/index.ts',
+      constants: 'src/constants/index.ts',
+      types: 'src/types/common.ts',
+      utils: 'src/utils/index.ts',
+    },
     format: ['esm', 'cjs'],
     dts: {
       resolve: true,
@@ -17,7 +23,7 @@ export default defineConfig([
     minify: false,
     tsconfig: './tsconfig.json',
   },
-  // UMD build for CDN
+  // UMD build for CDN (main entry only)
   {
     entry: ['src/index.ts'],
     format: ['iife'],
@@ -34,7 +40,7 @@ export default defineConfig([
       }
     },
   },
-  // UMD minified build for CDN
+  // UMD minified build for CDN (main entry only)
   {
     entry: ['src/index.ts'],
     format: ['iife'],

@@ -290,9 +290,9 @@ const showNotification = (type: 'success' | 'warning' | 'info' | 'error') => {
   const msg = messages[currentLocale.value][type]
   
   ElNotification({
-    title: msg.title,
-    message: msg.message,
-    type,
+    title: msg.title as any,
+    message: msg.message as any,
+    type: type as any,
   })
 }
 </script>
