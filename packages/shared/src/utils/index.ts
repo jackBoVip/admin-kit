@@ -5,18 +5,14 @@
  */
 
 // ==================== 通用工具（异步、环境、验证） ====================
-export * from './common';
+export * from './common'
 
 // ==================== 数据处理（数组、对象、字符串、树） ====================
-export * from './data';
+export * from './data'
 
 // ==================== 浏览器相关（DOM、CSS、剪贴板、文件、URL） ====================
-export * from './browser';
+export * from './browser'
 
 // ==================== 外部依赖（日期、差异、合并、进度条、状态） ====================
-export * from './external';
-
-// ==================== 向后兼容导出 ====================
-export * from './util';
-export * from './resources';
+export * from './external'
 
