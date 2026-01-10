@@ -65,14 +65,14 @@
   },
   "dependencies": {
     "@admin-core/shared": "workspace:*",
-    "@vueuse/core": "catalog:",
-    "reka-ui": "catalog:",
     "sortablejs": "catalog:"
   },
   "devDependencies": {
     "@types/sortablejs": "catalog:"
   },
   "peerDependencies": {
-    "vue": "^3.5.0"
+    "vue": "^3.5.0",
+    "@vueuse/core": "^14.0.0",
+    "reka-ui": "^2.0.0"
   }
 }

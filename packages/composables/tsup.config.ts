@@ -15,7 +15,7 @@ export default defineConfig([
     splitting: false,
     sourcemap: true,
     minify: false,
-    external: ['vue', '@vueuse/core'],
+    external: ['vue', '@vueuse/core', 'reka-ui', '@admin-core/shared'],
     tsconfig: './tsconfig.json',
   },
   // UMD build for CDN
@@ -28,7 +28,7 @@ export default defineConfig([
     splitting: false,
     sourcemap: true,
     minify: false,
-    external: ['vue'],
+    external: ['vue', '@vueuse/core', 'reka-ui'],
     tsconfig: './tsconfig.json',
     esbuildOptions(options) {
       options.banner = {
@@ -46,7 +46,7 @@ export default defineConfig([
     splitting: false,
     sourcemap: true,
     minify: true,
-    external: ['vue'],
+    external: ['vue', '@vueuse/core', 'reka-ui'],
     tsconfig: './tsconfig.json',
     esbuildOptions(options) {
       options.banner = {

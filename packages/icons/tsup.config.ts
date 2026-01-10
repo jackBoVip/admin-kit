@@ -28,7 +28,7 @@ export default defineConfig([
     splitting: false,
     sourcemap: true,
     minify: false,
-    external: ['vue'],
+    external: ['vue', 'lucide-vue-next'],
     tsconfig: './tsconfig.json',
     esbuildOptions(options) {
       options.banner = {
@@ -46,7 +46,7 @@ export default defineConfig([
     splitting: false,
     sourcemap: true,
     minify: true,
-    external: ['vue'],
+    external: ['vue', 'lucide-vue-next'],
     tsconfig: './tsconfig.json',
     esbuildOptions(options) {
       options.banner = {

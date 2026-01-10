@@ -23,10 +23,16 @@ export default defineConfig({
       },
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', '@vueuse/core', 'reka-ui', 'lucide-vue-next', '@admin-core/composables', '@admin-core/icons', '@admin-core/shared'],
       output: {
         globals: {
           vue: 'Vue',
+          '@vueuse/core': 'VueUse',
+          'reka-ui': 'RekaUI',
+          'lucide-vue-next': 'LucideVueNext',
+          '@admin-core/composables': 'AdminCoreComposables',
+          '@admin-core/icons': 'AdminCoreIcons',
+          '@admin-core/shared': 'AdminCoreShared',
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name === 'style.css') return 'style.css'

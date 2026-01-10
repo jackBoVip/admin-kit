@@ -27,6 +27,8 @@
 
 ## 📦 安装
 
+### 基础安装
+
 ```bash
 # 使用 pnpm
 pnpm add @admin-core/composables
@@ -37,6 +39,30 @@ npm install @admin-core/composables
 # 使用 yarn
 yarn add @admin-core/composables
 ```
+
+### Peer Dependencies
+
+此包需要以下对等依赖（peer dependencies）：
+
+```bash
+pnpm add vue @vueuse/core reka-ui
+```
+
+### 完整安装（推荐）
+
+```bash
+# 一次性安装所有依赖
+pnpm add @admin-core/composables vue @vueuse/core reka-ui
+```
+
+> **为什么需要 peer dependencies？**
+> 
+> 为了避免依赖重复打包，我们将常用的大型库（如 @vueuse/core、reka-ui）声明为 peer dependencies。
+> 这样可以：
+> - ✅ 减少打包体积（节省约 35% 的空间）
+> - ✅ 确保版本一致性
+> - ✅ 更好的缓存策略
+> - ✅ 避免多个实例导致的问题
 
 ---
 

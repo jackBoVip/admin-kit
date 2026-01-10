@@ -66,16 +66,16 @@
     "postpublish": "node ../../scripts/restore-catalog.js"
   },
   "peerDependencies": {
-    "vue": "^3.5.0"
+    "vue": "^3.5.0",
+    "@vueuse/core": "^14.0.0",
+    "reka-ui": "^2.0.0",
+    "lucide-vue-next": "^0.500.0"
   },
   "dependencies": {
     "@admin-core/composables": "workspace:*",
     "@admin-core/icons": "workspace:*",
     "@admin-core/shared": "workspace:*",
-    "@vueuse/core": "catalog:",
     "class-variance-authority": "catalog:",
-    "lucide-vue-next": "catalog:",
-    "reka-ui": "catalog:",
     "vee-validate": "catalog:"
   }
 }

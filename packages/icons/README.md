@@ -29,7 +29,7 @@
 
 ## 📦 安装
 
-### NPM 安装（推荐）
+### 基础安装
 
 ```bash
 # 使用 pnpm
@@ -41,6 +41,29 @@ npm install @admin-core/icons
 # 使用 yarn
 yarn add @admin-core/icons
 ```
+
+### Peer Dependencies
+
+此包需要以下对等依赖（peer dependencies）：
+
+```bash
+pnpm add vue lucide-vue-next
+```
+
+### 完整安装（推荐）
+
+```bash
+# 一次性安装所有依赖
+pnpm add @admin-core/icons vue lucide-vue-next
+```
+
+> **为什么需要 peer dependencies？**
+> 
+> 为了避免依赖重复打包，我们将 lucide-vue-next 声明为 peer dependency。
+> 这样可以：
+> - ✅ 减少打包体积（节省约 100KB）
+> - ✅ 确保版本一致性
+> - ✅ 避免多个实例导致的问题
 
 ### CDN 引入
 
