@@ -28,6 +28,10 @@
     "./style.css": "./dist/style.css",
     "./css": "./dist/style.css",
     "./css/index.css": "./src/css/index.css",
+    "./css/integrations/element-plus.css": "./src/css/integrations/element-plus.css",
+    "./css/integrations/ant-design-vue.css": "./src/css/integrations/ant-design-vue.css",
+    "./css/integrations/naive-ui.css": "./src/css/integrations/naive-ui.css",
+    "./css/integrations/arco-design.css": "./src/css/integrations/arco-design.css",
     "./tokens/light.css": "./src/tokens/light.css",
     "./tokens/dark.css": "./src/tokens/dark.css",
     "./umd": "./dist/index.umd.js",
@@ -50,8 +54,12 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
+    "src/css",
+    "src/tokens",
     "src/scss-bem",
-    "README.md"
+    "README.md",
+    "THIRD_PARTY_INTEGRATION.md",
+    "I18N.md"
   ],
   "publishConfig": {
     "access": "public"

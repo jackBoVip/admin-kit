@@ -1,0 +1,17 @@
+/**
+ * 第三方组件库集成
+ * 
+ * 根据你使用的组件库，选择对应的集成文件：
+ * 
+ * Element Plus:
+ * @import '@admin-core/design/css/integrations/element-plus.css';
+ * 
+ * Ant Design Vue:
+ * @import '@admin-core/design/css/integrations/ant-design-vue.css';
+ * 
+ * Naive UI:
+ * @import '@admin-core/design/css/integrations/naive-ui.css';
+ * 
+ * Arco Design:
+ * @import '@admin-core/design/css/integrations/arco-design.css';
+ */

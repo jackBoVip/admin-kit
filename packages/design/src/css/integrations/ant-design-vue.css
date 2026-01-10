@@ -1,0 +1,64 @@
+/**
+ * Ant Design Vue 主题集成
+ * 将 Admin Core 主题颜色映射到 Ant Design Vue
+ * 
+ * 使用方法：
+ * import '@admin-core/design/css/integrations/ant-design-vue.css'
+ */
+
+:root {
+  /* 主色 */
+  --ant-primary-color: hsl(var(--primary));
+  --ant-primary-color-hover: hsl(var(--primary) / 0.8);
+  --ant-primary-color-active: hsl(var(--primary) / 0.9);
+  --ant-primary-color-outline: hsl(var(--primary) / 0.2);
+  
+  /* 成功色 */
+  --ant-success-color: hsl(var(--success));
+  --ant-success-color-hover: hsl(var(--success) / 0.8);
+  --ant-success-color-active: hsl(var(--success) / 0.9);
+  --ant-success-color-outline: hsl(var(--success) / 0.2);
+  
+  /* 警告色 */
+  --ant-warning-color: hsl(var(--warning));
+  --ant-warning-color-hover: hsl(var(--warning) / 0.8);
+  --ant-warning-color-active: hsl(var(--warning) / 0.9);
+  --ant-warning-color-outline: hsl(var(--warning) / 0.2);
+  
+  /* 错误色 */
+  --ant-error-color: hsl(var(--destructive));
+  --ant-error-color-hover: hsl(var(--destructive) / 0.8);
+  --ant-error-color-active: hsl(var(--destructive) / 0.9);
+  --ant-error-color-outline: hsl(var(--destructive) / 0.2);
+  
+  /* 信息色 */
+  --ant-info-color: hsl(var(--info));
+  --ant-info-color-hover: hsl(var(--info) / 0.8);
+  --ant-info-color-active: hsl(var(--info) / 0.9);
+  
+  /* 文本颜色 */
+  --ant-text-color: hsl(var(--foreground));
+  --ant-text-color-secondary: hsl(var(--muted-foreground));
+  --ant-text-color-disabled: hsl(var(--muted-foreground) / 0.4);
+  
+  /* 边框颜色 */
+  --ant-border-color-base: hsl(var(--border));
+  --ant-border-color-split: hsl(var(--border) / 0.5);
+  
+  /* 背景颜色 */
+  --ant-background-color-base: hsl(var(--background));
+  --ant-background-color-light: hsl(var(--background-deep));
+  --ant-component-background: hsl(var(--card));
+  
+  /* 阴影 */
+  --ant-box-shadow-base: 0 2px 8px hsl(var(--foreground) / 0.1);
+}
+
+/* 暗色模式 */
+.dark {
+  --ant-background-color-base: hsl(var(--background));
+  --ant-background-color-light: hsl(var(--background-deep));
+  --ant-component-background: hsl(var(--card));
+  --ant-text-color: hsl(var(--foreground));
+  --ant-border-color-base: hsl(var(--border));
+}

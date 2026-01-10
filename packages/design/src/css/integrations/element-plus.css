@@ -1,6 +1,9 @@
 /**
  * Element Plus 主题集成
  * 将 Admin Core 主题颜色映射到 Element Plus
+ * 
+ * 使用方法：
+ * import '@admin-core/design/css/integrations/element-plus.css'
  */
 
 /* 主色 */

@@ -1,0 +1,60 @@
+/**
+ * Naive UI 主题集成
+ * 将 Admin Core 主题颜色映射到 Naive UI
+ * 
+ * 使用方法：
+ * import '@admin-core/design/css/integrations/naive-ui.css'
+ * 
+ * 注意：Naive UI 原生支持 CSS 变量，这个文件提供额外的样式优化
+ */
+
+:root {
+  /* 主色 */
+  --n-color-primary: hsl(var(--primary));
+  --n-color-primary-hover: hsl(var(--primary) / 0.8);
+  --n-color-primary-pressed: hsl(var(--primary) / 0.9);
+  --n-color-primary-suppl: hsl(var(--primary));
+  
+  /* 成功色 */
+  --n-color-success: hsl(var(--success));
+  --n-color-success-hover: hsl(var(--success) / 0.8);
+  --n-color-success-pressed: hsl(var(--success) / 0.9);
+  
+  /* 警告色 */
+  --n-color-warning: hsl(var(--warning));
+  --n-color-warning-hover: hsl(var(--warning) / 0.8);
+  --n-color-warning-pressed: hsl(var(--warning) / 0.9);
+  
+  /* 错误色 */
+  --n-color-error: hsl(var(--destructive));
+  --n-color-error-hover: hsl(var(--destructive) / 0.8);
+  --n-color-error-pressed: hsl(var(--destructive) / 0.9);
+  
+  /* 信息色 */
+  --n-color-info: hsl(var(--info));
+  --n-color-info-hover: hsl(var(--info) / 0.8);
+  --n-color-info-pressed: hsl(var(--info) / 0.9);
+  
+  /* 文本颜色 */
+  --n-text-color-base: hsl(var(--foreground));
+  --n-text-color-1: hsl(var(--foreground));
+  --n-text-color-2: hsl(var(--foreground) / 0.9);
+  --n-text-color-3: hsl(var(--muted-foreground));
+  
+  /* 边框颜色 */
+  --n-border-color: hsl(var(--border));
+  
+  /* 背景颜色 */
+  --n-body-color: hsl(var(--background));
+  --n-card-color: hsl(var(--card));
+  --n-modal-color: hsl(var(--card));
+  --n-popover-color: hsl(var(--card));
+}
+
+/* 暗色模式 */
+.dark {
+  --n-body-color: hsl(var(--background));
+  --n-card-color: hsl(var(--card));
+  --n-text-color-base: hsl(var(--foreground));
+  --n-border-color: hsl(var(--border));
+}
