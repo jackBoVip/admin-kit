@@ -408,6 +408,186 @@ export function getQuarter(date: Date | number | string): number {
 }
 
 /**
+ * 获取上个月的第一天
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 上个月第一天的日期对象
+ * @example
+ * ```typescript
+ * getFirstDayOfLastMonth() // 上个月 1 号 00:00:00
+ * getFirstDayOfLastMonth('2024-03-15') // 2024-02-01 00:00:00
+ * ```
+ */
+export function getFirstDayOfLastMonth(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.subtract(1, 'month').startOf('month').toDate()
+}
+
+/**
+ * 获取上个月的最后一天
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 上个月最后一天的日期对象
+ * @example
+ * ```typescript
+ * getLastDayOfLastMonth() // 上个月最后一天 23:59:59
+ * getLastDayOfLastMonth('2024-03-15') // 2024-02-29 23:59:59 (闰年)
+ * ```
+ */
+export function getLastDayOfLastMonth(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.subtract(1, 'month').endOf('month').toDate()
+}
+
+/**
+ * 获取本月的第一天
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 本月第一天的日期对象
+ * @example
+ * ```typescript
+ * getFirstDayOfMonth() // 本月 1 号 00:00:00
+ * getFirstDayOfMonth('2024-03-15') // 2024-03-01 00:00:00
+ * ```
+ */
+export function getFirstDayOfMonth(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.startOf('month').toDate()
+}
+
+/**
+ * 获取本月的最后一天
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 本月最后一天的日期对象
+ * @example
+ * ```typescript
+ * getLastDayOfMonth() // 本月最后一天 23:59:59
+ * getLastDayOfMonth('2024-02-15') // 2024-02-29 23:59:59 (闰年)
+ * ```
+ */
+export function getLastDayOfMonth(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.endOf('month').toDate()
+}
+
+/**
+ * 获取下个月的第一天
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 下个月第一天的日期对象
+ * @example
+ * ```typescript
+ * getFirstDayOfNextMonth() // 下个月 1 号 00:00:00
+ * getFirstDayOfNextMonth('2024-01-15') // 2024-02-01 00:00:00
+ * ```
+ */
+export function getFirstDayOfNextMonth(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.add(1, 'month').startOf('month').toDate()
+}
+
+/**
+ * 获取下个月的最后一天
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 下个月最后一天的日期对象
+ * @example
+ * ```typescript
+ * getLastDayOfNextMonth() // 下个月最后一天 23:59:59
+ * getLastDayOfNextMonth('2024-01-15') // 2024-02-29 23:59:59 (闰年)
+ * ```
+ */
+export function getLastDayOfNextMonth(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.add(1, 'month').endOf('month').toDate()
+}
+
+/**
+ * 获取今年的第一天
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 今年第一天的日期对象
+ * @example
+ * ```typescript
+ * getFirstDayOfYear() // 今年 1 月 1 号 00:00:00
+ * getFirstDayOfYear('2024-06-15') // 2024-01-01 00:00:00
+ * ```
+ */
+export function getFirstDayOfYear(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.startOf('year').toDate()
+}
+
+/**
+ * 获取今年的最后一天
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 今年最后一天的日期对象
+ * @example
+ * ```typescript
+ * getLastDayOfYear() // 今年 12 月 31 号 23:59:59
+ * getLastDayOfYear('2024-06-15') // 2024-12-31 23:59:59
+ * ```
+ */
+export function getLastDayOfYear(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.endOf('year').toDate()
+}
+
+/**
+ * 获取去年的第一天
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 去年第一天的日期对象
+ * @example
+ * ```typescript
+ * getFirstDayOfLastYear() // 去年 1 月 1 号 00:00:00
+ * getFirstDayOfLastYear('2024-06-15') // 2023-01-01 00:00:00
+ * ```
+ */
+export function getFirstDayOfLastYear(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.subtract(1, 'year').startOf('year').toDate()
+}
+
+/**
+ * 获取去年的最后一天
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 去年最后一天的日期对象
+ * @example
+ * ```typescript
+ * getLastDayOfLastYear() // 去年 12 月 31 号 23:59:59
+ * getLastDayOfLastYear('2024-06-15') // 2023-12-31 23:59:59
+ * ```
+ */
+export function getLastDayOfLastYear(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.subtract(1, 'year').endOf('year').toDate()
+}
+
+/**
+ * 获取本周的第一天（周一）
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 本周第一天的日期对象
+ * @example
+ * ```typescript
+ * getFirstDayOfWeek() // 本周周一 00:00:00
+ * getFirstDayOfWeek('2024-03-15') // 2024-03-11 00:00:00
+ * ```
+ */
+export function getFirstDayOfWeek(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.startOf('week').toDate()
+}
+
+/**
+ * 获取本周的最后一天（周日）
+ * @param date - 日期对象、时间戳或日期字符串，默认为当前日期
+ * @returns 本周最后一天的日期对象
+ * @example
+ * ```typescript
+ * getLastDayOfWeek() // 本周周日 23:59:59
+ * getLastDayOfWeek('2024-03-15') // 2024-03-17 23:59:59
+ * ```
+ */
+export function getLastDayOfWeek(date?: Date | number | string): Date {
+  const d = date ? dayjs(date) : dayjs()
+  return d.endOf('week').toDate()
+}
+
+/**
  * 判断是否是闰年
  * @param date - 日期对象、时间戳或日期字符串
  * @returns 是否是闰年
