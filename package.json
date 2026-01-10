@@ -9,6 +9,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "pnpm run build && changeset publish",
+    "test:catalog": "node scripts/test-catalog.js",
     "prepublishOnly": "node scripts/resolve-catalog.js",
     "postpublish": "node scripts/restore-catalog.js"
   },
