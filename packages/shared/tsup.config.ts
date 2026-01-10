@@ -1,5 +1,17 @@
 import { defineConfig } from 'tsup'
 
+const externalDeps = [
+  'clsx',
+  'tailwind-merge',
+  'es-toolkit',
+  'es-toolkit/compat',
+  'lodash.clonedeep',
+  'nprogress',
+  'dayjs',
+  'defu',
+  '@vue/shared',
+]
+
 export default defineConfig([
   // ESM and CJS builds with multiple entry points
   {
@@ -23,6 +35,7 @@ export default defineConfig([
     sourcemap: true,
     minify: false,
     tsconfig: './tsconfig.json',
+    external: externalDeps,
   },
   // UMD build for CDN (main entry only)
   {
@@ -35,6 +48,7 @@ export default defineConfig([
     sourcemap: true,
     minify: false,
     tsconfig: './tsconfig.json',
+    external: externalDeps,
     esbuildOptions(options) {
       options.banner = {
         js: '/* @admin-core/shared - MIT License */',
@@ -52,6 +66,7 @@ export default defineConfig([
     sourcemap: true,
     minify: true,
     tsconfig: './tsconfig.json',
+    external: externalDeps,
     esbuildOptions(options) {
       options.banner = {
         js: '/* @admin-core/shared - MIT License */',
