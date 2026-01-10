@@ -108,7 +108,7 @@ async function onBtnClick(value: ValueType) {
   <AdminButtonGroup
     :size="props.size"
     :gap="props.gap"
-    class="vben-check-button-group"
+    class="admin-check-button-group"
   >
     <Button
       v-for="(btn, index) in props.options"
@@ -145,7 +145,7 @@ async function onBtnClick(value: ValueType) {
   </AdminButtonGroup>
 </template>
 <style lang="scss" scoped>
-.vben-check-button-group {
+.admin-check-button-group {
   display: flex;
   flex-wrap: wrap;
 
