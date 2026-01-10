@@ -7,6 +7,16 @@
           <h1 class="text-2xl font-bold text-primary">Admin Core 主题系统</h1>
           
           <div class="flex items-center gap-4">
+            <!-- 语言切换 -->
+            <select
+              v-model="currentLocale"
+              @change="handleLocaleChange"
+              class="px-4 py-2 rounded-lg bg-input border border-border text-foreground focus:ring-2 focus:ring-ring outline-none"
+            >
+              <option value="zh-CN">🇨🇳 中文</option>
+              <option value="en-US">🇺🇸 English</option>
+            </select>
+
             <!-- 暗色模式切换 -->
             <button
               @click="toggleDarkMode()"
@@ -21,7 +31,7 @@
               @change="(e) => setVariant((e.target as HTMLSelectElement).value as any)"
               class="px-4 py-2 rounded-lg bg-input border border-border text-foreground focus:ring-2 focus:ring-ring outline-none"
             >
-              <option value="default">默认主题</option>
+              <option value="default">{{ getDefaultThemeLabel() }}</option>
               <option v-for="theme in themes" :key="theme.id" :value="theme.id">
                 {{ theme.icon }} {{ theme.name }}
               </option>
@@ -33,24 +43,49 @@
 
     <!-- 主内容区 -->
     <main class="container mx-auto px-4 py-8">
+      <!-- 国际化演示卡片 -->
+      <div class="card-box p-6 mb-8 bg-gradient-to-r from-primary/10 to-accent/10">
+        <h2 class="text-xl font-semibold mb-4">🌍 {{ currentLocale === 'zh-CN' ? '国际化演示' : 'Internationalization Demo' }}</h2>
+        <div class="space-y-3">
+          <div>
+            <span class="text-muted-foreground">{{ currentLocale === 'zh-CN' ? '当前语言：' : 'Current Language: ' }}</span>
+            <span class="font-medium">{{ currentLocale === 'zh-CN' ? '🇨🇳 中文（简体）' : '🇺🇸 English (US)' }}</span>
+          </div>
+          <div>
+            <span class="text-muted-foreground">{{ currentLocale === 'zh-CN' ? '当前主题：' : 'Current Theme: ' }}</span>
+            <span class="font-medium">{{ currentThemeMetadata?.icon }} {{ currentThemeMetadata?.name }}</span>
+          </div>
+          <div class="p-4 bg-card rounded-lg border border-border">
+            <p class="text-sm text-muted-foreground mb-1">{{ currentLocale === 'zh-CN' ? '主题描述：' : 'Theme Description:' }}</p>
+            <p class="text-foreground">{{ currentThemeMetadata?.description }}</p>
+          </div>
+          <div class="text-xs text-muted-foreground">
+            {{ currentLocale === 'zh-CN' 
+              ? '💡 提示：切换语言后，所有主题名称和描述会自动更新' 
+              : '💡 Tip: After switching languages, all theme names and descriptions will be automatically updated' 
+            }}
+          </div>
+        </div>
+      </div>
+
       <!-- 主题信息卡片 -->
       <div class="card-box p-6 mb-8">
-        <h2 class="text-xl font-semibold mb-4">当前主题配置</h2>
+        <h2 class="text-xl font-semibold mb-4">{{ currentLocale === 'zh-CN' ? '当前主题配置' : 'Current Theme Configuration' }}</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div>
-            <span class="text-muted-foreground">模式：</span>
-            <span class="font-medium">{{ isDark ? '暗色' : '浅色' }}</span>
+            <span class="text-muted-foreground">{{ currentLocale === 'zh-CN' ? '模式：' : 'Mode: ' }}</span>
+            <span class="font-medium">{{ isDark ? (currentLocale === 'zh-CN' ? '暗色' : 'Dark') : (currentLocale === 'zh-CN' ? '浅色' : 'Light') }}</span>
           </div>
           <div>
-            <span class="text-muted-foreground">主题：</span>
-            <span class="font-medium">{{ currentThemeMetadata?.name || '默认' }}</span>
+            <span class="text-muted-foreground">{{ currentLocale === 'zh-CN' ? '主题：' : 'Theme: ' }}</span>
+            <span class="font-medium">{{ currentThemeMetadata?.name || (currentLocale === 'zh-CN' ? '默认' : 'Default') }}</span>
           </div>
           <div>
-            <span class="text-muted-foreground">主色：</span>
+            <span class="text-muted-foreground">{{ currentLocale === 'zh-CN' ? '主色：' : 'Primary: ' }}</span>
             <span class="inline-block w-6 h-6 rounded bg-primary border border-border ml-2"></span>
           </div>
           <div>
-            <span class="text-muted-foreground">背景色：</span>
+            <span class="text-muted-foreground">{{ currentLocale === 'zh-CN' ? '背景色：' : 'Background: ' }}</span>
             <span class="inline-block w-6 h-6 rounded bg-background border border-border ml-2"></span>
           </div>
         </div>
@@ -263,7 +298,8 @@
 </template>
 
 <script setup lang="ts">
-import { useTheme } from '@admin-core/design'
+import { ref } from 'vue'
+import { useTheme, setLocale, getLocale, getThemeMetadata, type Locale } from '@admin-core/design'
 import ColorCard from './components/ColorCard.vue'
 import CustomThemePanel from './components/CustomThemePanel.vue'
 
@@ -275,12 +311,26 @@ const {
   setMode,
   setVariant,
   toggleDarkMode,
-  getAvailableThemes,
   getCurrentThemeMetadata,
 } = useTheme()
 
-// 获取所有可用主题
-const themes = getAvailableThemes()
+// 当前语言
+const currentLocale = ref<Locale>(getLocale())
+
+// 响应式主题列表
+const themes = ref(getThemeMetadata())
+
+// 切换语言
+const handleLocaleChange = () => {
+  setLocale(currentLocale.value)
+  // 重新获取主题列表以更新语言
+  themes.value = getThemeMetadata()
+}
+
+// 获取默认主题标签
+const getDefaultThemeLabel = () => {
+  return currentLocale.value === 'zh-CN' ? '默认主题' : 'Default Theme'
+}
 
 // 颜色令牌
 const colorTokens = [
