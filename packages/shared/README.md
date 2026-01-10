@@ -38,6 +38,8 @@ npm install @admin-core/shared
 yarn add @admin-core/shared
 ```
 
+> 💡 **依赖说明**: 所有依赖会自动安装，无需手动安装。详见 [依赖安装指南](./DEPENDENCY_GUIDE.md)
+
 ---
 
 ## 🚀 快速开始

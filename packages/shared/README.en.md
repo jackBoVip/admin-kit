@@ -38,6 +38,8 @@ npm install @admin-core/shared
 yarn add @admin-core/shared
 ```
 
+> 💡 **Dependency Note**: All dependencies will be installed automatically. See [Dependency Guide](./DEPENDENCY_GUIDE.md) for details.
+
 ---
 
 ## 🚀 Quick Start
