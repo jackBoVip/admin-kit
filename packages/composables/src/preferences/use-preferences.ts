@@ -1,6 +1,6 @@
 import { computed } from 'vue';
 
-import { diff } from '@vben-core/shared/utils';
+import { diff } from '@admin-core/shared/utils';
 
 import { isDarkTheme, preferencesManager } from './provider';
 
