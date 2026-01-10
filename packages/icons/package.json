@@ -1,6 +1,6 @@
 {
   "name": "@admin-core/icons",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": false,
   "type": "module",
   "description": "图标组件库",
@@ -24,7 +24,8 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "README.en.md"
   ],
   "publishConfig": {
     "access": "public"
@@ -34,7 +35,8 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "@iconify/vue": "catalog:"
+    "@iconify/vue": "catalog:",
+    "lucide-vue-next": "^0.468.0"
   },
   "peerDependencies": {
     "vue": "^3.5.0"
