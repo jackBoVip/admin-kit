@@ -19,6 +19,7 @@ export {
   useSessionStorage,
   useMouse,
   useScroll,
+  useScrollLock,
   useWindowSize,
   useEventListener,
   useDebounce,

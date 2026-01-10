@@ -30,6 +30,7 @@ catalog:
   autoprefixer: ^10.4.21
   tailwind-merge: ^2.6.0
   clsx: ^2.1.1
+  "class-variance-authority": ^0.7.1
   
   # 图标
   "@iconify/json": ^2.2.425
@@ -55,6 +56,8 @@ catalog:
   
   # UI 库
   "element-plus": ^2.9.2
+  "reka-ui": ^2.7.0
+  "vee-validate": ^4.15.1
   
   # 其他
   yaml: ^2.8.2

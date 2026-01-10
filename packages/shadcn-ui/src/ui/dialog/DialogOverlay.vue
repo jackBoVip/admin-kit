@@ -3,7 +3,7 @@ import { inject } from 'vue';
 
 import { useScrollLock } from '@admin-core/composables';
 
-useScrollLock();
+useScrollLock(document.body);
 const id = inject('DISMISSABLE_MODAL_ID');
 </script>
 <template>
