@@ -3,8 +3,8 @@ import type { CustomRenderType } from '../types';
 
 import {
   FormLabel,
-  VbenHelpTooltip,
-  VbenRenderContent,
+  AdminHelpTooltip,
+  AdminRenderContent,
 } from '@admin-core/shadcn-ui';
 import { cn } from '@admin-core/shared/utils';
 
@@ -23,9 +23,9 @@ const props = defineProps<Props>();
   <FormLabel :class="cn('flex items-center', props.class)">
     <span v-if="required" class="mr-[2px] text-destructive">*</span>
     <slot></slot>
-    <VbenHelpTooltip v-if="help" trigger-class="size-3.5 ml-1">
-      <VbenRenderContent :content="help" />
-    </VbenHelpTooltip>
+    <AdminHelpTooltip v-if="help" trigger-class="size-3.5 ml-1">
+      <AdminRenderContent :content="help" />
+    </AdminHelpTooltip>
     <span v-if="colon && label" class="ml-[2px]">:</span>
   </FormLabel>
 </template>

@@ -51,7 +51,7 @@ function getDefaultState(): AdminFormProps {
 }
 
 export class FormApi {
-  // private api: Pick<VbenFormProps, 'handleReset' | 'handleSubmit'>;
+  // private api: Pick<AdminFormProps, 'handleReset' | 'handleSubmit'>;
   public form = {} as FormActions;
   isMounted = false;
 
@@ -452,7 +452,7 @@ export class FormApi {
       await this.stateHandler.waitForCondition();
     }
     if (!this.form?.meta) {
-      throw new Error('<VbenForm /> is not mounted');
+      throw new Error('<AdminForm /> is not mounted');
     }
     return this.form;
   }

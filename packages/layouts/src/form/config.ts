@@ -9,12 +9,12 @@ import type {
 import { h } from 'vue';
 
 import {
-  VbenButton,
-  VbenCheckbox,
-  Input as VbenInput,
-  VbenInputPassword,
-  VbenPinInput,
-  VbenSelect,
+  AdminButton,
+  AdminCheckbox,
+  Input as AdminInput,
+  AdminInputPassword,
+  AdminPinInput,
+  AdminSelect,
 } from '@admin-core/shadcn-ui';
 import { globalShareState } from '@admin-core/shared/global-state';
 
@@ -25,13 +25,13 @@ const DEFAULT_MODEL_PROP_NAME = 'modelValue';
 export const DEFAULT_FORM_COMMON_CONFIG: FormCommonConfig = {};
 
 export const COMPONENT_MAP: Record<BaseFormComponentType, Component> = {
-  DefaultButton: h(VbenButton, { size: 'sm', variant: 'outline' }),
-  PrimaryButton: h(VbenButton, { size: 'sm', variant: 'default' }),
-  AdminCheckbox: VbenCheckbox,
-  AdminInput: VbenInput,
-  AdminInputPassword: VbenInputPassword,
-  AdminPinInput: VbenPinInput,
-  AdminSelect: VbenSelect,
+  DefaultButton: h(AdminButton, { size: 'sm', variant: 'outline' }),
+  PrimaryButton: h(AdminButton, { size: 'sm', variant: 'default' }),
+  AdminCheckbox,
+  AdminInput,
+  AdminInputPassword,
+  AdminPinInput,
+  AdminSelect,
 };
 
 export const COMPONENT_BIND_EVENT_MAP: Partial<
@@ -40,7 +40,7 @@ export const COMPONENT_BIND_EVENT_MAP: Partial<
   AdminCheckbox: 'checked',
 };
 
-export function setupVbenForm<
+export function setupAdminForm<
   T extends BaseFormComponentType = BaseFormComponentType,
 >(options: AdminFormAdapterOptions<T>) {
   const { config, defineRules } = options;

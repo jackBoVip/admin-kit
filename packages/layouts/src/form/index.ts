@@ -1,4 +1,4 @@
-export { setupVbenForm } from './config';
+export { setupAdminForm } from './config';
 
 export type {
   BaseFormComponentType,
@@ -7,6 +7,6 @@ export type {
   FormSchema as AdminFormSchema,
 } from './types';
 
-export * from './use-vben-form';
-// export { default as VbenForm } from './vben-form.vue';
+export * from './use-admin-form';
+// export { default as AdminForm } from './admin-form.vue';
 export * as z from 'zod';

@@ -9,9 +9,9 @@ import { defineComponent, h, isReactive, onBeforeUnmount, watch } from 'vue';
 import { useStore } from '@admin-core/shared/store';
 
 import { FormApi } from './form-api';
-import VbenUseForm from './vben-use-form.vue';
+import AdminUseForm from './admin-use-form.vue';
 
-export function useVbenForm<
+export function useAdminForm<
   T extends BaseFormComponentType = BaseFormComponentType,
 >(options: AdminFormProps<T>) {
   const IS_REACTIVE = isReactive(options);
@@ -28,10 +28,10 @@ export function useVbenForm<
       });
       api.setState({ ...props, ...attrs });
       return () =>
-        h(VbenUseForm, { ...props, ...attrs, formApi: extendedApi }, slots);
+        h(AdminUseForm, { ...props, ...attrs, formApi: extendedApi }, slots);
     },
     {
-      name: 'VbenUseForm',
+      name: 'AdminUseForm',
       inheritAttrs: false,
     },
   );

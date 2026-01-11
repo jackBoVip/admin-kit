@@ -2,7 +2,7 @@
 import { computed, toRaw, unref, watch } from 'vue';
 
 import { useSimpleLocale } from '@admin-core/composables';
-import { VbenExpandableArrow } from '@admin-core/shadcn-ui';
+import { AdminExpandableArrow } from '@admin-core/shadcn-ui';
 import { cn, isFunction, triggerWindowResize } from '@admin-core/shared/utils';
 
 import { COMPONENT_MAP } from '../config';
@@ -174,13 +174,13 @@ defineExpose({
     <!-- 展开按钮前 -->
     <slot name="expand-before"></slot>
 
-    <VbenExpandableArrow
+    <AdminExpandableArrow
       class="ml-[-0.3em]"
       v-if="rootProps.showCollapseButton"
       v-model:model-value="collapsed"
     >
       <span>{{ collapsed ? $t('expand') : $t('collapse') }}</span>
-    </VbenExpandableArrow>
+    </AdminExpandableArrow>
 
     <!-- 展开按钮后 -->
     <slot name="expand-after"></slot>
