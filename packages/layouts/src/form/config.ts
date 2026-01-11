@@ -20,10 +20,13 @@ import { globalShareState } from '@admin-core/shared/utils';
 
 import { defineRule } from 'vee-validate';
 
+/** 默认的 model 属性名 */
 const DEFAULT_MODEL_PROP_NAME = 'modelValue';
 
+/** 默认的表单通用配置 */
 export const DEFAULT_FORM_COMMON_CONFIG: FormCommonConfig = {};
 
+/** 组件映射表 */
 export const COMPONENT_MAP: Record<BaseFormComponentType, Component> = {
   DefaultButton: h(AdminButton, { size: 'sm', variant: 'outline' }),
   PrimaryButton: h(AdminButton, { size: 'sm', variant: 'default' }),
@@ -34,12 +37,31 @@ export const COMPONENT_MAP: Record<BaseFormComponentType, Component> = {
   AdminSelect,
 };
 
+/** 组件绑定事件映射表 */
 export const COMPONENT_BIND_EVENT_MAP: Partial<
   Record<BaseFormComponentType, string>
 > = {
   AdminCheckbox: 'checked',
 };
 
+/**
+ * 设置 Admin 表单
+ * @description 配置表单的全局选项，包括组件映射、验证规则等
+ * @template T - 表单组件类型
+ * @param options - 表单适配器选项
+ * @example
+ * ```typescript
+ * setupAdminForm({
+ *   config: {
+ *     baseModelPropName: 'modelValue',
+ *     disabledOnChangeListener: true,
+ *   },
+ *   defineRules: {
+ *     required: (value) => !!value || '此字段为必填项',
+ *   }
+ * })
+ * ```
+ */
 export function setupAdminForm<
   T extends BaseFormComponentType = BaseFormComponentType,
 >(options: AdminFormAdapterOptions<T>) {

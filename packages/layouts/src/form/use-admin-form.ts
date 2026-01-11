@@ -11,6 +11,31 @@ import { useStore } from '@admin-core/shared/utils';
 import { FormApi } from './form-api';
 import AdminUseForm from './admin-use-form.vue';
 
+/**
+ * 使用 Admin 表单
+ * @description 创建一个响应式表单组件和 API 实例
+ * @template T - 表单组件类型
+ * @param options - 表单配置选项
+ * @returns 返回表单组件和扩展的表单 API
+ * @example
+ * ```typescript
+ * const [Form, formApi] = useAdminForm({
+ *   schema: [
+ *     {
+ *       component: 'AdminInput',
+ *       fieldName: 'username',
+ *       label: '用户名',
+ *     }
+ *   ]
+ * })
+ * 
+ * // 在模板中使用
+ * <Form />
+ * 
+ * // 使用 API
+ * formApi.setFieldValue('username', 'admin')
+ * ```
+ */
 export function useAdminForm<
   T extends BaseFormComponentType = BaseFormComponentType,
 >(options: AdminFormProps<T>) {
@@ -35,7 +60,7 @@ export function useAdminForm<
       inheritAttrs: false,
     },
   );
-  // Add reactivity support
+  // 添加响应式支持
   if (IS_REACTIVE) {
     watch(
       () => options.schema,

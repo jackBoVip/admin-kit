@@ -24,6 +24,10 @@ import {
   isObject,
 } from '@admin-core/shared/utils';
 
+/**
+ * 获取默认表单状态
+ * @returns 默认的表单配置
+ */
 function getDefaultState(): Partial<AdminFormProps> {
   return {
     actionWrapperClass: '',
@@ -44,6 +48,31 @@ function getDefaultState(): Partial<AdminFormProps> {
   };
 }
 
+/**
+ * 表单 API 类
+ * @description 提供表单的核心功能，包括状态管理、验证、提交等
+ * @example
+ * ```typescript
+ * const api = new FormApi({
+ *   schema: [
+ *     {
+ *       component: 'AdminInput',
+ *       fieldName: 'username',
+ *       label: '用户名',
+ *     }
+ *   ]
+ * })
+ * 
+ * // 设置字段值
+ * await api.setFieldValue('username', 'admin')
+ * 
+ * // 验证表单
+ * const result = await api.validate()
+ * 
+ * // 提交表单
+ * await api.submitForm()
+ * ```
+ */
 export class FormApi {
   // private api: Pick<AdminFormProps, 'handleReset' | 'handleSubmit'>;
   public form = {} as FormActions;

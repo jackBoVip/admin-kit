@@ -15,14 +15,34 @@ import { getDefaultsForSchema } from 'zod-defaults';
 
 type ExtendFormProps = AdminFormProps & { formApi?: ExtendedFormApi };
 
+/** 表单属性注入/提供上下文 */
 export const [injectFormProps, provideFormProps] =
   createContext<[ComputedRef<ExtendFormProps> | ExtendFormProps, FormActions]>(
     'AdminFormProps',
   );
 
+/** 组件引用映射注入/提供上下文 */
 export const [injectComponentRefMap, provideComponentRefMap] =
   createContext<Map<string, unknown>>('ComponentRefMap');
 
+/**
+ * 使用表单初始化
+ * @description 初始化表单实例和插槽
+ * @param props - 表单属性（可以是响应式的）
+ * @returns 返回委托的插槽和表单实例
+ * @example
+ * ```typescript
+ * const { delegatedSlots, form } = useFormInitial(props)
+ * 
+ * // 使用表单实例
+ * form.setFieldValue('username', 'admin')
+ * 
+ * // 使用委托的插槽
+ * delegatedSlots.value.forEach(slot => {
+ *   console.log(slot)
+ * })
+ * ```
+ */
 export function useFormInitial(
   props: ComputedRef<AdminFormProps> | AdminFormProps,
 ) {
@@ -44,6 +64,10 @@ export function useFormInitial(
     return resultSlots;
   });
 
+  /**
+   * 生成初始值
+   * @description 根据 schema 生成表单的初始值
+   */
   function generateInitialValues() {
     const initialValues: Record<string, any> = {};
 
@@ -69,7 +93,12 @@ export function useFormInitial(
     }
     return deepMerge(zodDefaults, initialValues);
   }
-  // 自定义默认值提取逻辑
+  
+  /**
+   * 获取自定义默认值
+   * @description 根据 Zod 规则提取默认值
+   * @param rule - Zod 验证规则
+   */
   function getCustomDefaultValue(rule: any): any {
     if (rule instanceof ZodString) {
       return ''; // 默认为空字符串
