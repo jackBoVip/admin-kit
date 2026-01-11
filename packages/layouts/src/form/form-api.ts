@@ -13,30 +13,24 @@ import type { FormActions, FormSchema, AdminFormProps } from './types';
 
 import { isRef, toRaw } from 'vue';
 
-import { Store } from '@admin-core/shared/utils';
+import type { Store } from '@admin-core/shared/utils';
 import {
   bindMethods,
-  createMerge,
+  createStore,
+  deepMerge,
   formatDate,
   isDate,
-  isDayjsObject,
   isFunction,
   isObject,
-  mergeWithArrayOverride,
-  StateHandler,
 } from '@admin-core/shared/utils';
 
-function getDefaultState(): AdminFormProps {
+function getDefaultState(): Partial<AdminFormProps> {
   return {
     actionWrapperClass: '',
     collapsed: false,
     collapsedRows: 1,
     collapseTriggerResize: false,
     commonConfig: {},
-    handleReset: undefined,
-    handleSubmit: undefined,
-    handleValuesChange: undefined,
-    handleCollapsedChange: undefined,
     layout: 'horizontal',
     resetButtonOptions: {},
     schema: [],
@@ -56,7 +50,8 @@ export class FormApi {
   isMounted = false;
 
   public state: null | AdminFormProps = null;
-  stateHandler: StateHandler;
+  private mountedPromise: Promise<void>;
+  private resolveMounted!: () => void;
 
   public store: Store<AdminFormProps>;
 
@@ -75,22 +70,27 @@ export class FormApi {
 
     const defaultState = getDefaultState();
 
-    this.store = new Store<AdminFormProps>(
+    this.store = createStore<AdminFormProps>(
       {
         ...defaultState,
         ...storeState,
       },
-      {
-        onUpdate: () => {
-          this.prevState = this.state;
-          this.state = this.store.state;
-          this.updateState();
-        },
-      },
     );
 
-    this.state = this.store.state;
-    this.stateHandler = new StateHandler();
+    // 添加 onUpdate 监听器
+    this.store.subscribe(() => {
+      this.prevState = this.state;
+      this.state = this.store.getState();
+      this.updateState();
+    });
+
+    this.state = this.store.getState();
+    
+    // 创建挂载等待 Promise
+    this.mountedPromise = new Promise((resolve) => {
+      this.resolveMounted = resolve;
+    });
+    
     bindMethods(this);
   }
 
@@ -212,7 +212,7 @@ export class FormApi {
   mount(formActions: FormActions, componentRefMap: Map<string, unknown>) {
     if (!this.isMounted) {
       Object.assign(this.form, formActions);
-      this.stateHandler.setConditionTrue();
+      this.resolveMounted(); // 解析挂载 Promise
       this.setLatestSubmissionValues({
         ...toRaw(this.handleRangeTimeValue(this.form.values)),
       });
@@ -306,10 +306,11 @@ export class FormApi {
   ) {
     if (isFunction(stateOrFn)) {
       this.store.setState((prev) => {
-        return mergeWithArrayOverride(stateOrFn(prev), prev);
+        const partial = stateOrFn(prev);
+        return { ...prev, ...partial };
       });
     } else {
-      this.store.setState((prev) => mergeWithArrayOverride(stateOrFn, prev));
+      this.store.setState((prev) => ({ ...prev, ...stateOrFn }));
     }
   }
 
@@ -330,25 +331,29 @@ export class FormApi {
       return;
     }
 
-    /**
-     * 合并算法有待改进，目前的算法不支持object类型的值。
-     * antd的日期时间相关组件的值类型为dayjs对象
-     * element-plus的日期时间相关组件的值类型可能为Date对象
-     * 以上两种类型需要排除深度合并
-     */
-    const fieldMergeFn = createMerge((obj, key, value) => {
-      if (key in obj) {
-        obj[key] =
-          !Array.isArray(obj[key]) &&
-          isObject(obj[key]) &&
-          !isDayjsObject(obj[key]) &&
-          !isDate(obj[key])
-            ? fieldMergeFn(value, obj[key])
-            : value;
+    // 简化的合并逻辑：只合并 form.values 中已存在的字段
+    const filteredFields: Record<string, any> = {};
+    for (const key in fields) {
+      if (key in form.values) {
+        const existingValue = form.values[key];
+        const newValue = fields[key];
+        
+        // 如果现有值是对象且不是数组、Date，则深度合并
+        if (
+          isObject(existingValue) &&
+          !Array.isArray(existingValue) &&
+          !isDate(existingValue) &&
+          isObject(newValue) &&
+          !Array.isArray(newValue) &&
+          !isDate(newValue)
+        ) {
+          filteredFields[key] = deepMerge(existingValue, newValue);
+        } else {
+          filteredFields[key] = newValue;
+        }
       }
-      return true;
-    });
-    const filteredFields = fieldMergeFn(fields, form.values);
+    }
+    
     form.setValues(filteredFields, shouldValidate);
   }
 
@@ -368,7 +373,10 @@ export class FormApi {
     // this.state = null;
     this.latestSubmissionValues = null;
     this.isMounted = false;
-    this.stateHandler.reset();
+    // 重新创建挂载 Promise
+    this.mountedPromise = new Promise((resolve) => {
+      this.resolveMounted = resolve;
+    });
   }
 
   updateSchema(schema: Partial<FormSchema>[]) {
@@ -396,10 +404,7 @@ export class FormApi {
     currentSchema.forEach((schema, index) => {
       const updatedData = updatedMap[schema.fieldName];
       if (updatedData) {
-        currentSchema[index] = mergeWithArrayOverride(
-          updatedData,
-          schema,
-        ) as FormSchema;
+        currentSchema[index] = { ...schema, ...updatedData } as FormSchema;
       }
     });
     this.setState({ schema: currentSchema });
@@ -449,7 +454,7 @@ export class FormApi {
   private async getForm() {
     if (!this.isMounted) {
       // 等待form挂载
-      await this.stateHandler.waitForCondition();
+      await this.mountedPromise;
     }
     if (!this.form?.meta) {
       throw new Error('<AdminForm /> is not mounted');

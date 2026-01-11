@@ -167,7 +167,7 @@ const computedProps = computed(() => {
 });
 
 watch(
-  () => computedProps.value?.autofocus,
+  () => computedProps.value?.['autofocus'],
   (value) => {
     if (value === true) {
       nextTick(() => {
@@ -179,7 +179,7 @@ watch(
 );
 
 const shouldDisabled = computed(() => {
-  return isDisabled.value || disabled || computedProps.value?.disabled;
+  return isDisabled.value || disabled || computedProps.value?.['disabled'];
 });
 
 const customContentRender = computed(() => {
@@ -204,8 +204,8 @@ const fieldProps = computed(() => {
 });
 
 function fieldBindEvent(slotProps: Record<string, any>) {
-  const modelValue = slotProps.componentField.modelValue;
-  const handler = slotProps.componentField['onUpdate:modelValue'];
+  const modelValue = slotProps['componentField']?.modelValue;
+  const handler = slotProps['componentField']?.['onUpdate:modelValue'];
 
   const bindEventField =
     modelPropName ||
@@ -215,7 +215,7 @@ function fieldBindEvent(slotProps: Record<string, any>) {
   // antd design 的一些组件会传递一个 event 对象
   if (modelValue && isObject(modelValue) && bindEventField) {
     value = isEventObjectLike(modelValue)
-      ? modelValue?.target?.[bindEventField]
+      ? modelValue?.['target']?.[bindEventField]
       : (modelValue?.[bindEventField] ?? modelValue);
   }
 
@@ -227,12 +227,12 @@ function fieldBindEvent(slotProps: Record<string, any>) {
         ? undefined
         : (e: Record<string, any>) => {
             const shouldUnwrap = isEventObjectLike(e);
-            const onChange = slotProps?.componentField?.onChange;
+            const onChange = slotProps?.['componentField']?.onChange;
             if (!shouldUnwrap) {
               return onChange?.(e);
             }
 
-            return onChange?.(e?.target?.[bindEventField] ?? e);
+            return onChange?.(e?.['target']?.[bindEventField] ?? e);
           },
       ...(disabledOnInputListener ? { onInput: undefined } : {}),
     };
@@ -247,7 +247,7 @@ function createComponentProps(slotProps: Record<string, any>) {
   const bindEvents = fieldBindEvent(slotProps);
 
   const binds = {
-    ...slotProps.componentField,
+    ...slotProps['componentField'],
     ...computedProps.value,
     ...bindEvents,
     ...(Reflect.has(computedProps.value, 'onChange')
@@ -314,10 +314,12 @@ onUnmounted(() => {
             labelClass,
           )
         "
-        :help="help"
-        :colon="colon"
-        :label="label"
-        :required="shouldRequired && !hideRequiredMark"
+        v-bind="{
+          ...(help !== undefined ? { help } : {}),
+          ...(colon !== undefined ? { colon } : {}),
+          ...(label !== undefined ? { label } : {}),
+          required: shouldRequired && !hideRequiredMark,
+        }"
         :style="labelStyle"
       >
         <template v-if="label">
