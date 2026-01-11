@@ -7,7 +7,7 @@ import type { ExtendedFormApi, FormActions, AdminFormProps } from './types';
 import { computed, unref, useSlots } from 'vue';
 
 import { createContext } from '@admin-core/ui';
-import { isString, mergeWithArrayOverride, set } from '@admin-core/shared/utils';
+import { isString, set, deepMerge } from '@admin-core/shared/utils';
 
 import { useForm } from 'vee-validate';
 import { object, ZodIntersection, ZodNumber, ZodObject, ZodString } from 'zod';
@@ -67,7 +67,7 @@ export function useFormInitial(
     for (const key in schemaInitialValues) {
       set(zodDefaults, key, schemaInitialValues[key]);
     }
-    return mergeWithArrayOverride(initialValues, zodDefaults);
+    return deepMerge(zodDefaults, initialValues);
   }
   // 自定义默认值提取逻辑
   function getCustomDefaultValue(rule: any): any {

@@ -23,7 +23,11 @@ declare module '@admin-core/ui' {
   export const FormItem: Component;
   export const FormLabel: Component;
   export const FormMessage: Component;
-  export const createContext: any;
+  
+  export function createContext<T>(name: string): [
+    () => T,
+    (value: T) => void
+  ];
   
   export type AdminButtonProps = any;
 }
