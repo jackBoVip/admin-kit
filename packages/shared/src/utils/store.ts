@@ -267,28 +267,28 @@ export function createPersistedStore<T>(
 }
 
 /**
- * Vue composable for using store state reactively
- * @description Creates a reactive reference to store state with optional selector
- * @template T - State type
- * @template U - Selected state type
- * @param store - The store to subscribe to
- * @param selector - Optional selector function to derive state
- * @returns Readonly reactive reference to the selected state
+ * Vue 组合式函数：响应式使用状态存储
+ * @description 创建一个响应式引用来访问状态存储，支持可选的选择器函数
+ * @template T - 状态类型
+ * @template U - 选择后的状态类型
+ * @param store - 要订阅的状态存储
+ * @param selector - 可选的选择器函数，用于派生状态
+ * @returns 只读的响应式引用
  * @example
  * ```typescript
  * import { readonly, ref, Ref } from 'vue'
  * 
  * const store = createStore({ count: 0, name: 'Test' })
  * 
- * // Use entire state
+ * // 使用完整状态
  * const state = useStore(store)
  * console.log(state.value) // { count: 0, name: 'Test' }
  * 
- * // Use with selector
+ * // 使用选择器
  * const count = useStore(store, state => state.count)
  * console.log(count.value) // 0
  * 
- * // Updates automatically when store changes
+ * // 状态变化时自动更新
  * store.setState({ count: 1, name: 'Test' })
  * console.log(count.value) // 1
  * ```
@@ -297,8 +297,8 @@ export function useStore<T, U = T>(
   store: Store<T>,
   selector?: (state: T) => U
 ): any {
-  // Import Vue's ref and readonly dynamically to avoid circular dependencies
-  // This assumes Vue is available in the runtime environment
+  // 动态导入 Vue 的 ref 和 readonly 以避免循环依赖
+  // 假设 Vue 在运行时环境中可用
   const { readonly, ref, onUnmounted } = require('vue')
   
   const state = ref(selector ? selector(store.getState()) : store.getState()) as any
@@ -307,7 +307,7 @@ export function useStore<T, U = T>(
     state.value = selector ? selector(newState) : newState
   })
   
-  // Clean up subscription when component unmounts
+  // 组件卸载时清理订阅
   if (onUnmounted) {
     onUnmounted(() => {
       unsubscribe()
