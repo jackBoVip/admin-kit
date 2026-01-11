@@ -40,7 +40,9 @@ export function useAdminForm<
     watch(
       () => options.schema,
       () => {
-        api.setState({ schema: options.schema });
+        if (options.schema) {
+          api.setState({ schema: options.schema });
+        }
       },
       { immediate: true },
     );

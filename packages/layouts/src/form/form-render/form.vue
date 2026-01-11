@@ -16,7 +16,7 @@ import {
   cn,
   isFunction,
   isString,
-  mergeWithArrayOverride,
+  deepMerge,
 } from '@admin-core/shared/utils';
 
 import { provideFormRenderProps } from './context';
@@ -51,9 +51,10 @@ const wrapperClass = computed(() => {
   return cn(...cls, props.wrapperClass);
 });
 
-provideFormRenderProps(props);
+provideFormRenderProps(props as any);
 
-const { isCalculated, keepFormItemIndex, wrapperRef } = useExpandable(props);
+// @ts-expect-error - wrapperRef is used in template
+const { isCalculated, keepFormItemIndex, wrapperRef } = useExpandable(props as any);
 
 const shapes = computed(() => {
   const resultShapes: FormShape[] = [];
@@ -115,7 +116,7 @@ const computedSchema = computed(
       labelWidth = 100,
       modelPropName = '',
       wrapperClass = '',
-    } = mergeWithArrayOverride(props.commonConfig, props.globalCommonConfig);
+    } = deepMerge(props.commonConfig, props.globalCommonConfig);
     return (props.schema || []).map((schema, index) => {
       const keepIndex = keepFormItemIndex.value;
 
@@ -148,13 +149,13 @@ const computedSchema = computed(
         modelPropName,
         wrapperClass,
         ...schema,
-        commonComponentProps: componentProps,
+        commonComponentProps: componentProps as Record<string, any>,
         componentProps: schema.componentProps,
         controlClass: cn(controlClass, schema.controlClass),
         formFieldProps: {
           ...formFieldProps,
           ...schema.formFieldProps,
-        },
+        } as Record<string, any>,
         formItemClass: cn(
           'flex-shrink-0',
           { hidden },
@@ -163,7 +164,7 @@ const computedSchema = computed(
         ),
         labelClass: cn(labelClass, schema.labelClass),
       };
-    });
+    }) as any;
   },
 );
 </script>
@@ -176,7 +177,7 @@ const computedSchema = computed(
           <slot :definition="cSchema" :name="cSchema.fieldName"> </slot>
         </div> -->
         <FormField
-          v-bind="cSchema"
+          v-bind="cSchema as any"
           :class="cSchema.formItemClass"
           :rules="cSchema.rules"
         >

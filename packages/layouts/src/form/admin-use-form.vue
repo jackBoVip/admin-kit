@@ -36,9 +36,9 @@ const forward = useForwardPriorityValues(props, state);
 
 const componentRefMap = new Map<string, unknown>();
 
-const { delegatedSlots, form } = useFormInitial(forward);
+const { delegatedSlots, form } = useFormInitial(forward as any);
 
-provideFormProps([forward, form]);
+provideFormProps([forward as any, form]);
 provideComponentRefMap(componentRefMap);
 
 props.formApi?.mount?.(form, componentRefMap);
@@ -111,7 +111,7 @@ onMounted(async () => {
 <template>
   <Form
     @keydown.enter="handleKeyDownEnter"
-    v-bind="forward"
+    v-bind="forward as any"
     :collapsed="state?.collapsed"
     :component-bind-event-map="COMPONENT_BIND_EVENT_MAP"
     :component-map="COMPONENT_MAP"
@@ -129,7 +129,7 @@ onMounted(async () => {
       <slot v-bind="slotProps">
         <FormActions
           v-if="forward.showDefaultActions"
-          :model-value="state?.collapsed"
+          :model-value="state?.collapsed ?? false"
           @update:model-value="handleUpdateCollapsed"
         >
           <template #reset-before="resetSlotProps">

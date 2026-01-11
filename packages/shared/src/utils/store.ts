@@ -265,3 +265,54 @@ export function createPersistedStore<T>(
 
   return store
 }
+
+/**
+ * Vue composable for using store state reactively
+ * @description Creates a reactive reference to store state with optional selector
+ * @template T - State type
+ * @template U - Selected state type
+ * @param store - The store to subscribe to
+ * @param selector - Optional selector function to derive state
+ * @returns Readonly reactive reference to the selected state
+ * @example
+ * ```typescript
+ * import { readonly, ref, Ref } from 'vue'
+ * 
+ * const store = createStore({ count: 0, name: 'Test' })
+ * 
+ * // Use entire state
+ * const state = useStore(store)
+ * console.log(state.value) // { count: 0, name: 'Test' }
+ * 
+ * // Use with selector
+ * const count = useStore(store, state => state.count)
+ * console.log(count.value) // 0
+ * 
+ * // Updates automatically when store changes
+ * store.setState({ count: 1, name: 'Test' })
+ * console.log(count.value) // 1
+ * ```
+ */
+export function useStore<T, U = T>(
+  store: Store<T>,
+  selector?: (state: T) => U
+): any {
+  // Import Vue's ref and readonly dynamically to avoid circular dependencies
+  // This assumes Vue is available in the runtime environment
+  const { readonly, ref, onUnmounted } = require('vue')
+  
+  const state = ref(selector ? selector(store.getState()) : store.getState()) as any
+  
+  const unsubscribe = store.subscribe((newState) => {
+    state.value = selector ? selector(newState) : newState
+  })
+  
+  // Clean up subscription when component unmounts
+  if (onUnmounted) {
+    onUnmounted(() => {
+      unsubscribe()
+    })
+  }
+  
+  return readonly(state)
+}
