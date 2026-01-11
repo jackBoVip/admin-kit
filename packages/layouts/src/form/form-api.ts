@@ -9,7 +9,7 @@ import type { ComponentPublicInstance } from 'vue';
 
 import type { Recordable } from '@admin-core/shared/types';
 
-import type { FormActions, FormSchema, VbenFormProps } from './types';
+import type { FormActions, FormSchema, AdminFormProps } from './types';
 
 import { isRef, toRaw } from 'vue';
 
@@ -26,7 +26,7 @@ import {
   StateHandler,
 } from '@admin-core/shared/utils';
 
-function getDefaultState(): VbenFormProps {
+function getDefaultState(): AdminFormProps {
   return {
     actionWrapperClass: '',
     collapsed: false,
@@ -55,10 +55,10 @@ export class FormApi {
   public form = {} as FormActions;
   isMounted = false;
 
-  public state: null | VbenFormProps = null;
+  public state: null | AdminFormProps = null;
   stateHandler: StateHandler;
 
-  public store: Store<VbenFormProps>;
+  public store: Store<AdminFormProps>;
 
   /**
    * 组件实例映射
@@ -68,14 +68,14 @@ export class FormApi {
   // 最后一次点击提交时的表单值
   private latestSubmissionValues: null | Recordable<any> = null;
 
-  private prevState: null | VbenFormProps = null;
+  private prevState: null | AdminFormProps = null;
 
-  constructor(options: VbenFormProps = {}) {
+  constructor(options: AdminFormProps = {}) {
     const { ...storeState } = options;
 
     const defaultState = getDefaultState();
 
-    this.store = new Store<VbenFormProps>(
+    this.store = new Store<AdminFormProps>(
       {
         ...defaultState,
         ...storeState,
@@ -301,8 +301,8 @@ export class FormApi {
 
   setState(
     stateOrFn:
-      | ((prev: VbenFormProps) => Partial<VbenFormProps>)
-      | Partial<VbenFormProps>,
+      | ((prev: AdminFormProps) => Partial<AdminFormProps>)
+      | Partial<AdminFormProps>,
   ) {
     if (isFunction(stateOrFn)) {
       this.store.setState((prev) => {

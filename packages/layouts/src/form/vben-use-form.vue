@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Recordable } from '@admin-core/shared/types';
 
-import type { ExtendedFormApi, VbenFormProps } from './types';
+import type { ExtendedFormApi, AdminFormProps } from './types';
 
 // import { toRaw, watch } from 'vue';
 import { nextTick, onMounted, watch } from 'vue';
@@ -24,7 +24,7 @@ import {
   useFormInitial,
 } from './use-form-context';
 // 通过 extends 会导致热更新卡死，所以重复写了一遍
-interface Props extends VbenFormProps {
+interface Props extends AdminFormProps {
   formApi?: ExtendedFormApi;
 }
 

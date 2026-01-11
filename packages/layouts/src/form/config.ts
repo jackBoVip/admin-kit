@@ -3,7 +3,7 @@ import type { Component } from 'vue';
 import type {
   BaseFormComponentType,
   FormCommonConfig,
-  VbenFormAdapterOptions,
+  AdminFormAdapterOptions,
 } from './types';
 
 import { h } from 'vue';
@@ -27,22 +27,22 @@ export const DEFAULT_FORM_COMMON_CONFIG: FormCommonConfig = {};
 export const COMPONENT_MAP: Record<BaseFormComponentType, Component> = {
   DefaultButton: h(VbenButton, { size: 'sm', variant: 'outline' }),
   PrimaryButton: h(VbenButton, { size: 'sm', variant: 'default' }),
-  VbenCheckbox,
-  VbenInput,
-  VbenInputPassword,
-  VbenPinInput,
-  VbenSelect,
+  AdminCheckbox: VbenCheckbox,
+  AdminInput: VbenInput,
+  AdminInputPassword: VbenInputPassword,
+  AdminPinInput: VbenPinInput,
+  AdminSelect: VbenSelect,
 };
 
 export const COMPONENT_BIND_EVENT_MAP: Partial<
   Record<BaseFormComponentType, string>
 > = {
-  VbenCheckbox: 'checked',
+  AdminCheckbox: 'checked',
 };
 
 export function setupVbenForm<
   T extends BaseFormComponentType = BaseFormComponentType,
->(options: VbenFormAdapterOptions<T>) {
+>(options: AdminFormAdapterOptions<T>) {
   const { config, defineRules } = options;
 
   const {

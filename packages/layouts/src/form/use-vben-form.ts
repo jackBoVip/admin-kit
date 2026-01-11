@@ -1,7 +1,7 @@
 import type {
   BaseFormComponentType,
   ExtendedFormApi,
-  VbenFormProps,
+  AdminFormProps,
 } from './types';
 
 import { defineComponent, h, isReactive, onBeforeUnmount, watch } from 'vue';
@@ -13,7 +13,7 @@ import VbenUseForm from './vben-use-form.vue';
 
 export function useVbenForm<
   T extends BaseFormComponentType = BaseFormComponentType,
->(options: VbenFormProps<T>) {
+>(options: AdminFormProps<T>) {
   const IS_REACTIVE = isReactive(options);
   const api = new FormApi(options);
   const extendedApi: ExtendedFormApi = api as never;
@@ -22,7 +22,7 @@ export function useVbenForm<
   };
 
   const Form = defineComponent(
-    (props: VbenFormProps, { attrs, slots }) => {
+    (props: AdminFormProps, { attrs, slots }) => {
       onBeforeUnmount(() => {
         api.unmount();
       });
