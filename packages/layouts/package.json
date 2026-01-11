@@ -65,6 +65,18 @@
     "prepublishOnly": "node ../../scripts/resolve-catalog.js",
     "postpublish": "node ../../scripts/restore-catalog.js"
   },
+  "dependencies": {
+    "@admin-core/composables": "workspace:*",
+    "@admin-core/icons": "workspace:*",
+    "@admin-core/shared": "workspace:*",
+    "@admin-core/ui": "workspace:*",
+    "vee-validate": "catalog:",
+    "zod": "^3.24.1",
+    "zod-defaults": "^0.2.3"
+  },
+  "devDependencies": {
+    "@vee-validate/zod": "^4.15.1"
+  },
   "peerDependencies": {
     "vue": "^3.5.0"
   }

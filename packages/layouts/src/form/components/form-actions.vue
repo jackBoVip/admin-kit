@@ -2,8 +2,8 @@
 import { computed, toRaw, unref, watch } from 'vue';
 
 import { useSimpleLocale } from '@admin-core/composables';
-import { AdminExpandableArrow } from '@admin-core/shadcn-ui';
-import { cn, isFunction, triggerWindowResize } from '@admin-core/shared/utils';
+import { AdminExpandableArrow } from '@admin-core/ui';
+import { cn, isFunction } from '@admin-core/shared/utils';
 
 import { COMPONENT_MAP } from '../config';
 import { injectFormProps } from '../use-form-context';
@@ -70,7 +70,8 @@ watch(
   () => {
     const props = unref(rootProps);
     if (props.collapseTriggerResize) {
-      triggerWindowResize();
+      // 触发窗口 resize 事件
+      window.dispatchEvent(new Event('resize'));
     }
   },
 );

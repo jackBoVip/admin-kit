@@ -6,7 +6,7 @@ import type {
 
 import { defineComponent, h, isReactive, onBeforeUnmount, watch } from 'vue';
 
-import { useStore } from '@admin-core/shared/store';
+import { useStore } from '@admin-core/shared/utils';
 
 import { FormApi } from './form-api';
 import AdminUseForm from './admin-use-form.vue';

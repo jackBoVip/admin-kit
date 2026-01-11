@@ -13,7 +13,7 @@ import type { FormActions, FormSchema, AdminFormProps } from './types';
 
 import { isRef, toRaw } from 'vue';
 
-import { Store } from '@admin-core/shared/store';
+import { Store } from '@admin-core/shared/utils';
 import {
   bindMethods,
   createMerge,

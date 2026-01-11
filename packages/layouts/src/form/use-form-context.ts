@@ -6,7 +6,7 @@ import type { ExtendedFormApi, FormActions, AdminFormProps } from './types';
 
 import { computed, unref, useSlots } from 'vue';
 
-import { createContext } from '@admin-core/shadcn-ui';
+import { createContext } from '@admin-core/ui';
 import { isString, mergeWithArrayOverride, set } from '@admin-core/shared/utils';
 
 import { useForm } from 'vee-validate';

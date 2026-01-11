@@ -15,8 +15,8 @@ import {
   AdminInputPassword,
   AdminPinInput,
   AdminSelect,
-} from '@admin-core/shadcn-ui';
-import { globalShareState } from '@admin-core/shared/global-state';
+} from '@admin-core/ui';
+import { globalShareState } from '@admin-core/shared/utils';
 
 import { defineRule } from 'vee-validate';
 

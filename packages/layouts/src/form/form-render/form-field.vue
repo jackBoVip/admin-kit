@@ -14,7 +14,7 @@ import {
   FormMessage,
   AdminRenderContent,
   AdminTooltip,
-} from '@admin-core/shadcn-ui';
+} from '@admin-core/ui';
 import { cn, isFunction, isObject, isString } from '@admin-core/shared/utils';
 
 import { toTypedSchema } from '@vee-validate/zod';

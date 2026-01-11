@@ -3,7 +3,7 @@ import type { ZodTypeAny } from 'zod';
 
 import type { Component, HtmlHTMLAttributes, Ref } from 'vue';
 
-import type { AdminButtonProps } from '@admin-core/shadcn-ui';
+import type { AdminButtonProps } from '@admin-core/ui';
 import type { ClassType, MaybeComputedRef } from '@admin-core/shared/types';
 
 import type { FormApi } from './form-api';

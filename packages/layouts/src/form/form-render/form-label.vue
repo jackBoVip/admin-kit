@@ -5,7 +5,7 @@ import {
   FormLabel,
   AdminHelpTooltip,
   AdminRenderContent,
-} from '@admin-core/shadcn-ui';
+} from '@admin-core/ui';
 import { cn } from '@admin-core/shared/utils';
 
 interface Props {
