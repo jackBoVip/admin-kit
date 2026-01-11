@@ -3,8 +3,8 @@ import type { ZodTypeAny } from 'zod';
 
 import type { Component, HtmlHTMLAttributes, Ref } from 'vue';
 
-import type { VbenButtonProps } from '@vben-core/shadcn-ui';
-import type { ClassType, MaybeComputedRef } from '@vben-core/typings';
+import type { VbenButtonProps } from '@admin-core/shadcn-ui';
+import type { ClassType, MaybeComputedRef } from '@admin-core/shared/types';
 
 import type { FormApi } from './form-api';
 
