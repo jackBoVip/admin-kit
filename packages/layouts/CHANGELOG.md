@@ -1,5 +1,12 @@
 # @admin-kit/layouts
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies
+  - @admin-core/ui@0.0.7
+
 ## 0.0.6
 
 ### Patch Changes

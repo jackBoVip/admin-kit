@@ -1,6 +1,6 @@
 {
   "name": "@admin-core/layouts",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": false,
   "type": "module",
   "description": "布局和业务组件",
