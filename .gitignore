@@ -43,6 +43,9 @@ yarn-error.log*
 .changeset/cache/
 .changeset/pre.json
 
+# 框架示例目录
+vue-vben-admin-main/
+
 # 操作系统生成文件
 .DS_Store
 .DS_Store?
