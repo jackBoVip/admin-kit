@@ -4,6 +4,8 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "composite": false,
+    "noEmit": false,
+    "allowImportingTsExtensions": false,
     "exactOptionalPropertyTypes": false,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "target": "ESNext",

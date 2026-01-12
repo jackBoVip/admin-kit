@@ -2,14 +2,20 @@ import type {
   BaseFormComponentType,
   ExtendedFormApi,
   AdminFormProps,
+  FormSchema,
 } from './types';
 
-import { defineComponent, h, isReactive, onBeforeUnmount, watch } from 'vue';
+import type { Component } from 'vue';
+
+import { defineComponent, h, isReactive, watch } from 'vue';
+
+import { normalizeSchema } from './utils';
+
 
 import { useStore } from '@admin-core/shared/utils';
 
 import { FormApi } from './form-api';
-import AdminUseForm from './admin-use-form.vue';
+import AdminUseFormSimple from './admin-use-form-simple.vue';
 
 /**
  * 使用 Admin 表单
@@ -38,35 +44,41 @@ import AdminUseForm from './admin-use-form.vue';
  */
 export function useAdminForm<
   T extends BaseFormComponentType = BaseFormComponentType,
->(options: AdminFormProps<T>) {
-  const IS_REACTIVE = isReactive(options);
-  const api = new FormApi(options);
-  const extendedApi: ExtendedFormApi = api as never;
-  extendedApi.useStore = (selector) => {
-    return useStore(api.store, selector);
+>(options: AdminFormProps<T>): readonly [Component, ExtendedFormApi] {
+  // 检查 schema 是否是 ref 并进行相应处理
+  const normalizedOptions = { 
+    ...options,
+    schema: normalizeSchema(options.schema)
   };
+  
+  const IS_REACTIVE = isReactive(options);
+  const api = new FormApi(normalizedOptions as AdminFormProps<T>);
+  
+  // 使用类型断言
+  const extendedApi = api as ExtendedFormApi;
+  extendedApi.useStore = (selector) => useStore(api.store, selector);
 
-  const Form = defineComponent(
-    (props: AdminFormProps, { attrs, slots }) => {
-      onBeforeUnmount(() => {
-        api.unmount();
-      });
-      api.setState({ ...props, ...attrs });
-      return () =>
-        h(AdminUseForm, { ...props, ...attrs, formApi: extendedApi }, slots);
+  // 创建一个包装组件，将 options 和 formApi 传递给 AdminUseFormSimple
+  const Form = defineComponent({
+    name: 'AdminFormWrapper',
+    setup() {
+      // 在 setup 函数中再次处理 ref，确保动态更新也能正常工作
+      return () => h(AdminUseFormSimple as Component, {
+        ...normalizedOptions,
+        formApi: extendedApi,
+      } as any);
     },
-    {
-      name: 'AdminUseForm',
-      inheritAttrs: false,
-    },
-  );
+  });
+  
   // 添加响应式支持
   if (IS_REACTIVE) {
     watch(
-      () => options.schema,
-      () => {
-        if (options.schema) {
-          api.setState({ schema: options.schema });
+      () => normalizeSchema(options.schema),
+      (newSchema) => {
+        if (newSchema) {
+          if (newSchema !== undefined) {
+            api.setState({ schema: newSchema as FormSchema<BaseFormComponentType>[] });
+          }
         }
       },
       { immediate: true },

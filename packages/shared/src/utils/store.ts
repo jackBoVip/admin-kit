@@ -4,6 +4,8 @@
  * @module store
  */
 
+import { readonly, ref, onUnmounted } from 'vue'
+
 /**
  * 状态订阅器类型
  * @description 状态变化时的回调函数
@@ -297,10 +299,6 @@ export function useStore<T, U = T>(
   store: Store<T>,
   selector?: (state: T) => U
 ): any {
-  // 动态导入 Vue 的 ref 和 readonly 以避免循环依赖
-  // 假设 Vue 在运行时环境中可用
-  const { readonly, ref, onUnmounted } = require('vue')
-  
   const state = ref(selector ? selector(store.getState()) : store.getState()) as any
   
   const unsubscribe = store.subscribe((newState) => {
@@ -308,11 +306,9 @@ export function useStore<T, U = T>(
   })
   
   // 组件卸载时清理订阅
-  if (onUnmounted) {
-    onUnmounted(() => {
-      unsubscribe()
-    })
-  }
+  onUnmounted(() => {
+    unsubscribe()
+  })
   
   return readonly(state)
 }

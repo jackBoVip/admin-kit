@@ -6,42 +6,50 @@ import type {
   AdminFormAdapterOptions,
 } from './types';
 
-import { h } from 'vue';
-
 import {
   AdminButton,
   AdminCheckbox,
-  Input as AdminInput,
   AdminInputPassword,
   AdminPinInput,
   AdminSelect,
+  Input,
 } from '@admin-core/ui';
 import { globalShareState } from '@admin-core/shared/utils';
 
 import { defineRule } from 'vee-validate';
 
+// 定义常量
+const MODEL_VALUE_PROP = 'modelValue';
+const CHECKED_PROP = 'checked';
+
 /** 默认的 model 属性名 */
-const DEFAULT_MODEL_PROP_NAME = 'modelValue';
+const DEFAULT_MODEL_PROP_NAME = MODEL_VALUE_PROP;
 
 /** 默认的表单通用配置 */
 export const DEFAULT_FORM_COMMON_CONFIG: FormCommonConfig = {};
 
 /** 组件映射表 */
 export const COMPONENT_MAP: Record<BaseFormComponentType, Component> = {
-  DefaultButton: h(AdminButton, { size: 'sm', variant: 'outline' }),
-  PrimaryButton: h(AdminButton, { size: 'sm', variant: 'default' }),
+  DefaultButton: AdminButton,
+  PrimaryButton: AdminButton,
   AdminCheckbox,
-  AdminInput,
+  AdminInput: Input,
   AdminInputPassword,
   AdminPinInput,
   AdminSelect,
+};
+
+/** 组件默认属性映射表 */
+export const COMPONENT_DEFAULT_PROPS: Partial<Record<BaseFormComponentType, Record<string, any>>> = {
+  DefaultButton: { size: 'sm', variant: 'outline' },
+  PrimaryButton: { size: 'sm', variant: 'default' },
 };
 
 /** 组件绑定事件映射表 */
 export const COMPONENT_BIND_EVENT_MAP: Partial<
   Record<BaseFormComponentType, string>
 > = {
-  AdminCheckbox: 'checked',
+  AdminCheckbox: CHECKED_PROP,
 };
 
 /**
@@ -79,9 +87,10 @@ export function setupAdminForm<
     emptyStateValue,
   });
 
+  // 使用 Object.entries() 和 for...of 替代 Object.keys()
   if (defineRules) {
-    for (const key of Object.keys(defineRules)) {
-      defineRule(key, defineRules[key as never]);
+    for (const [key, rule] of Object.entries(defineRules)) {
+      defineRule(key, rule as never);
     }
   }
 
@@ -93,16 +102,17 @@ export function setupAdminForm<
 
   const components = globalShareState.getComponents();
 
-  for (const component of Object.keys(components)) {
+  // 使用 Object.entries() 替代 Object.keys()
+  for (const [component, componentValue] of Object.entries(components)) {
     const key = component as BaseFormComponentType;
-    COMPONENT_MAP[key] = components[component as never];
+    COMPONENT_MAP[key] = componentValue as Component;
 
     if (baseModelPropName !== DEFAULT_MODEL_PROP_NAME) {
       COMPONENT_BIND_EVENT_MAP[key] = baseModelPropName;
     }
 
-    // 覆盖特殊组件的modelPropName
-    if (modelPropNameMap && modelPropNameMap[key]) {
+    // 覆盖特殊组件的 modelPropName
+    if (modelPropNameMap?.[key]) {
       COMPONENT_BIND_EVENT_MAP[key] = modelPropNameMap[key];
     }
   }

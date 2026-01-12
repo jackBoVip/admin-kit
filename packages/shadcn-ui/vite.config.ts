@@ -35,8 +35,8 @@ export default defineConfig({
           '@admin-core/shared': 'AdminCoreShared',
         },
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'style.css'
-          return assetInfo.name || ''
+          if (assetInfo.name?.endsWith('.css')) return 'style.css';
+          return assetInfo.name || '';
         },
       },
     },

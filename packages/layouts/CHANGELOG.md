@@ -1,5 +1,14 @@
 # @admin-kit/layouts
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @admin-core/shared@0.4.1
+  - @admin-core/composables@0.1.3
+  - @admin-core/ui@0.0.5
+
 ## 0.0.4
 
 ### Patch Changes

@@ -10,6 +10,7 @@ const externalDeps = [
   'dayjs',
   'defu',
   '@vue/shared',
+  'vue',
 ]
 
 export default defineConfig([

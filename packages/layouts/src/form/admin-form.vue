@@ -1,4 +1,20 @@
 <script setup lang="ts">
+/**
+ * Admin 表单组件
+ * 
+ * @description
+ * 基础的表单组件，提供表单渲染、操作按钮、折叠展开等功能。
+ * 适用于不需要 formApi 的简单表单场景。
+ * 
+ * @example
+ * ```vue
+ * <AdminForm
+ *   :schema="formSchema"
+ *   :show-default-actions="true"
+ *   @submit="handleSubmit"
+ * />
+ * ```
+ */
 import type { AdminFormProps } from './types';
 
 import { ref, watchEffect } from 'vue';
@@ -29,20 +45,30 @@ const props = withDefaults(defineProps<Props>(), {
   wrapperClass: 'grid-cols-1',
 });
 
+/** 转发 props 和 emits */
 const forward = useForwardPropsEmits(props);
 
+/** 当前折叠状态 */
 const currentCollapsed = ref(false);
 
+/** 初始化表单和插槽 */
 const { delegatedSlots, form } = useFormInitial(props as any);
 
+/** 提供表单属性给子组件 */
 provideFormProps([props as any, form]);
 
+/**
+ * 处理折叠状态更新
+ * 
+ * @param value - 新的折叠状态
+ */
 const handleUpdateCollapsed = (value: boolean) => {
   currentCollapsed.value = value;
   // 触发收起展开状态变化回调
   props.handleCollapsedChange?.(value);
 };
 
+/** 监听 props.collapsed 变化，同步到本地状态 */
 watchEffect(() => {
   currentCollapsed.value = props.collapsed;
 });

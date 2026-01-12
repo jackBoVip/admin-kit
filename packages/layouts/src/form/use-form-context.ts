@@ -6,12 +6,15 @@ import type { ExtendedFormApi, FormActions, AdminFormProps } from './types';
 
 import { computed, unref, useSlots } from 'vue';
 
+import { normalizeSchema } from './utils';
+
+
+
 import { createContext } from '@admin-core/ui';
-import { isString, set, deepMerge } from '@admin-core/shared/utils';
+import { isString, set } from '@admin-core/shared/utils';
 
 import { useForm } from 'vee-validate';
-import { object, ZodIntersection, ZodNumber, ZodObject, ZodString } from 'zod';
-import { getDefaultsForSchema } from 'zod-defaults';
+import { ZodIntersection, ZodNumber, ZodObject, ZodString } from 'zod';
 
 type ExtendFormProps = AdminFormProps & { formApi?: ExtendedFormApi };
 
@@ -48,21 +51,16 @@ export function useFormInitial(
 ) {
   const slots = useSlots();
   const initialValues = generateInitialValues();
-
+  
   const form = useForm({
+    // 按照vben的方式：只有当initialValues不为空时才传递
     ...(Object.keys(initialValues)?.length ? { initialValues } : {}),
   });
 
-  const delegatedSlots = computed(() => {
-    const resultSlots: string[] = [];
-
-    for (const key of Object.keys(slots)) {
-      if (key !== 'default') {
-        resultSlots.push(key);
-      }
-    }
-    return resultSlots;
-  });
+  // 使用 computed 和 Object.keys().filter() 的组合
+  const delegatedSlots = computed(() => 
+    Object.keys(slots).filter((key) => key !== 'default')
+  );
 
   /**
    * 生成初始值
@@ -70,28 +68,22 @@ export function useFormInitial(
    */
   function generateInitialValues() {
     const initialValues: Record<string, any> = {};
-
     const zodObject: ZodRawShape = {};
-    (unref(props).schema || []).forEach((item) => {
-      if (Reflect.has(item, 'defaultValue')) {
+    
+    const propsValue = unref(props);
+    const schema = normalizeSchema(propsValue.schema);
+    
+    for (const item of schema) {
+      if (Object.hasOwn(item, 'defaultValue')) {
         set(initialValues, item.fieldName, item.defaultValue);
       } else if (item.rules && !isString(item.rules)) {
-        // 检查规则是否适合提取默认值
         const customDefaultValue = getCustomDefaultValue(item.rules);
         zodObject[item.fieldName] = item.rules;
-        if (customDefaultValue !== undefined) {
-          initialValues[item.fieldName] = customDefaultValue;
-        }
+        initialValues[item.fieldName] = customDefaultValue;
       }
-    });
-
-    const schemaInitialValues = getDefaultsForSchema(object(zodObject));
-
-    const zodDefaults: Record<string, any> = {};
-    for (const key in schemaInitialValues) {
-      set(zodDefaults, key, schemaInitialValues[key]);
     }
-    return deepMerge(zodDefaults, initialValues);
+    
+    return initialValues;
   }
   
   /**
@@ -100,19 +92,33 @@ export function useFormInitial(
    * @param rule - Zod 验证规则
    */
   function getCustomDefaultValue(rule: any): any {
+    // 对于 ZodOptional 和 ZodNullable，返回 undefined
+    // 但我们仍然会将 undefined 添加到 initialValues 中
+    // 这样 vee-validate 才能追踪这个字段
+    if (rule._def?.typeName === 'ZodOptional' || rule._def?.typeName === 'ZodNullable') {
+      return undefined;
+    }
+    
     if (rule instanceof ZodString) {
       return ''; // 默认为空字符串
-    } else if (rule instanceof ZodNumber) {
+    }
+    
+    if (rule instanceof ZodNumber) {
       return null; // 默认为 null（避免显示 0）
-    } else if (rule instanceof ZodObject) {
+    }
+    
+    if (rule instanceof ZodObject) {
       // 递归提取嵌套对象的默认值
-      const defaultValues: Record<string, any> = {};
-      for (const [key, valueSchema] of Object.entries(rule.shape)) {
-        defaultValues[key] = getCustomDefaultValue(valueSchema);
-      }
-      return defaultValues;
-    } else if (rule instanceof ZodIntersection) {
-      // 对于交集类型，从schema 提取默认值
+      return Object.fromEntries(
+        Object.entries(rule.shape).map(([key, valueSchema]) => [
+          key,
+          getCustomDefaultValue(valueSchema),
+        ])
+      );
+    }
+    
+    if (rule instanceof ZodIntersection) {
+      // 对于交集类型，从 schema 提取默认值
       const leftDefaultValue = getCustomDefaultValue(rule._def.left);
       const rightDefaultValue = getCustomDefaultValue(rule._def.right);
 
@@ -126,9 +132,9 @@ export function useFormInitial(
 
       // 否则优先使用左边的默认值
       return leftDefaultValue ?? rightDefaultValue;
-    } else {
-      return undefined; // 其他类型不提供默认值
     }
+    
+    return undefined; // 其他类型不提供默认值
   }
 
   return {

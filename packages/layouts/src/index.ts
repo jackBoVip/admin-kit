@@ -1,6 +1,7 @@
 /**
- * @admin-kit/layouts
+ * @admin-core/layouts
  * 布局和业务组件
  */
 
-// 布局组件将在这里导出
+// 导出表单相关功能
+export * from './form';

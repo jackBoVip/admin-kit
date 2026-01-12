@@ -1,5 +1,11 @@
 # @admin-core/shared
 
+## 0.4.1
+
+### Patch Changes
+
+- 发布 shared 包到 npm
+
 ## 0.4.0
 
 ### Minor Changes

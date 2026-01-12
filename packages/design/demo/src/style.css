@@ -1,5 +1,0 @@
-/**
- * Demo 项目样式入口
- * 直接引用 @admin-core/design 设计系统的样式
- */
-@import "@admin-core/design/css/index.css";

@@ -1,0 +1,23 @@
+{
+  "name": "@example/icons-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "图标系统演示应用",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@admin-core/icons": "^0.1.4",
+    "vue": "catalog:",
+    "lucide-vue-next": "catalog:"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}

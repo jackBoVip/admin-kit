@@ -1,6 +1,6 @@
 packages:
   - "packages/*"
-  - "packages/*/demo"
+  - "example/*"
   - "internal/*"
 
 catalog:
