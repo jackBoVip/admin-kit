@@ -1,5 +1,13 @@
 # @admin-core/shared
 
+## 0.4.2
+
+### Patch Changes
+
+- 发布更新：
+  - composables: 优化导出结构，添加演示应用
+  - shared: 优化 external 工具函数
+
 ## 0.4.1
 
 ### Patch Changes
