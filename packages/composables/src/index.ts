@@ -20,6 +20,9 @@ export * from './use-is-mobile'
 export * from './locale'
 export type { Locale } from './locale/messages'
 
+// 偏好设置
+export * from './preferences'
+
 // 重新导出 @vueuse/core 的常用函数
 export {
   useToggle as useVueUseToggle,

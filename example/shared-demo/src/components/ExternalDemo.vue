@@ -26,16 +26,16 @@
             <input v-model="endDate" placeholder="结束日期" class="input-field" />
             <button @click="testIsDateInRange" class="btn-warning">检查日期范围 (isDateInRange)</button>
           </div>
-          <div class="result" v-if="dateRangeResult">日期范围检查: {{ dateRangeResult }}</div>
+          <div class="result">日期范围检查: {{ dateRangeResult }}</div>
         </div>
         
         <div class="tool-demo">
           <div class="input-group">
             <input v-model="daysDate1" placeholder="第一个日期" class="input-field" />
             <input v-model="daysDate2" placeholder="第二个日期" class="input-field" />
-            <button @click="testDaysDiff" class="btn-primary">计算天数差 (daysDiff)</button>
+            <button @click="testDaysDiff" class="btn-primary">计算天数差 (getDaysDiff)</button>
           </div>
-          <div class="result" v-if="daysDiffResult">天数差: {{ daysDiffResult }}</div>
+          <div class="result">天数差: {{ daysDiffResult }}</div>
         </div>
       </div>
     </section>
@@ -131,6 +131,12 @@ const testGetRelativeTime = async () => {
 // 检查日期范围
 const testIsDateInRange = async () => {
   try {
+    // 验证日期输入
+    if (!checkDate.value || !startDate.value || !endDate.value) {
+      dateRangeResult.value = '请提供所有日期参数'
+      return
+    }
+    
     const shared: any = await import('@admin-core/shared')
     
     if (shared && shared.isDateInRange) {
@@ -141,24 +147,30 @@ const testIsDateInRange = async () => {
     }
   } catch (error) {
     console.error('isDateInRange test failed:', error)
-    dateRangeResult.value = 'isDateInRange function not available'
+    dateRangeResult.value = `错误: ${error instanceof Error ? error.message : '未知错误'}`
   }
 }
 
 // 计算天数差
 const testDaysDiff = async () => {
   try {
+    // 验证日期输入
+    if (!daysDate1.value || !daysDate2.value) {
+      daysDiffResult.value = '请提供两个日期参数'
+      return
+    }
+    
     const shared: any = await import('@admin-core/shared')
     
-    if (shared && shared.daysDiff) {
-      const result = shared.daysDiff(daysDate1.value, daysDate2.value)
+    if (shared && shared.getDaysDiff) {
+      const result = shared.getDaysDiff(daysDate1.value, daysDate2.value)
       daysDiffResult.value = result
     } else {
-      daysDiffResult.value = 'daysDiff function not available'
+      daysDiffResult.value = 'getDaysDiff function not available'
     }
   } catch (error) {
-    console.error('daysDiff test failed:', error)
-    daysDiffResult.value = 'daysDiff function not available'
+    console.error('getDaysDiff test failed:', error)
+    daysDiffResult.value = `错误: ${error instanceof Error ? error.message : '未知错误'}`
   }
 }
 
@@ -186,8 +198,8 @@ const testNProgressStart = async () => {
   try {
     const shared: any = await import('@admin-core/shared')
     
-    if (shared && shared.NProgress) {
-      shared.NProgress.start()
+    if (shared && shared.startProgress) {
+      shared.startProgress()
     } else {
       alert('NProgress not available')
     }
@@ -202,8 +214,8 @@ const testNProgressDone = async () => {
   try {
     const shared: any = await import('@admin-core/shared')
     
-    if (shared && shared.NProgress) {
-      shared.NProgress.done()
+    if (shared && shared.doneProgress) {
+      shared.doneProgress()
     } else {
       alert('NProgress not available')
     }
@@ -218,8 +230,8 @@ const testNProgressInc = async () => {
   try {
     const shared: any = await import('@admin-core/shared')
     
-    if (shared && shared.NProgress) {
-      shared.NProgress.inc()
+    if (shared && shared.incProgress) {
+      shared.incProgress()
     } else {
       alert('NProgress not available')
     }

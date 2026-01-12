@@ -90,7 +90,9 @@ export function isDateInRange(
   end: Date | number | string
 ): boolean {
   const d = dayjs(date)
-  return d.isAfter(dayjs(start)) && d.isBefore(dayjs(end))
+  const s = dayjs(start)
+  const e = dayjs(end)
+  return d.isSameOrAfter(s) && d.isSameOrBefore(e)
 }
 
 /**

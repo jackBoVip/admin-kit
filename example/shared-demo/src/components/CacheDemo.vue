@@ -167,17 +167,11 @@ const createExpiredItem = async () => {
   }
   
   try {
-    // 创建一个已过期的项目（过去的时间）
-    const pastTime = Date.now() - 10000; // 10秒前
+    // 使用StorageManager创建一个已过期的项目（过去的时间）
+    const pastTime = 10000; // 10秒，StorageManager会将其转换为过期时间戳
     
-    // 直接操作localStorage来创建一个已过期的项目
-    const fullKey = `${storagePrefix.value}-expired-test-${Date.now()}`;
-    const expiredItem = JSON.stringify({
-      value: 'This is an expired item',
-      expiry: pastTime
-    });
-    
-    localStorage.setItem(fullKey, expiredItem);
+    // 使用StorageManager的setItem方法，它会自动处理前缀和过期逻辑
+    storageManager.setItem(`expired-test-${Date.now()}`, 'This is an expired item', pastTime);
     
     storageResult.value = { message: '已创建过期测试项，现在可以尝试清除过期项功能' };
   } catch (error: any) {

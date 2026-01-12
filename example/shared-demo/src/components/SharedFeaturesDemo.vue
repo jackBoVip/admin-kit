@@ -320,6 +320,12 @@ const testGetRelativeTime = async () => {
 // 检查日期范围
 const testIsDateInRange = async () => {
   try {
+    // 验证日期输入
+    if (!checkDate.value || !startDate.value || !endDate.value) {
+      dateRangeResult.value = '请提供所有日期参数'
+      return
+    }
+    
     const shared: any = await import('@admin-core/shared')
     
     if (shared && shared.isDateInRange) {
@@ -330,24 +336,30 @@ const testIsDateInRange = async () => {
     }
   } catch (error) {
     console.error('isDateInRange test failed:', error)
-    dateRangeResult.value = 'isDateInRange function not available'
+    dateRangeResult.value = `错误: ${error instanceof Error ? error.message : '未知错误'}`
   }
 }
 
 // 计算天数差
 const testDaysDiff = async () => {
   try {
+    // 验证日期输入
+    if (!daysDate1.value || !daysDate2.value) {
+      daysDiffResult.value = '请提供两个日期参数'
+      return
+    }
+    
     const shared: any = await import('@admin-core/shared')
     
-    if (shared && shared.daysDiff) {
-      const result = shared.daysDiff(daysDate1.value, daysDate2.value)
+    if (shared && shared.getDaysDiff) {
+      const result = shared.getDaysDiff(daysDate1.value, daysDate2.value)
       daysDiffResult.value = result
     } else {
-      daysDiffResult.value = 'daysDiff function not available'
+      daysDiffResult.value = 'getDaysDiff function not available'
     }
   } catch (error) {
-    console.error('daysDiff test failed:', error)
-    daysDiffResult.value = 'daysDiff function not available'
+    console.error('getDaysDiff test failed:', error)
+    daysDiffResult.value = `错误: ${error instanceof Error ? error.message : '未知错误'}`
   }
 }
 
@@ -375,8 +387,8 @@ const testNProgressStart = async () => {
   try {
     const shared: any = await import('@admin-core/shared')
     
-    if (shared && shared.NProgress) {
-      shared.NProgress.start()
+    if (shared && shared.startProgress) {
+      shared.startProgress()
     } else {
       alert('NProgress not available')
     }
@@ -391,8 +403,8 @@ const testNProgressDone = async () => {
   try {
     const shared: any = await import('@admin-core/shared')
     
-    if (shared && shared.NProgress) {
-      shared.NProgress.done()
+    if (shared && shared.doneProgress) {
+      shared.doneProgress()
     } else {
       alert('NProgress not available')
     }
@@ -407,8 +419,8 @@ const testNProgressInc = async () => {
   try {
     const shared: any = await import('@admin-core/shared')
     
-    if (shared && shared.NProgress) {
-      shared.NProgress.inc()
+    if (shared && shared.incProgress) {
+      shared.incProgress()
     } else {
       alert('NProgress not available')
     }
@@ -628,17 +640,11 @@ const createExpiredItem = async () => {
   }
   
   try {
-    // 创建一个已过期的项目（过去的时间）
-    const pastTime = Date.now() - 10000; // 10秒前
+    // 使用StorageManager创建一个已过期的项目（过去的时间）
+    const pastTime = 10000; // 10秒，StorageManager会将其转换为过期时间戳
     
-    // 直接操作localStorage来创建一个已过期的项目
-    const fullKey = `${storagePrefix.value}-expired-test-${Date.now()}`;
-    const expiredItem = JSON.stringify({
-      value: 'This is an expired item',
-      expiry: pastTime
-    });
-    
-    localStorage.setItem(fullKey, expiredItem);
+    // 使用StorageManager的setItem方法，它会自动处理前缀和过期逻辑
+    storageManager.setItem(`expired-test-${Date.now()}`, 'This is an expired item', pastTime);
     
     storageResult.value = { message: '已创建过期测试项，现在可以尝试清除过期项功能' };
   } catch (error: any) {

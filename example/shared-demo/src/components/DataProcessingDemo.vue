@@ -9,7 +9,7 @@
             <input v-model="uniqueArrayInput" placeholder="输入数组元素，逗号分隔" class="input-field" />
             <button @click="processUniqueArray" class="btn-success">数组去重 (unique)</button>
           </div>
-          <div class="result" v-if="uniqueResult.length > 0">
+          <div class="result" v-if="uniqueResult && uniqueResult.length > 0">
             <h5>去重结果:</h5>
             <pre>{{ JSON.stringify(uniqueResult, null, 2) }}</pre>
           </div>
@@ -21,7 +21,7 @@
             <input v-model="fieldKeyInput" placeholder="去重字段名 (如: id)" class="input-field" />
             <button @click="testUniqueByField" class="btn-info">按字段去重 (uniqueByField)</button>
           </div>
-          <div class="result" v-if="fieldResult.length > 0">
+          <div class="result" v-if="fieldResult && fieldResult.length > 0">
             <h5>按字段去重结果:</h5>
             <pre>{{ JSON.stringify(fieldResult, null, 2) }}</pre>
           </div>
@@ -32,7 +32,7 @@
             <input v-model="flatArrayInput" placeholder="输入嵌套数组，如: [1,2,[3,4],[5,[6,7]]]" class="input-field" />
             <button @click="testFlatten" class="btn-warning">数组扁平化 (flatten)</button>
           </div>
-          <div class="result" v-if="flatResult.length > 0">
+          <div class="result" v-if="flatResult && Array.isArray(flatResult) && flatResult.length > 0">
             <h5>扁平化结果:</h5>
             <pre>{{ JSON.stringify(flatResult, null, 2) }}</pre>
           </div>
@@ -44,7 +44,7 @@
             <input v-model="chunkArrayInput" placeholder="输入数组元素，逗号分隔" class="input-field" />
             <button @click="processChunkArray" class="btn-info">数组分块 (chunk)</button>
           </div>
-          <div class="result" v-if="chunkResult.length > 0">
+          <div class="result" v-if="chunkResult && chunkResult.length > 0">
             <h5>分块结果:</h5>
             <pre>{{ JSON.stringify(chunkResult, null, 2) }}</pre>
           </div>
@@ -55,7 +55,7 @@
             <input v-model="shuffleArrayInput" placeholder="输入数组元素，逗号分隔" class="input-field" />
             <button @click="testShuffle" class="btn-success">数组随机排序 (shuffle)</button>
           </div>
-          <div class="result" v-if="shuffleResult.length > 0">
+          <div class="result" v-if="shuffleResult && Array.isArray(shuffleResult) && shuffleResult.length > 0">
             <h5>随机排序结果:</h5>
             <pre>{{ JSON.stringify(shuffleResult, null, 2) }}</pre>
           </div>
@@ -67,7 +67,7 @@
             <input v-model="sampleCountInput" type="number" placeholder="抽取数量" class="input-field" />
             <button @click="testSample" class="btn-primary">随机抽取 (sample)</button>
           </div>
-          <div class="result" v-if="sampleResult.length > 0">
+          <div class="result" v-if="sampleResult && Array.isArray(sampleResult) && sampleResult.length > 0">
             <h5>随机抽取结果:</h5>
             <pre>{{ JSON.stringify(sampleResult, null, 2) }}</pre>
           </div>
@@ -122,23 +122,23 @@
 import { ref } from 'vue'
 
 // 数据处理相关变量
-const objectPath = ref('')
-const objectData = ref('{}')
+const objectPath = ref('user.profile.name')
+const objectData = ref('{"user":{"profile":{"name":"John Doe","age":30,"email":"john@example.com"}}}')
 const objectResult = ref<any>(null)
-const cloneData = ref('{}')
+const cloneData = ref('{"name":"Test","data":[1,2,3],"nested":{"value":"test"}}')
 const clonedObject = ref<any>(null)
 
-const uniqueArrayInput = ref('')
-const fieldArrayInput = ref('')
-const fieldKeyInput = ref('')
-const flatArrayInput = ref('')
-const chunkSizeInput = ref('2')
-const chunkArrayInput = ref('')
-const shuffleArrayInput = ref('')
-const sampleArrayInput = ref('')
-const sampleCountInput = ref('2')
-const compareData1 = ref('')
-const compareData2 = ref('')
+const uniqueArrayInput = ref('apple,banana,orange,apple,grape,banana')
+const fieldArrayInput = ref('[{"id":1,"name":"Alice"},{"id":2,"name":"Bob"},{"id":1,"name":"Alice"},{"id":3,"name":"Charlie"}]')
+const fieldKeyInput = ref('id')
+const flatArrayInput = ref('[1,2,[3,4],[5,[6,7,[8,9]]],10]')
+const chunkSizeInput = ref('3')
+const chunkArrayInput = ref('apple,banana,orange,grape,kiwi,mango,papaya,peach')
+const shuffleArrayInput = ref('red,green,blue,yellow,purple,orange')
+const sampleArrayInput = ref('cat,dog,bird,fish,horse,rabbit,turtle,lizard')
+const sampleCountInput = ref('4')
+const compareData1 = ref('{"name":"test","data":[1,2,3],"flag":true}')
+const compareData2 = ref('{"name":"test","data":[1,2,3],"flag":true}')
 const uniqueResult = ref<any[]>([])
 const fieldResult = ref<any[]>([])
 const flatResult = ref<any | any[]>(null)
@@ -175,11 +175,11 @@ const testFlatten = async () => {
       const result = shared.flatten(inputArray)
       flatResult.value = result
     } else {
-      flatResult.value = { error: 'flatten function not available' }
+      flatResult.value = [] // 使用空数组
     }
   } catch (error) {
     console.error('flatten test failed:', error)
-    flatResult.value = { error: 'Invalid JSON or function not available' }
+    flatResult.value = [] // 使用空数组
   }
 }
 
@@ -193,11 +193,11 @@ const testShuffle = async () => {
       const result = shared.shuffle(inputArray)
       shuffleResult.value = result
     } else {
-      shuffleResult.value = { error: 'shuffle function not available' }
+      shuffleResult.value = [] // 使用空数组代替错误对象
     }
   } catch (error) {
     console.error('shuffle test failed:', error)
-    shuffleResult.value = { error: 'Function not available' }
+    shuffleResult.value = [] // 使用空数组代替错误对象
   }
 }
 
@@ -212,11 +212,11 @@ const testSample = async () => {
       const result = shared.sample(inputArray, count)
       sampleResult.value = result
     } else {
-      sampleResult.value = { error: 'sample function not available' }
+      sampleResult.value = [] // 使用空数组代替错误对象
     }
   } catch (error) {
     console.error('sample test failed:', error)
-    sampleResult.value = { error: 'Function not available' }
+    sampleResult.value = [] // 使用空数组代替错误对象
   }
 }
 
