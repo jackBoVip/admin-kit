@@ -1,7 +1,7 @@
 {
-  "name": "shadcn-ui-demo",
+  "name": "layouts-demo",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,8 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@admin-core/ui": "0.0.7",
-    "@admin-core/shared": "0.4.2",
+    "@admin-core/layouts": "workspace:*",
+    "@admin-core/shared": "workspace:*",
+    "@admin-core/ui": "workspace:*",
+    "@admin-core/composables": "workspace:*",
+    "@admin-core/icons": "workspace:*",
     "vue": "^3.5.24"
   },
   "devDependencies": {

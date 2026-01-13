@@ -423,3 +423,22 @@ export function updateCSSVariables(variables: Record<string, string>): void {
     }
   }
 }
+
+/**
+ * 触发 window 的 resize 事件
+ * @description 创建并派发一个新的 resize 事件，用于通知监听器窗口大小已更改
+ * @example
+ * ```typescript
+ * triggerWindowResize() // 触发 resize 事件
+ * ```
+ */
+export function triggerWindowResize(): void {
+  // 创建一个新的 resize 事件
+  const resizeEvent = new Event('resize', {
+    bubbles: true,
+    cancelable: true
+  })
+
+  // 使用 globalThis 确保跨环境兼容性 (browser, Node.js, Web Workers)
+  globalThis.dispatchEvent?.(resizeEvent) || window.dispatchEvent(resizeEvent)
+}

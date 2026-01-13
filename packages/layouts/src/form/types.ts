@@ -94,42 +94,42 @@ export interface FormItemDependencies {
    * 组件参数
    * @returns 组件参数
    */
-  componentProps?: FormItemDependenciesConditionWithProps;
+  componentProps?: FormItemDependenciesConditionWithProps | undefined;
   /**
    * 是否禁用
    * @returns 是否禁用
    */
-  disabled?: boolean | FormItemDependenciesCondition;
+  disabled?: (boolean | FormItemDependenciesCondition) | undefined;
   /**
    * 是否渲染（删除dom）
    * @returns 是否渲染
    */
-  if?: boolean | FormItemDependenciesCondition;
+  if?: (boolean | FormItemDependenciesCondition) | undefined;
   /**
    * 是否必填
    * @returns 是否必填
    */
-  required?: FormItemDependenciesCondition;
+  required?: FormItemDependenciesCondition | undefined;
   /**
    * 字段规则
    */
-  rules?: FormItemDependenciesConditionWithRules;
+  rules?: FormItemDependenciesConditionWithRules | undefined;
   /**
    * 是否隐藏(Css)
    * @returns 是否隐藏
    */
-  show?: boolean | FormItemDependenciesCondition;
+  show?: (boolean | FormItemDependenciesCondition) | undefined;
   /**
    * 任意触发都会执行
    */
-  trigger?: FormItemDependenciesCondition<void>;
+  trigger?: FormItemDependenciesCondition<void> | undefined;
   /**
    * 触发字段
    */
   triggerFields: string[];
 }
 
-type ComponentProps =
+export type ComponentProps =
   | ((
       value: Partial<Record<string, any>>,
       actions: FormActions,
@@ -140,30 +140,30 @@ export interface FormCommonConfig {
   /**
    * 在Label后显示一个冒号
    */
-  colon?: boolean;
+  colon?: boolean | undefined;
   /**
    * 所有表单项的props
    */
-  componentProps?: ComponentProps;
+  componentProps?: ComponentProps | undefined;
   /**
    * 所有表单项的控件样式
    */
-  controlClass?: string;
+  controlClass?: string | undefined;
   /**
    * 所有表单项的禁用状态
    * @default false
    */
-  disabled?: boolean;
+  disabled?: boolean | undefined;
   /**
    * 是否禁用所有表单项的change事件监听
    * @default true
    */
-  disabledOnChangeListener?: boolean;
+  disabledOnChangeListener?: boolean | undefined;
   /**
    * 是否禁用所有表单项的input事件监听
    * @default true
    */
-  disabledOnInputListener?: boolean;
+  disabledOnInputListener?: boolean | undefined;
   /**
    * 所有表单项的空状态值,默认都是undefined，naive-ui的空状态值是null
    */
@@ -172,40 +172,40 @@ export interface FormCommonConfig {
    * 所有表单项的控件样式
    * @default {}
    */
-  formFieldProps?: FormFieldOptions;
+  formFieldProps?: FormFieldOptions | undefined;
   /**
    * 所有表单项的栅格布局，支持函数形式
    * @default ""
    */
-  formItemClass?: (() => string) | string;
+  formItemClass?: ((() => string) | string) | undefined;
   /**
    * 隐藏所有表单项label
    * @default false
    */
-  hideLabel?: boolean;
+  hideLabel?: boolean | undefined;
   /**
    * 是否隐藏必填标记
    * @default false
    */
-  hideRequiredMark?: boolean;
+  hideRequiredMark?: boolean | undefined;
   /**
    * 所有表单项的label样式
    * @default ""
    */
-  labelClass?: string;
+  labelClass?: string | undefined;
   /**
    * 所有表单项的label宽度
    */
-  labelWidth?: number;
+  labelWidth?: number | undefined;
   /**
    * 所有表单项的model属性名
    * @default "modelValue"
    */
-  modelPropName?: string;
+  modelPropName?: string | undefined;
   /**
    * 所有表单项的wrapper样式
    */
-  wrapperClass?: string;
+  wrapperClass?: string | undefined;
 }
 
 type RenderComponentContentType = (
@@ -246,29 +246,29 @@ export interface FormSchema<
   /** 组件参数 */
   componentProps?: ComponentProps;
   /** 默认值 */
-  defaultValue?: any;
+  defaultValue?: any | undefined;
   /** 依赖 */
-  dependencies?: FormItemDependencies;
+  dependencies?: FormItemDependencies | undefined;
   /** 描述 */
-  description?: CustomRenderType;
+  description?: CustomRenderType | undefined;
   /** 字段名 */
   fieldName: string;
   /** 帮助信息 */
-  help?: CustomRenderType;
+  help?: CustomRenderType | undefined;
   /** 是否隐藏表单项 */
-  hide?: boolean;
+  hide?: boolean | undefined;
   /** 表单项 */
-  label?: CustomRenderType;
+  label?: CustomRenderType | undefined;
   // 自定义组件内部渲染
-  renderComponentContent?: RenderComponentContentType;
+  renderComponentContent?: RenderComponentContentType | undefined;
   /** 字段规则 */
-  rules?: FormSchemaRuleType;
+  rules?: FormSchemaRuleType | undefined;
   /** 后缀 */
-  suffix?: CustomRenderType;
+  suffix?: CustomRenderType | undefined;
 }
 
 export interface FormFieldProps extends FormSchema {
-  required?: boolean;
+  required?: boolean | undefined;
 }
 
 export interface FormRenderProps<
@@ -277,34 +277,34 @@ export interface FormRenderProps<
   /**
    * 表单字段数组映射字符串配置 默认使用","
    */
-  arrayToStringFields?: ArrayToStringFields;
+  arrayToStringFields?: ArrayToStringFields | undefined;
   /**
    * 是否折叠，在showCollapseButton=true下生效
    * true:折叠 false:展开
    */
-  collapsed?: boolean;
+  collapsed?: boolean | undefined;
   /**
    * 折叠时保持行数
    * @default 1
    */
-  collapsedRows?: number;
+  collapsedRows?: number | undefined;
   /**
    * 是否触发resize事件
    * @default false
    */
-  collapseTriggerResize?: boolean;
+  collapseTriggerResize?: boolean | undefined;
   /**
    * 表单项通用后备配置，当子项目没配置时使用这里的配置，子项目配置优先级高于此配置
    */
-  commonConfig?: FormCommonConfig;
+  commonConfig?: FormCommonConfig | undefined;
   /**
    * 紧凑模式（移除表单每一项底部为校验信息预留的空间）
    */
-  compact?: boolean;
+  compact?: boolean | undefined;
   /**
    * 组件v-model事件绑定
    */
-  componentBindEventMap?: Partial<Record<BaseFormComponentType, string>>;
+  componentBindEventMap?: Partial<Record<BaseFormComponentType, string>> | undefined;
   /**
    * 组件集合
    */
@@ -312,24 +312,24 @@ export interface FormRenderProps<
   /**
    * 表单字段映射到时间格式
    */
-  fieldMappingTime?: FieldMappingTime;
+  fieldMappingTime?: FieldMappingTime | undefined;
   /**
    * 表单实例
    */
-  form?: FormContext<GenericObject>;
+  form?: FormContext<GenericObject> | undefined;
   /**
    * 表单项布局
    */
-  layout?: FormLayout;
+  layout?: FormLayout | undefined;
   /**
    * 表单定义
    */
-  schema?: FormSchema<T>[];
+  schema?: FormSchema<T>[] | undefined;
 
   /**
    * 是否显示展开/折叠
    */
-  showCollapseButton?: boolean;
+  showCollapseButton?: boolean | undefined;
   /**
    * 格式化日期
    */
@@ -338,7 +338,7 @@ export interface FormRenderProps<
    * 表单栅格布局
    * @default "grid-cols-1"
    */
-  wrapperClass?: WrapperClassType;
+  wrapperClass?: WrapperClassType | undefined;
 }
 
 export interface ActionButtonOptions extends AdminButtonProps {
@@ -361,76 +361,76 @@ export interface AdminFormProps<
    * 操作按钮组的样式
    * newLine: 在新行显示。rowEnd: 在行内显示，靠右对齐（默认）。inline: 使用grid默认样式
    */
-  actionLayout?: 'inline' | 'newLine' | 'rowEnd';
+  actionLayout?: 'inline' | 'newLine' | 'rowEnd' | undefined;
   /**
    * 操作按钮组显示位置，默认靠右显示
    */
-  actionPosition?: 'center' | 'left' | 'right';
+  actionPosition?: 'center' | 'left' | 'right' | undefined;
   /**
    * 表单操作区域class
    */
-  actionWrapperClass?: ClassType;
+  actionWrapperClass?: ClassType | undefined;
   /**
    * 表单字段数组映射字符串配置 默认使用","
    */
-  arrayToStringFields?: ArrayToStringFields;
+  arrayToStringFields?: ArrayToStringFields | undefined;
 
   /**
    * 表单字段映射
    */
-  fieldMappingTime?: FieldMappingTime;
+  fieldMappingTime?: FieldMappingTime | undefined;
   /**
    * 表单收起展开状态变化回调
    */
-  handleCollapsedChange?: (collapsed: boolean) => void;
+  handleCollapsedChange?: ((collapsed: boolean) => void) | undefined;
   /**
    * 表单重置回调
    */
-  handleReset?: HandleResetFn;
+  handleReset?: HandleResetFn | undefined;
   /**
    * 表单提交回调
    */
-  handleSubmit?: HandleSubmitFn;
+  handleSubmit?: HandleSubmitFn | undefined;
   /**
    * 表单值变化回调
    */
-  handleValuesChange?: (
+  handleValuesChange?: ((
     values: Record<string, any>,
     fieldsChanged: string[],
-  ) => void;
+  ) => void) | undefined;
   /**
    * 重置按钮参数
    */
-  resetButtonOptions?: ActionButtonOptions;
+  resetButtonOptions?: ActionButtonOptions | undefined;
 
   /**
    * 验证失败时是否自动滚动到第一个错误字段
    * @default false
    */
-  scrollToFirstError?: boolean;
+  scrollToFirstError?: boolean | undefined;
 
   /**
    * 是否显示默认操作按钮
    * @default true
    */
-  showDefaultActions?: boolean;
+  showDefaultActions?: boolean | undefined;
 
   /**
    * 提交按钮参数
    */
-  submitButtonOptions?: ActionButtonOptions;
+  submitButtonOptions?: ActionButtonOptions | undefined;
 
   /**
    * 是否在字段值改变时提交表单
    * @default false
    */
-  submitOnChange?: boolean;
+  submitOnChange?: boolean | undefined;
 
   /**
    * 是否在回车时提交表单
    * @default false
    */
-  submitOnEnter?: boolean;
+  submitOnEnter?: boolean | undefined;
 }
 
 export type ExtendedFormApi = FormApi & {
@@ -448,7 +448,7 @@ export interface AdminFormAdapterOptions<
     disabledOnInputListener?: boolean;
     emptyStateValue?: null | undefined;
     modelPropNameMap?: Partial<Record<T, string>>;
-  };
+  } | undefined;
   defineRules?: {
     required?: (
       value: any,
@@ -460,5 +460,5 @@ export interface AdminFormAdapterOptions<
       params: any,
       ctx: Record<string, any>,
     ) => boolean | string;
-  };
+  } | undefined;
 }

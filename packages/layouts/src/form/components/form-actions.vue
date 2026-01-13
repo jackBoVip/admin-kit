@@ -1,44 +1,19 @@
 <script setup lang="ts">
-/**
- * 表单操作按钮组件
- * 
- * @description
- * 渲染表单的操作按钮区域，包括提交、重置和展开/折叠按钮。
- * 支持自定义按钮配置、位置布局和插槽扩展。
- * 
- * @example
- * ```vue
- * <FormActions
- *   v-model="collapsed"
- *   @submit="handleSubmit"
- *   @reset="handleReset"
- * />
- * ```
- */
 import { computed, toRaw, unref, watch } from 'vue';
 
 import { useSimpleLocale } from '@admin-core/composables';
 import { AdminExpandableArrow } from '@admin-core/ui';
-import { cn, isFunction } from '@admin-core/shared/utils';
+import { cn, isFunction, triggerWindowResize } from '@admin-core/shared/utils';
 
-import { COMPONENT_MAP, COMPONENT_DEFAULT_PROPS } from '../config';
+import { COMPONENT_MAP } from '../config';
 import { injectFormProps } from '../use-form-context';
 
-/** 获取国际化函数 */
 const { $t } = useSimpleLocale();
 
-/** 注入表单属性 */
 const [rootProps, form] = injectFormProps();
 
-/** 折叠状态的双向绑定 */
 const collapsed = defineModel({ default: false });
 
-/**
- * 计算重置按钮配置
- * 
- * @description
- * 合并默认配置和用户自定义配置
- */
 const resetButtonOptions = computed(() => {
   return {
     content: `${$t.value('reset')}`,
@@ -47,12 +22,6 @@ const resetButtonOptions = computed(() => {
   };
 });
 
-/**
- * 计算提交按钮配置
- * 
- * @description
- * 合并默认配置和用户自定义配置
- */
 const submitButtonOptions = computed(() => {
   return {
     content: `${$t.value('submit')}`,
@@ -61,14 +30,10 @@ const submitButtonOptions = computed(() => {
   };
 });
 
-/**
- * 处理表单提交
- * 
- * @description
- * 验证表单后，如果验证通过则调用 handleSubmit 回调
- * 
- * @param e - 事件对象
- */
+// const isQueryForm = computed(() => {
+//   return !!unref(rootProps).showCollapseButton;
+// });
+
 async function handleSubmit(e: Event) {
   e?.preventDefault();
   e?.stopPropagation();
@@ -86,15 +51,6 @@ async function handleSubmit(e: Event) {
   await props.handleSubmit?.(values);
 }
 
-/**
- * 处理表单重置
- * 
- * @description
- * 如果提供了自定义 handleReset 回调则调用它，
- * 否则使用表单的默认重置方法
- * 
- * @param e - 事件对象
- */
 async function handleReset(e: Event) {
   e?.preventDefault();
   e?.stopPropagation();
@@ -109,34 +65,20 @@ async function handleReset(e: Event) {
   }
 }
 
-/**
- * 监听折叠状态变化
- * 
- * @description
- * 当折叠状态改变且启用了 collapseTriggerResize 时，
- * 触发窗口 resize 事件，用于更新依赖窗口尺寸的组件
- */
 watch(
   () => collapsed.value,
   () => {
     const props = unref(rootProps);
     if (props.collapseTriggerResize) {
-      // 触发窗口 resize 事件
-      window.dispatchEvent(new Event('resize'));
+      triggerWindowResize();
     }
   },
 );
 
-/**
- * 计算操作按钮容器的样式类
- * 
- * @description
- * 根据布局模式、位置和其他配置生成对应的样式类
- */
 const actionWrapperClass = computed(() => {
   const props = unref(rootProps);
-  const actionLayout = props.actionLayout ?? 'rowEnd';
-  const actionPosition = props.actionPosition ?? 'right';
+  const actionLayout = props.actionLayout || 'rowEnd';
+  const actionPosition = props.actionPosition || 'right';
 
   const cls = [
     'flex',
@@ -148,33 +90,37 @@ const actionWrapperClass = computed(() => {
     props.actionWrapperClass,
   ];
 
-  // 根据操作按钮布局模式添加样式
-  const layoutClasses = {
-    newLine: 'col-span-full', // 独占一行
-    rowEnd: 'col-[-2/-1]',    // 占据最后一列
-    inline: '',               // 不需要额外类名
-  } as const;
-  
-  cls.push(layoutClasses[actionLayout] ?? '');
+  switch (actionLayout) {
+    case 'newLine': {
+      cls.push('col-span-full');
+      break;
+    }
+    case 'rowEnd': {
+      cls.push('col-[-2/-1]');
+      break;
+    }
+    // 'inline' 不需要额外类名，保持默认
+  }
 
-  // 根据操作按钮位置添加对齐样式
-  const positionClasses = {
-    center: 'justify-center', // 居中对齐
-    left: 'justify-start',    // 左对齐
-    right: 'justify-end',     // 右对齐（默认）
-  } as const;
-  
-  cls.push(positionClasses[actionPosition] ?? 'justify-end');
+  switch (actionPosition) {
+    case 'center': {
+      cls.push('justify-center');
+      break;
+    }
+    case 'left': {
+      cls.push('justify-start');
+      break;
+    }
+    default: {
+      // case 'right': 默认右对齐
+      cls.push('justify-end');
+      break;
+    }
+  }
 
   return cls.join(' ');
 });
 
-/**
- * 暴露方法给父组件
- * 
- * @description
- * 允许父组件通过 ref 调用提交和重置方法
- */
 defineExpose({
   handleReset,
   handleSubmit,
@@ -191,7 +137,7 @@ defineExpose({
         v-if="submitButtonOptions.show"
         type="button"
         @click="handleSubmit"
-        v-bind="{ ...COMPONENT_DEFAULT_PROPS.PrimaryButton, ...submitButtonOptions }"
+        v-bind="submitButtonOptions"
       >
         {{ submitButtonOptions.content }}
       </component>
@@ -205,7 +151,7 @@ defineExpose({
       v-if="resetButtonOptions.show"
       type="button"
       @click="handleReset"
-      v-bind="{ ...COMPONENT_DEFAULT_PROPS.DefaultButton, ...resetButtonOptions }"
+      v-bind="resetButtonOptions"
     >
       {{ resetButtonOptions.content }}
     </component>
@@ -219,7 +165,7 @@ defineExpose({
         v-if="submitButtonOptions.show"
         type="button"
         @click="handleSubmit"
-        v-bind="{ ...COMPONENT_DEFAULT_PROPS.PrimaryButton, ...submitButtonOptions }"
+        v-bind="submitButtonOptions"
       >
         {{ submitButtonOptions.content }}
       </component>

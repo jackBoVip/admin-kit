@@ -49,7 +49,7 @@ const props = withDefaults(
   defineProps<
     Props & {
       commonComponentProps: MaybeComponentProps;
-      componentProps?: MaybeComponentProps | ((value: Partial<Record<string, any>>, actions: any) => MaybeComponentProps);
+      componentProps?: any; // 使用 any 避免运行时类型检查错误
     }
   >(),
   {}

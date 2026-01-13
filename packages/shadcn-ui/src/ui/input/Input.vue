@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { cn } from '@admin-core/shared/utils';
+
 import { useVModel } from '@vueuse/core';
 
 const props = defineProps<{
@@ -12,10 +13,6 @@ const emits = defineEmits<{
   (e: 'update:modelValue', payload: number | string): void;
 }>();
 
-// 使用 useVModel 来处理双向绑定，与 vben 框架保持一致
-// passive: true 表示不会主动 emit，而是等待父组件更新
-// 使用 useVModel 来处理双向绑定，与 vben 框架保持一致
-// passive: true 表示不会主动 emit，而是等待父组件更新
 const modelValue = useVModel(props, 'modelValue', emits, {
   defaultValue: props.defaultValue,
   passive: true,

@@ -30,7 +30,7 @@ import { computed } from 'vue';
 
 import { Form } from '@admin-core/ui';
 
-import { normalizeSchema } from '../utils';
+import { normalizeSchema } from './helper';
 import {
   cn,
   isFunction,
@@ -123,19 +123,22 @@ const shapes = computed((): FormShape[] => {
  * 如果传入了 form 实例，使用原生 form 标签；
  * 否则使用 UI 库的 Form 组件
  */
-const formComponent = computed(() => props.form ? 'form' : Form);
+const formComponent = computed(() => {
+  // 当有外部 form 实例时，使用原生 form 标签，否则使用 vee-validate 的 Form 组件
+  return props.form ? 'form' : Form;
+});
 
 /**
  * 计算表单组件的属性
  * 
  * @description
- * 根据是否有 form 实例，配置不同的提交处理方式
+ * 使用 Form 组件或原生 form 标签，根据是否传入外部 form 实例
  */
-const formComponentProps = computed(() => 
-  props.form
-    ? { onSubmit: props.form.handleSubmit((val) => emits('submit', val)) }
-    : { onSubmit: (val: GenericObject) => emits('submit', val) }
-);
+const formComponentProps = computed(() => ({
+  onSubmit: props.form
+    ? (values: any) => props.form!.handleSubmit((val: GenericObject) => emits('submit', val))(values)
+    : (values: GenericObject) => emits('submit', values)
+}));
 
 /**
  * 计算表单是否处于折叠状态

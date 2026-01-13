@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 优化 Input 组件，使用 useVModel 与 vben 框架保持一致
+- 优化 Input 组件
 
 ## 0.0.6
 

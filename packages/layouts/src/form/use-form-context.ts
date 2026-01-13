@@ -1,4 +1,4 @@
-import type { ZodRawShape } from 'zod';
+import type { ZodRawShape, ZodTypeAny } from 'zod';
 
 import type { ComputedRef } from 'vue';
 
@@ -6,119 +6,108 @@ import type { ExtendedFormApi, FormActions, AdminFormProps } from './types';
 
 import { computed, unref, useSlots } from 'vue';
 
-import { normalizeSchema } from './utils';
-
-
-
 import { createContext } from '@admin-core/ui';
-import { isString, set } from '@admin-core/shared/utils';
+import { isString, mergeWithArrayOverride, set } from '@admin-core/shared/utils';
 
 import { useForm } from 'vee-validate';
-import { ZodIntersection, ZodNumber, ZodObject, ZodString } from 'zod';
+import { ZodIntersection, ZodNumber, ZodObject, ZodString, object } from 'zod';
+// import { getDefaultsForSchema } from 'zod-defaults'; // Temporarily commented out due to version incompatibility
 
 type ExtendFormProps = AdminFormProps & { formApi?: ExtendedFormApi };
 
-/** 表单属性注入/提供上下文 */
 export const [injectFormProps, provideFormProps] =
   createContext<[ComputedRef<ExtendFormProps> | ExtendFormProps, FormActions]>(
     'AdminFormProps',
   );
 
-/** 组件引用映射注入/提供上下文 */
 export const [injectComponentRefMap, provideComponentRefMap] =
   createContext<Map<string, unknown>>('ComponentRefMap');
 
-/**
- * 使用表单初始化
- * @description 初始化表单实例和插槽
- * @param props - 表单属性（可以是响应式的）
- * @returns 返回委托的插槽和表单实例
- * @example
- * ```typescript
- * const { delegatedSlots, form } = useFormInitial(props)
- * 
- * // 使用表单实例
- * form.setFieldValue('username', 'admin')
- * 
- * // 使用委托的插槽
- * delegatedSlots.value.forEach(slot => {
- *   console.log(slot)
- * })
- * ```
- */
 export function useFormInitial(
   props: ComputedRef<AdminFormProps> | AdminFormProps,
 ) {
   const slots = useSlots();
   const initialValues = generateInitialValues();
-  
+
   const form = useForm({
-    // 按照vben的方式：只有当initialValues不为空时才传递
     ...(Object.keys(initialValues)?.length ? { initialValues } : {}),
+    ...(hasValidationRules() ? { validationSchema: generateValidationSchema() } : {}),
+  });
+  
+  function generateValidationSchema() {
+    const schemaObject: ZodRawShape = {};
+    
+    (unref(props).schema || []).forEach((item) => {
+      // 只有当 rules 是 ZodTypeAny 时才添加到验证 schema 中
+      if (item.rules && typeof item.rules !== 'string') {
+        schemaObject[item.fieldName] = item.rules as ZodTypeAny;
+      }
+    });
+    
+    return object(schemaObject);
+  }
+  
+  function hasValidationRules(): boolean {
+    const schema = unref(props).schema || [];
+    return schema.some(item => item.rules && typeof item.rules !== 'string');
+  }
+
+  const delegatedSlots = computed(() => {
+    const resultSlots: string[] = [];
+
+    for (const key of Object.keys(slots)) {
+      if (key !== 'default') {
+        resultSlots.push(key);
+      }
+    }
+    return resultSlots;
   });
 
-  // 使用 computed 和 Object.keys().filter() 的组合
-  const delegatedSlots = computed(() => 
-    Object.keys(slots).filter((key) => key !== 'default')
-  );
-
-  /**
-   * 生成初始值
-   * @description 根据 schema 生成表单的初始值
-   */
   function generateInitialValues() {
     const initialValues: Record<string, any> = {};
+
     const zodObject: ZodRawShape = {};
-    
-    const propsValue = unref(props);
-    const schema = normalizeSchema(propsValue.schema);
-    
-    for (const item of schema) {
-      if (Object.hasOwn(item, 'defaultValue')) {
+    (unref(props).schema || []).forEach((item) => {
+      if (Reflect.has(item, 'defaultValue')) {
         set(initialValues, item.fieldName, item.defaultValue);
       } else if (item.rules && !isString(item.rules)) {
+        // 检查规则是否适合提取默认值
         const customDefaultValue = getCustomDefaultValue(item.rules);
         zodObject[item.fieldName] = item.rules;
-        initialValues[item.fieldName] = customDefaultValue;
+        if (customDefaultValue !== undefined) {
+          initialValues[item.fieldName] = customDefaultValue;
+        }
+      }
+    });
+
+    // const schemaInitialValues = getDefaultsForSchema(object(zodObject));
+    
+    // Temporary workaround for zod-defaults compatibility issue
+    const zodDefaults: Record<string, any> = {};
+    // Extract defaults from zodObject schema if available
+    for (const [key, schema] of Object.entries(zodObject)) {
+      if ('_def' in schema && schema._def && 'defaultValue' in schema._def) {
+        zodDefaults[key] = schema._def.defaultValue;
       }
     }
     
-    return initialValues;
+    return mergeWithArrayOverride(initialValues, zodDefaults);
   }
-  
-  /**
-   * 获取自定义默认值
-   * @description 根据 Zod 规则提取默认值
-   * @param rule - Zod 验证规则
-   */
+  // 自定义默认值提取逻辑
   function getCustomDefaultValue(rule: any): any {
-    // 对于 ZodOptional 和 ZodNullable，返回 undefined
-    // 但我们仍然会将 undefined 添加到 initialValues 中
-    // 这样 vee-validate 才能追踪这个字段
-    if (rule._def?.typeName === 'ZodOptional' || rule._def?.typeName === 'ZodNullable') {
-      return undefined;
-    }
-    
     if (rule instanceof ZodString) {
       return ''; // 默认为空字符串
-    }
-    
-    if (rule instanceof ZodNumber) {
+    } else if (rule instanceof ZodNumber) {
       return null; // 默认为 null（避免显示 0）
-    }
-    
-    if (rule instanceof ZodObject) {
+    } else if (rule instanceof ZodObject) {
       // 递归提取嵌套对象的默认值
-      return Object.fromEntries(
-        Object.entries(rule.shape).map(([key, valueSchema]) => [
-          key,
-          getCustomDefaultValue(valueSchema),
-        ])
-      );
-    }
-    
-    if (rule instanceof ZodIntersection) {
-      // 对于交集类型，从 schema 提取默认值
+      const defaultValues: Record<string, any> = {};
+      for (const [key, valueSchema] of Object.entries(rule.shape)) {
+        defaultValues[key] = getCustomDefaultValue(valueSchema);
+      }
+      return defaultValues;
+    } else if (rule instanceof ZodIntersection) {
+      // 对于交集类型，从schema 提取默认值
       const leftDefaultValue = getCustomDefaultValue(rule._def.left);
       const rightDefaultValue = getCustomDefaultValue(rule._def.right);
 
@@ -132,9 +121,9 @@ export function useFormInitial(
 
       // 否则优先使用左边的默认值
       return leftDefaultValue ?? rightDefaultValue;
+    } else {
+      return undefined; // 其他类型不提供默认值
     }
-    
-    return undefined; // 其他类型不提供默认值
   }
 
   return {
