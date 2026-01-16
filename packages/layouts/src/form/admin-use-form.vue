@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import type { Recordable } from '@admin-core/shared/types';
 
-import type { ComputedRef } from 'vue';
-
 import type { ExtendedFormApi, AdminFormProps } from './types';
 
 // import { toRaw, watch } from 'vue';
-import { nextTick, onMounted, watch } from 'vue';
+import { computed, nextTick, onMounted, watch, watchEffect } from 'vue';
 
 import { useForwardPriorityValues } from '@admin-core/composables';
 import { cloneDeep, get, isEqual, set } from '@admin-core/shared/utils';
@@ -34,7 +32,7 @@ const props = defineProps<Props>();
 
 const state = props.formApi?.useStore?.();
 
-const forward = useForwardPriorityValues(props, state) as ComputedRef<Props>;
+const forward = useForwardPriorityValues(props, state);
 
 const componentRefMap = new Map<string, unknown>();
 
@@ -71,42 +69,122 @@ const handleValuesChangeDebounced = useDebounceFn(async () => {
 
 const valuesCache: Recordable<any> = {};
 
-onMounted(async () => {
-  // 只在挂载后开始监听，form.values会有一个初始化的过程
-  await nextTick();
-  watch(
-    () => form.values,
-    async (newVal) => {
-      if (forward.value.handleValuesChange) {
-        const fields = state?.value.schema?.map((item) => {
-          return item.fieldName;
-        });
+/**
+ * 需要追踪的字段列表（从 schema 派生）
+ *
+ * @description
+ * 性能优化：避免在每次 values 变化时都对 schema 做一次 map。
+ */
+const trackedFields = computed(() => state?.value.schema?.map((i) => i.fieldName) ?? []);
 
-        if (fields && fields.length > 0) {
+/**
+ * schema 字段值快照（仅追踪 schema 中声明的字段）
+ *
+ * @description
+ * 性能优化：替代对 `form.values` 的 deep watch，避免整棵 values 树都被递归追踪。
+ */
+const trackedValues = computed(() => {
+  const fields = trackedFields.value;
+  return fields.map((field) => get(form.values, field));
+});
+
+/**
+ * handleValuesChange 的载荷策略（默认 deep，保持兼容）
+ *
+ * 优先级：props/commonConfig > 全局 DEFAULT_FORM_COMMON_CONFIG
+ */
+const valuesChangePayload = computed<'deep' | 'shallow' | 'patch'>(() => {
+  return (
+    (forward.value.commonConfig as any)?.valuesChangePayload ??
+    DEFAULT_FORM_COMMON_CONFIG.valuesChangePayload ??
+    'deep'
+  );
+});
+
+/**
+ * 构造 handleValuesChange 的 values 参数
+ *
+ * @description
+ * - deep：全量深拷贝（默认，兼容最强）
+ * - shallow：全量浅拷贝（GC 更少，但嵌套引用共享）
+ * - patch：仅构造变更字段片段（最省，但 values 不再是“全量快照”）
+ */
+function buildValuesPayload(
+  fullValues: Record<string, any>,
+  fieldsChanged: string[],
+): Record<string, any> {
+  const strategy = valuesChangePayload.value;
+  if (strategy === 'patch') {
+    const patch: Record<string, any> = {};
+    for (const field of fieldsChanged) {
+      set(patch, field, get(fullValues, field));
+    }
+    return patch;
+  }
+  if (strategy === 'shallow') {
+    return { ...fullValues };
+  }
+  // default: deep（保持现有行为）
+  return cloneDeep(fullValues) as Record<string, any>;
+}
+
+onMounted(async () => {
+  // 只在挂载后开始监听，form.values 会有一个初始化的过程
+  await nextTick();
+
+  watchEffect((onCleanup) => {
+    const hasValuesChangeHook = !!forward.value.handleValuesChange;
+    const shouldSubmitOnChange = !!state?.value.submitOnChange;
+    // 若两者都不需要，直接不建立 watcher
+    if (!hasValuesChangeHook && !shouldSubmitOnChange) return;
+
+    const fields = trackedFields.value;
+
+    // 初始化 cache：避免首次建立 watcher 时把所有字段都当作“变更”
+    for (let i = 0; i < fields.length; i++) {
+      set(valuesCache, fields[i]!, trackedValues.value[i]);
+    }
+
+    const stop = watch(
+      trackedValues,
+      async (newVals, oldVals) => {
+        // oldVals 可能为 undefined（取决于 Vue 内部优化），这里兜底成空数组
+        const prev = oldVals ?? [];
+
+        // 仅当需要回调时才计算 changedFields
+        if (hasValuesChangeHook) {
           const changedFields: string[] = [];
-          fields.forEach((field) => {
-            const newFieldValue = get(newVal, field);
-            const oldFieldValue = get(valuesCache, field);
-            if (!isEqual(newFieldValue, oldFieldValue)) {
+          for (let i = 0; i < fields.length; i++) {
+            const field = fields[i]!;
+            const nextVal = newVals[i];
+            const prevVal = prev[i];
+            // 这里优先用“快照对比”，避免重复 get/遍历
+            if (!isEqual(nextVal, prevVal)) {
               changedFields.push(field);
-              set(valuesCache, field, newFieldValue);
+              set(valuesCache, field, nextVal);
             }
-          });
+          }
 
           if (changedFields.length > 0) {
-            // 调用handleValuesChange回调，传入所有表单值的深拷贝和变更的字段列表
             const values = await forward.value.formApi?.getValues();
-            forward.value.handleValuesChange(
-              cloneDeep(values ?? {}) as Record<string, any>,
+            const fullValues = (values ?? {}) as Record<string, any>;
+            forward.value.handleValuesChange?.(
+              buildValuesPayload(fullValues, changedFields),
               changedFields,
             );
           }
         }
-      }
-      handleValuesChangeDebounced();
-    },
-    { deep: true },
-  );
+
+        if (shouldSubmitOnChange) handleValuesChangeDebounced();
+      },
+      {
+        // 行为保持：不立即触发（与原先非-immediate 的 watch 一致）
+        immediate: false,
+      },
+    );
+
+    onCleanup(stop);
+  });
 });
 </script>
 
@@ -114,7 +192,7 @@ onMounted(async () => {
   <Form
     @keydown.enter="handleKeyDownEnter"
     v-bind="forward"
-    :collapsed="state?.collapsed ?? false"
+    :collapsed="state?.collapsed"
     :component-bind-event-map="COMPONENT_BIND_EVENT_MAP"
     :component-map="COMPONENT_MAP"
     :form="form"
@@ -131,7 +209,7 @@ onMounted(async () => {
       <slot v-bind="slotProps">
         <FormActions
           v-if="forward.showDefaultActions"
-          :model-value="state?.collapsed ?? false"
+          :model-value="state?.collapsed"
           @update:model-value="handleUpdateCollapsed"
         >
           <template #reset-before="resetSlotProps">

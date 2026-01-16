@@ -1,18 +1,19 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 
+/**
+ * Vite 配置（library mode）
+ *
+ * @description
+ * 输出 ES/CJS/UMD，便于 npm 与 CDN（unpkg/jsdelivr）使用
+ */
 export default defineConfig({
   plugins: [vue()],
-  resolve: {
-    alias: {
-      // Force runtime-only Vue build
-      vue: 'vue/dist/vue.runtime.esm-bundler.js',
-    },
-  },
   build: {
+    target: 'esnext',
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: resolve(import.meta.dirname, 'src/index.ts'),
       name: 'AdminKitLayouts',
       formats: ['es', 'cjs', 'umd'],
       fileName: (format) => {
@@ -22,21 +23,39 @@ export default defineConfig({
       },
     },
     rollupOptions: {
-      external: ['vue', '@admin-kit/ui', '@admin-kit/composables', '@admin-core/ui', '@admin-core/composables', '@admin-core/shared', '@admin-core/icons', 'vee-validate', 'zod'],
+      external: [
+        'vue',
+        'vue-router',
+        '@vueuse/core',
+        'vee-validate',
+        '@vee-validate/zod',
+        'zod',
+        'zod-defaults',
+        '@admin-core/ui',
+        '@admin-core/composables',
+        '@admin-core/icons',
+        '@admin-core/shared',
+        '@admin-core/shared/constants',
+        '@admin-core/shared/types',
+      ],
       output: {
         globals: {
           vue: 'Vue',
-          '@admin-kit/ui': 'AdminKitUI',
-          '@admin-kit/composables': 'AdminKitComposables',
+          'vue-router': 'VueRouter',
+          '@vueuse/core': 'VueUse',
+          'vee-validate': 'VeeValidate',
+          '@vee-validate/zod': 'VeeValidateZod',
+          zod: 'zod',
+          'zod-defaults': 'zodDefaults',
           '@admin-core/ui': 'AdminCoreUI',
           '@admin-core/composables': 'AdminCoreComposables',
-          '@admin-core/shared': 'AdminCoreShared',
           '@admin-core/icons': 'AdminCoreIcons',
-          'vee-validate': 'VeeValidate',
-          'zod': 'Zod',
+          '@admin-core/shared': 'AdminCoreShared',
+          '@admin-core/shared/constants': 'AdminCoreShared',
+          '@admin-core/shared/types': 'AdminCoreShared',
         },
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'style.css'
+          if (assetInfo.name?.endsWith('.css')) return 'style.css'
           return assetInfo.name || ''
         },
       },
@@ -45,3 +64,4 @@ export default defineConfig({
     minify: 'esbuild',
   },
 })
+

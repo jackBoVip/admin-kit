@@ -1,21 +1,4 @@
 <script setup lang="ts">
-/**
- * 表单渲染核心组件
- * 
- * @description
- * 负责表单的实际渲染，包括表单字段的布局、折叠展开、
- * 验证规则处理等核心功能。这是表单系统的渲染引擎。
- * 
- * @example
- * ```vue
- * <Form
- *   :schema="schema"
- *   :form="form"
- *   :collapsed="false"
- *   @submit="handleSubmit"
- * />
- * ```
- */
 import type { GenericObject } from 'vee-validate';
 import type { ZodTypeAny } from 'zod';
 
@@ -29,13 +12,11 @@ import type {
 import { computed } from 'vue';
 
 import { Form } from '@admin-core/ui';
-
-import { normalizeSchema } from './helper';
 import {
   cn,
   isFunction,
   isString,
-  deepMerge,
+  mergeWithArrayOverride,
 } from '@admin-core/shared/utils';
 
 import { provideFormRenderProps } from './context';
@@ -60,12 +41,6 @@ const emits = defineEmits<{
   submit: [event: any];
 }>();
 
-/**
- * 计算表单容器的样式类
- * 
- * @description
- * 根据布局模式（inline/vertical）和紧凑模式生成对应的样式类
- */
 const wrapperClass = computed(() => {
   const cls = ['flex'];
   if (props.layout === 'inline') {
@@ -76,85 +51,49 @@ const wrapperClass = computed(() => {
   return cn(...cls, props.wrapperClass);
 });
 
-/** 提供表单渲染属性给子组件 */
-provideFormRenderProps(props as any);
+provideFormRenderProps(props);
 
-/** 使用展开/折叠功能 */
-// @ts-expect-error - wrapperRef is used in template
-const { isCalculated, keepFormItemIndex, wrapperRef } = useExpandable(props as any);
+const { isCalculated, keepFormItemIndex } = useExpandable(props);
 
-/**
- * 计算表单字段的形状信息
- * 
- * @description
- * 从 schema 中提取每个字段的默认值、验证规则、是否必填等信息，
- * 用于表单初始化和验证
- */
-const shapes = computed((): FormShape[] => {
-  const schemaArray = normalizeSchema(props.schema);
-  return schemaArray.map((schema: FormSchema) => {
-    const { fieldName, rules } = schema;
-    
-    if (!rules || isString(rules)) {
-      return {
-        default: undefined,
-        fieldName,
-        required: false,
-        rules: undefined as any,
-      };
+const shapes = computed(() => {
+  const resultShapes: FormShape[] = [];
+  props.schema?.forEach((schema) => {
+    const { fieldName } = schema;
+    const rules = schema.rules as ZodTypeAny;
+
+    let typeName = '';
+    if (rules && !isString(rules)) {
+      typeName = rules._def.typeName;
     }
-    
-    const typeName = rules._def.typeName;
+
     const baseRules = getBaseRules(rules) as ZodTypeAny;
 
-    return {
+    resultShapes.push({
       default: getDefaultValueInZodStack(rules),
       fieldName,
       required: !['ZodNullable', 'ZodOptional'].includes(typeName),
       rules: baseRules,
-    };
+    });
   });
+  return resultShapes;
 });
 
-/**
- * 动态选择表单组件
- * 
- * @description
- * 如果传入了 form 实例，使用原生 form 标签；
- * 否则使用 UI 库的 Form 组件
- */
-const formComponent = computed(() => {
-  // 当有外部 form 实例时，使用原生 form 标签，否则使用 vee-validate 的 Form 组件
-  return props.form ? 'form' : Form;
+const formComponent = computed(() => (props.form ? 'form' : Form));
+
+const formComponentProps = computed(() => {
+  return props.form
+    ? {
+        onSubmit: props.form.handleSubmit((val) => emits('submit', val)),
+      }
+    : {
+        onSubmit: (val: GenericObject) => emits('submit', val),
+      };
 });
 
-/**
- * 计算表单组件的属性
- * 
- * @description
- * 使用 Form 组件或原生 form 标签，根据是否传入外部 form 实例
- */
-const formComponentProps = computed(() => ({
-  onSubmit: props.form
-    ? (values: any) => props.form!.handleSubmit((val: GenericObject) => emits('submit', val))(values)
-    : (values: GenericObject) => emits('submit', values)
-}));
+const formCollapsed = computed(() => {
+  return props.collapsed && isCalculated.value;
+});
 
-/**
- * 计算表单是否处于折叠状态
- * 
- * @description
- * 只有在折叠属性为 true 且已完成行计算时，才认为是折叠状态
- */
-const formCollapsed = computed(() => props.collapsed && isCalculated.value);
-
-/**
- * 计算最终的表单 schema
- * 
- * @description
- * 合并全局配置和单个字段配置，处理折叠状态下的字段隐藏，
- * 生成每个字段的完整配置信息
- */
 const computedSchema = computed(
   (): (Omit<FormSchema, 'formFieldProps'> & {
     commonComponentProps: Record<string, any>;
@@ -167,7 +106,7 @@ const computedSchema = computed(
       disabled,
       disabledOnChangeListener = true,
       disabledOnInputListener = true,
-      emptyStateValue = undefined,
+      emptyStateValue = undefined as null | undefined,
       formFieldProps = {},
       formItemClass = '',
       hideLabel = false,
@@ -176,27 +115,26 @@ const computedSchema = computed(
       labelWidth = 100,
       modelPropName = '',
       wrapperClass = '',
-    } = deepMerge(props.commonConfig, props.globalCommonConfig);
-    
-    const keepIndex = keepFormItemIndex.value;
-    const isCollapsed = formCollapsed.value;
-    
-    const schemaArray = normalizeSchema(props.schema);
-    return schemaArray.map((schema, index) => {
-      const hidden = props.showCollapseButton && isCollapsed && keepIndex
-        ? keepIndex <= index
-        : false;
+    } = mergeWithArrayOverride(props.commonConfig, props.globalCommonConfig);
+    return (props.schema || []).map((schema, index) => {
+      const keepIndex = keepFormItemIndex.value;
 
-      const resolvedSchemaFormItemClass = isFunction(schema.formItemClass)
-        ? (() => {
-            try {
-              return schema.formItemClass();
-            } catch (error) {
-              console.error('Error calling formItemClass function:', error);
-              return '';
-            }
-          })()
-        : schema.formItemClass;
+      const hidden =
+        // 折叠状态 & 显示折叠按钮 & 当前索引大于保留索引
+        props.showCollapseButton && !!formCollapsed.value && keepIndex
+          ? keepIndex <= index
+          : false;
+
+      // 处理函数形式的formItemClass
+      let resolvedSchemaFormItemClass = schema.formItemClass;
+      if (isFunction(schema.formItemClass)) {
+        try {
+          resolvedSchemaFormItemClass = schema.formItemClass();
+        } catch (error) {
+          console.error('Error calling formItemClass function:', error);
+          resolvedSchemaFormItemClass = '';
+        }
+      }
 
       return {
         colon,
@@ -210,13 +148,13 @@ const computedSchema = computed(
         modelPropName,
         wrapperClass,
         ...schema,
-        commonComponentProps: componentProps as Record<string, any>,
+        commonComponentProps: componentProps,
         componentProps: schema.componentProps,
         controlClass: cn(controlClass, schema.controlClass),
         formFieldProps: {
           ...formFieldProps,
           ...schema.formFieldProps,
-        } as Record<string, any>,
+        },
         formItemClass: cn(
           'flex-shrink-0',
           { hidden },
@@ -225,7 +163,7 @@ const computedSchema = computed(
         ),
         labelClass: cn(labelClass, schema.labelClass),
       };
-    }) as any;
+    });
   },
 );
 </script>
@@ -238,9 +176,8 @@ const computedSchema = computed(
           <slot :definition="cSchema" :name="cSchema.fieldName"> </slot>
         </div> -->
         <FormField
-          v-bind="cSchema as any"
+          v-bind="cSchema"
           :class="cSchema.formItemClass"
-          :rules="cSchema.rules"
         >
           <template #default="slotProps">
             <slot v-bind="slotProps" :name="cSchema.fieldName"> </slot>

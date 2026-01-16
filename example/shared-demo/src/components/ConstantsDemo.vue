@@ -44,7 +44,7 @@
       <h4>布局常量</h4>
       <div class="constant-display">
         <div><strong>CSS_VARIABLES:</strong> {{ layoutConstants.CSS_VARIABLES ? Object.keys(layoutConstants.CSS_VARIABLES).join(', ') : 'N/A' }}</div>
-        <div><strong>ELEMENT_IDS:</strong> {{ layoutConstants.ELEMENT_IDS ? Object.keys(layoutConstants.ELEMENT_IDS).join(', ') : 'N/A' }}</div>
+        <div><strong>ELEMENT_IDS:</strong> {{ layoutConstants.ELEMENT_IDS.MAIN_CONTENT ? Object.keys(layoutConstants.ELEMENT_IDS.MAIN_CONTENT).join(', ') : 'N/A' }}</div>
       </div>
     </div>
   </section>

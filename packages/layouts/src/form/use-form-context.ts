@@ -1,4 +1,4 @@
-import type { ZodRawShape, ZodTypeAny } from 'zod';
+import type { ZodRawShape } from 'zod';
 
 import type { ComputedRef } from 'vue';
 
@@ -10,18 +10,31 @@ import { createContext } from '@admin-core/ui';
 import { isString, mergeWithArrayOverride, set } from '@admin-core/shared/utils';
 
 import { useForm } from 'vee-validate';
-import { ZodIntersection, ZodNumber, ZodObject, ZodString, object } from 'zod';
-// import { getDefaultsForSchema } from 'zod-defaults'; // Temporarily commented out due to version incompatibility
+import { object, ZodIntersection, ZodNumber, ZodObject, ZodString } from 'zod';
+import { getDefaultsForSchema } from 'zod-defaults';
 
 type ExtendFormProps = AdminFormProps & { formApi?: ExtendedFormApi };
 
-export const [injectFormProps, provideFormProps] =
-  createContext<[ComputedRef<ExtendFormProps> | ExtendFormProps, FormActions]>(
-    'AdminFormProps',
-  );
+/**
+ * 注入/提供：表单 props 与 vee-validate 的 form actions
+ *
+ * @description
+ * - 第一个元素：当前表单 props（可能是 computed，也可能是普通对象）
+ * - 第二个元素：`useForm()` 返回的 actions（用于校验、提交、取值等）
+ */
+export const [injectFormProps, provideFormProps] = createContext<
+  [ComputedRef<ExtendFormProps> | ExtendFormProps, FormActions]
+>('AdminFormProps');
 
-export const [injectComponentRefMap, provideComponentRefMap] =
-  createContext<Map<string, unknown>>('ComponentRefMap');
+/**
+ * 注入/提供：字段组件实例映射
+ *
+ * @description
+ * 用于 `FormApi.getFieldComponentRef()` 等场景拿到字段组件实例。
+ */
+export const [injectComponentRefMap, provideComponentRefMap] = createContext<
+  Map<string, unknown>
+>('ComponentRefMap');
 
 export function useFormInitial(
   props: ComputedRef<AdminFormProps> | AdminFormProps,
@@ -31,26 +44,7 @@ export function useFormInitial(
 
   const form = useForm({
     ...(Object.keys(initialValues)?.length ? { initialValues } : {}),
-    ...(hasValidationRules() ? { validationSchema: generateValidationSchema() } : {}),
   });
-  
-  function generateValidationSchema() {
-    const schemaObject: ZodRawShape = {};
-    
-    (unref(props).schema || []).forEach((item) => {
-      // 只有当 rules 是 ZodTypeAny 时才添加到验证 schema 中
-      if (item.rules && typeof item.rules !== 'string') {
-        schemaObject[item.fieldName] = item.rules as ZodTypeAny;
-      }
-    });
-    
-    return object(schemaObject);
-  }
-  
-  function hasValidationRules(): boolean {
-    const schema = unref(props).schema || [];
-    return schema.some(item => item.rules && typeof item.rules !== 'string');
-  }
 
   const delegatedSlots = computed(() => {
     const resultSlots: string[] = [];
@@ -63,6 +57,13 @@ export function useFormInitial(
     return resultSlots;
   });
 
+  /**
+   * 根据 schema 与 zod 规则推导 initialValues
+   *
+   * 优先级：
+   * 1. schema 上的 `defaultValue`
+   * 2. 从 zod rule 中提取的默认值（含 zod-defaults）
+   */
   function generateInitialValues() {
     const initialValues: Record<string, any> = {};
 
@@ -80,21 +81,18 @@ export function useFormInitial(
       }
     });
 
-    // const schemaInitialValues = getDefaultsForSchema(object(zodObject));
-    
-    // Temporary workaround for zod-defaults compatibility issue
+    const schemaInitialValues = getDefaultsForSchema(object(zodObject));
+
     const zodDefaults: Record<string, any> = {};
-    // Extract defaults from zodObject schema if available
-    for (const [key, schema] of Object.entries(zodObject)) {
-      if ('_def' in schema && schema._def && 'defaultValue' in schema._def) {
-        zodDefaults[key] = schema._def.defaultValue;
-      }
+    for (const key in schemaInitialValues) {
+      set(zodDefaults, key, schemaInitialValues[key]);
     }
-    
     return mergeWithArrayOverride(initialValues, zodDefaults);
   }
-  // 自定义默认值提取逻辑
-  function getCustomDefaultValue(rule: any): any {
+  /**
+   * 自定义默认值提取逻辑（保持与现有行为一致）
+   */
+  function getCustomDefaultValue(rule: unknown): unknown {
     if (rule instanceof ZodString) {
       return ''; // 默认为空字符串
     } else if (rule instanceof ZodNumber) {
@@ -103,13 +101,13 @@ export function useFormInitial(
       // 递归提取嵌套对象的默认值
       const defaultValues: Record<string, any> = {};
       for (const [key, valueSchema] of Object.entries(rule.shape)) {
-        defaultValues[key] = getCustomDefaultValue(valueSchema);
+        defaultValues[key] = getCustomDefaultValue(valueSchema as unknown);
       }
       return defaultValues;
     } else if (rule instanceof ZodIntersection) {
       // 对于交集类型，从schema 提取默认值
-      const leftDefaultValue = getCustomDefaultValue(rule._def.left);
-      const rightDefaultValue = getCustomDefaultValue(rule._def.right);
+      const leftDefaultValue = getCustomDefaultValue(rule._def.left as unknown);
+      const rightDefaultValue = getCustomDefaultValue(rule._def.right as unknown);
 
       // 如果左右两边都能提取默认值，合并它们
       if (

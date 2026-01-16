@@ -1,36 +1,19 @@
 {
   "name": "@admin-core/layouts",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "private": false,
   "type": "module",
-  "description": "布局和业务组件",
+  "description": "布局和业务组件库",
   "keywords": [
     "admin",
     "admin-kit",
     "admin-core",
-    "admin-panel",
-    "admin-dashboard",
     "layouts",
-    "layout-components",
-    "page-layout",
+    "layout",
+    "business-components",
     "vue",
     "vue3",
-    "vue-components",
-    "components",
-    "business",
-    "business-components",
-    "dashboard",
-    "frontend",
-    "ui",
-    "navigation",
-    "sidebar",
-    "header",
-    "footer",
-    "responsive",
-    "responsive-layout",
-    "grid",
-    "flexbox",
-    "template"
+    "component-library"
   ],
   "author": "Admin Kit Team",
   "license": "MIT",
@@ -65,19 +48,20 @@
     "prepublishOnly": "node ../../scripts/resolve-catalog.js",
     "postpublish": "node ../../scripts/restore-catalog.js"
   },
+  "peerDependencies": {
+    "vue": "^3.5.0",
+    "vue-router": "^4.0.0",
+    "@vueuse/core": "^14.0.0"
+  },
   "dependencies": {
+    "@admin-core/ui": "workspace:*",
     "@admin-core/composables": "workspace:*",
     "@admin-core/icons": "workspace:*",
     "@admin-core/shared": "workspace:*",
-    "@admin-core/ui": "workspace:*",
+    "@vee-validate/zod": "catalog:",
     "vee-validate": "catalog:",
-    "zod": "^3.24.1",
-    "zod-defaults": "^0.2.3"
-  },
-  "devDependencies": {
-    "@vee-validate/zod": "^4.15.1"
-  },
-  "peerDependencies": {
-    "vue": "^3.5.0"
+    "zod": "catalog:",
+    "zod-defaults": "catalog:"
   }
 }
+

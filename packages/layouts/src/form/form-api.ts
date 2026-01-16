@@ -13,7 +13,7 @@ import type { FormActions, FormSchema, AdminFormProps } from './types';
 
 import { isRef, toRaw } from 'vue';
 
-import { Store } from '@tanstack/vue-store';
+import { Store } from '@admin-core/shared/utils';
 import {
   bindMethods,
   createMerge,
@@ -26,6 +26,12 @@ import {
   StateHandler,
 } from '@admin-core/shared/utils';
 
+/**
+ * 表单默认状态（保持现有默认值不变）
+ *
+ * @description
+ * 用于 `FormApi` 初始化 store state 的兜底值。
+ */
 function getDefaultState(): AdminFormProps {
   return {
     actionWrapperClass: '',
@@ -70,6 +76,11 @@ export class FormApi {
 
   private prevState: null | AdminFormProps = null;
 
+  /**
+   * 创建表单 API
+   *
+   * @param options 初始表单配置（通常来自 `useAdminForm` 的参数或组件 props）
+   */
   constructor(options: AdminFormProps = {}) {
     const { ...storeState } = options;
 
@@ -126,8 +137,15 @@ export class FormApi {
 
   /**
    * 获取当前聚焦的字段，如果没有聚焦的字段则返回undefined
+   *
+   * @description
+   * - 用于“自动滚动到聚焦项”“键盘交互”等场景
+   * - SSR/Node 环境下会直接返回 `undefined`
    */
   getFocusedField() {
+    // SSR/Node 环境下没有 document，直接返回
+    if (typeof document === 'undefined') return undefined;
+
     for (const fieldName of this.componentRefMap.keys()) {
       const ref = this.getFieldComponentRef(fieldName);
       if (ref) {
@@ -155,10 +173,23 @@ export class FormApi {
     return this.latestSubmissionValues || {};
   }
 
+  /**
+   * 获取当前表单配置状态（store.state）
+   *
+   * @description
+   * 这不是 vee-validate 的 values，而是 `AdminFormProps`（schema、布局、回调等配置）。
+   */
   getState() {
     return this.state;
   }
 
+  /**
+   * 获取当前表单的 values（带时间字段处理）
+   *
+   * @description
+   * - 返回值来自 vee-validate 的 `form.values`
+   * - 会根据 `fieldMappingTime` 做 date/dayjs 的格式化/转换（保持现有行为）
+   */
   async getValues<T = Recordable<any>>() {
     const form = await this.getForm();
     return (form.values ? this.handleRangeTimeValue(form.values) : {}) as T;
@@ -169,6 +200,19 @@ export class FormApi {
     return form.isFieldValid(fieldName);
   }
 
+  /**
+   * 合并多个表单 API（链式）
+   *
+   * @description
+   * 主要用于“多表单分块”的场景，把多个 `FormApi` 组合成一个代理对象。
+   * 组合后可使用 `submitAllForm(needMerge?)` 统一校验/提交并返回合并后的值。
+   *
+   * @example
+   * ```ts
+   * const merged = api1.merge(api2).merge(api3)
+   * const values = await merged.submitAllForm(true)
+   * ```
+   */
   merge(formApi: FormApi) {
     const chain = [this, formApi];
     const proxy = new Proxy(formApi, {
@@ -209,6 +253,16 @@ export class FormApi {
     return proxy;
   }
 
+  /**
+   * 挂载（由 `AdminUseForm` 在组件 mounted 时调用）
+   *
+   * @description
+   * - 将 vee-validate 的 `FormActions` 绑定到 `this.form`
+   * - 标记 `isMounted=true`，允许后续 API 调用
+   * - 记录当前提交快照（latestSubmissionValues）
+   *
+   * 注意：这是内部生命周期方法，外部通常不需要手动调用。
+   */
   mount(formActions: FormActions, componentRefMap: Map<string, unknown>) {
     if (!this.isMounted) {
       Object.assign(this.form, formActions);
@@ -238,6 +292,12 @@ export class FormApi {
 
   /**
    * 重置表单
+   *
+   * @description
+   * 对 vee-validate 的 `resetForm` 的轻量封装。
+   *
+   * @param state 目标 state（values/errors/touched 等）
+   * @param opts vee-validate reset 选项
    */
   async resetForm(
     state?: Partial<FormState<GenericObject>> | undefined,
@@ -247,6 +307,12 @@ export class FormApi {
     return form.resetForm(state, opts);
   }
 
+  /**
+   * 清空校验错误（不改变 values）
+   *
+   * @description
+   * 通过遍历 `form.errors` 并 setFieldError(undefined) 清空错误展示。
+   */
   async resetValidate() {
     const form = await this.getForm();
     const fields = Object.keys(form.errors.value);
@@ -260,6 +326,9 @@ export class FormApi {
    * @param errors 验证错误对象
    */
   scrollToFirstError(errors: Record<string, any> | string) {
+    // SSR/Node 环境下没有 document
+    if (typeof document === 'undefined') return;
+
     // https://github.com/logaretm/vee-validate/discussions/3835
     const firstErrorFieldName =
       typeof errors === 'string' ? errors : Object.keys(errors)[0];
@@ -290,15 +359,36 @@ export class FormApi {
     }
   }
 
+  /**
+   * 设置单个字段值
+   *
+   * @param field 字段名（dot-path）
+   * @param value 新值
+   * @param shouldValidate 是否触发校验
+   */
   async setFieldValue(field: string, value: any, shouldValidate?: boolean) {
     const form = await this.getForm();
     form.setFieldValue(field, value, shouldValidate);
   }
 
+  /**
+   * 设置最新一次提交快照（内部使用）
+   *
+   * @description
+   * 用于后续对比/调试等场景（保持现有行为）。
+   */
   setLatestSubmissionValues(values: null | Recordable<any>) {
     this.latestSubmissionValues = { ...toRaw(values) };
   }
 
+  /**
+   * 更新表单配置 state
+   *
+   * @description
+   * - 支持传入部分 state
+   * - 支持传入函数（基于 prev state 计算增量）
+   * - 内部使用 `mergeWithArrayOverride` 合并（数组以新值覆盖旧值）
+   */
   setState(
     stateOrFn:
       | ((prev: AdminFormProps) => Partial<AdminFormProps>)
@@ -352,6 +442,16 @@ export class FormApi {
     form.setValues(filteredFields, shouldValidate);
   }
 
+  /**
+   * 提交表单（并触发 handleSubmit 回调）
+   *
+   * @description
+   * - 调用 vee-validate 的 `submitForm()`
+   * - 获取处理后的 values（含时间字段映射/数组字段处理）
+   * - 调用 `state.handleSubmit(values)`
+   *
+   * @returns 提交时的 values（raw）
+   */
   async submitForm(e?: Event) {
     e?.preventDefault();
     e?.stopPropagation();
@@ -363,6 +463,13 @@ export class FormApi {
     return rawValues;
   }
 
+  /**
+   * 卸载/销毁（由 useAdminForm 组件卸载时调用）
+   *
+   * @description
+   * - 重置 vee-validate form（清理 errors/touched 等）
+   * - 清理内部标记与最新提交快照
+   */
   unmount() {
     this.form?.resetForm?.();
     // this.state = null;
@@ -371,6 +478,13 @@ export class FormApi {
     this.stateHandler.reset();
   }
 
+  /**
+   * 更新 schema（按 fieldName 对已有 schema 做增量合并）
+   *
+   * @description
+   * - 传入数组必须都包含有效 `fieldName`
+   * - 会把匹配 fieldName 的项与当前项做合并（数组覆盖）
+   */
   updateSchema(schema: Partial<FormSchema>[]) {
     const updated: Partial<FormSchema>[] = [...schema];
     const hasField = updated.every(
@@ -405,6 +519,13 @@ export class FormApi {
     this.setState({ schema: currentSchema });
   }
 
+  /**
+   * 校验整个表单
+   *
+   * @description
+   * - 返回 vee-validate 的 validateResult
+   * - 如果开启 `scrollToFirstError`，会自动滚到第一个错误字段
+   */
   async validate(opts?: Partial<ValidationOptions>) {
     const form = await this.getForm();
 
@@ -420,6 +541,14 @@ export class FormApi {
     return validateResult;
   }
 
+  /**
+   * 校验并提交（常用）
+   *
+   * @description
+   * - 先 validate
+   * - valid 才 submit
+   * - 若开启 `scrollToFirstError`，invalid 时自动滚动
+   */
   async validateAndSubmitForm() {
     const form = await this.getForm();
     const { valid, errors } = await form.validate();
@@ -432,6 +561,12 @@ export class FormApi {
     return await this.submitForm();
   }
 
+  /**
+   * 校验单个字段
+   *
+   * @description
+   * - invalid 且开启 `scrollToFirstError` 时，会滚动到该字段
+   */
   async validateField(fieldName: string, opts?: Partial<ValidationOptions>) {
     const form = await this.getForm();
     const validateResult = await form.validateField(fieldName, opts);

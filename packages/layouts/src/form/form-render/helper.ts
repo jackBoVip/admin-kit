@@ -58,21 +58,3 @@ export function isEventObjectLike(obj: any) {
   }
   return Reflect.has(obj, 'target') && Reflect.has(obj, 'stopPropagation');
 }
-
-/**
- * Normalize form schema to ensure consistent structure
- * 
- * @param schema - The form schema to normalize
- * @returns Normalized form schema array
- */
-export function normalizeSchema<T>(schema: T | T[] | undefined): T[] {
-  if (!schema) {
-    return [];
-  }
-  
-  if (Array.isArray(schema)) {
-    return schema;
-  }
-  
-  return [schema];
-}
