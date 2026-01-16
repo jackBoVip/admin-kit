@@ -1,7 +1,7 @@
 {
   "name": "shadcn-ui-demo",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@admin-core/ui": "0.0.7",
+    "@admin-core/ui": "0.0.8",
     "@admin-core/shared": "0.4.2",
     "vue": "^3.5.24"
   },
