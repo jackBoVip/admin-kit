@@ -782,6 +782,7 @@ const notificationIcons = [
 ];
 
 // 剩余图标 - 用于基本图标展示
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const remainingIcons = [
 
   { name: 'Home', component: Home },

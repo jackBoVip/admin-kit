@@ -3,7 +3,6 @@ import { computed, inject } from 'vue';
 import {
   FieldContextKey,
   useFieldError,
-  useForm,
   useIsFieldDirty,
   useIsFieldTouched,
   useIsFieldValid,
@@ -67,32 +66,6 @@ export function useFormField() {
 
   // Restore warnings after hooks are called
   restoreWarnings();
-
-  // Get form instance to check field existence via meta
-  let form: ReturnType<typeof useForm> | null = null;
-  try {
-    form = useForm();
-  } catch {
-    // Form might not be available, that's okay
-  }
-
-  // Check if field exists in form's meta.fields
-  const fieldExists = computed(() => {
-    if (!name || !form) return true; // Assume exists if we can't check
-    try {
-      // Check if field exists in meta.fields
-      const meta = form.meta.value;
-      if (meta && meta.fields && typeof meta.fields === 'object') {
-        return name in meta.fields;
-      }
-      // Fallback: check if field state exists
-      const fieldState = form.getFieldState(name);
-      return fieldState !== undefined;
-    } catch {
-      // If check fails, assume field exists to avoid breaking functionality
-      return true;
-    }
-  });
 
   // Wrap hooks in computed to safely access values
   const error = computed(() => {
